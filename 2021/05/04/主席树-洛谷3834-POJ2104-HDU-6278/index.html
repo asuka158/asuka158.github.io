@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="主席树        主席树模板">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主席树 洛谷P3834&amp;POJ2104&amp;HDU 6278">
+<meta property="og:url" content="http://example.com/2021/05/04/%E4%B8%BB%E5%B8%AD%E6%A0%91-%E6%B4%9B%E8%B0%B73834-POJ2104-HDU-6278/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="主席树        主席树模板">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/05/04/%E4%B8%BB%E5%B8%AD%E6%A0%91-%E6%B4%9B%E8%B0%B73834-POJ2104-HDU-6278/42778d565a47b466acd5eb42eaa14460.png">
+<meta property="article:published_time" content="2021-05-04T03:14:39.000Z">
+<meta property="article:modified_time" content="2024-07-30T11:12:40.000Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="线段树">
+<meta property="article:tag" content="主席树">
+<meta property="article:tag" content="可持久化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/05/04/%E4%B8%BB%E5%B8%AD%E6%A0%91-%E6%B4%9B%E8%B0%B73834-POJ2104-HDU-6278/42778d565a47b466acd5eb42eaa14460.png">
+
+
+<link rel="canonical" href="http://example.com/2021/05/04/%E4%B8%BB%E5%B8%AD%E6%A0%91-%E6%B4%9B%E8%B0%B73834-POJ2104-HDU-6278/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/05/04/%E4%B8%BB%E5%B8%AD%E6%A0%91-%E6%B4%9B%E8%B0%B73834-POJ2104-HDU-6278/","path":"2021/05/04/主席树-洛谷3834-POJ2104-HDU-6278/","title":"主席树 洛谷P3834&POJ2104&HDU 6278"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>主席树 洛谷P3834&POJ2104&HDU 6278 | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    主席树
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#P3834-%E3%80%90%E6%A8%A1%E6%9D%BF%E3%80%91%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%91-2%EF%BC%88%E4%B8%BB%E5%B8%AD%E6%A0%91%EF%BC%89%EF%BC%88%E6%B4%9B%E8%B0%B7%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">P3834 【模板】可持久化线段树 2（主席树）（洛谷）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POJ2104"><span class="nav-number">1.2.</span> <span class="nav-text">POJ2104</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E7%BB%B4%E6%8A%A4%E7%9A%84%E5%AE%B9%E5%99%A8-amp-%E5%8F%98%E9%87%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">需要维护的容器&amp;变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDU-6278"><span class="nav-number">1.3.</span> <span class="nav-text">HDU 6278</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/05/04/%E4%B8%BB%E5%B8%AD%E6%A0%91-%E6%B4%9B%E8%B0%B73834-POJ2104-HDU-6278/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="主席树 洛谷P3834&POJ2104&HDU 6278 | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          主席树 洛谷P3834&POJ2104&HDU 6278
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-05-04 11:14:39" itemprop="dateCreated datePublished" datetime="2021-05-04T11:14:39+08:00">2021-05-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-07-30 19:12:40" itemprop="dateModified" datetime="2024-07-30T19:12:40+08:00">2024-07-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">数据结构</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 style="text-align: center;">
+    主席树
+</h1>
+
+<div style="text-align: center;">
+    主席树模板
+</div>
+
+<span id="more"></span>
+<h2 id="P3834-【模板】可持久化线段树-2（主席树）（洛谷）"><a href="#P3834-【模板】可持久化线段树-2（主席树）（洛谷）" class="headerlink" title="P3834 【模板】可持久化线段树 2（主席树）（洛谷）"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3834">P3834 【模板】可持久化线段树 2（主席树）（洛谷）</a></h2><h2 id="POJ2104"><a href="#POJ2104" class="headerlink" title="POJ2104"></a><a target="_blank" rel="noopener" href="http://poj.org/problem?id=2104">POJ2104</a></h2><p><img src="/2021/05/04/%E4%B8%BB%E5%B8%AD%E6%A0%91-%E6%B4%9B%E8%B0%B73834-POJ2104-HDU-6278/42778d565a47b466acd5eb42eaa14460.png" alt="img"><br><strong>题意：</strong><br>两道题都是求区间第k小<br><strong>分析：</strong><br>1.预处理原数组，排序，去重，离散化（用普通数组即可离散化，不习惯用vector）<br>2.建树，与普通线段树不同在于，线段树是把一坨数输进来之后直接build（1，1，n）即可，主席树是一个一个点的修改，即维护不同版本的权值线段树。<br>对于新一个版本的权值线段树，都会先添加一个根节点作为当前版本的根节点，也是便于后续查询某个版本的权值线段树，然后把上一个版本的权值线段树复制给当前版本（当前根节点 = 上一个版本根节点)，然后进行修改，两个版本权值线段树不同就在于新增加的这一个元素，不同的结点即根节点到新增结点路径上的所有结点，这些结点是需要新增加的，把这些结点放在新版本根节点之下，新版本的其他点也上一个版本相同，由此我们可以发现对于一个点，他可能有多个父亲，故对于主席树来说，找父亲儿子不能简单的通过/2或*2解决，我们需要存每个结点的左右儿子。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//l，r区间边界，pre上一个版本的根（父）结点，now当前版本的根（父）节点，p需要修改的值（由于离散化，p值多1，即第p个大）</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">updata</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> pre, <span class="type">int</span> &amp;now, <span class="type">int</span> p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    tree[++cnt] = tree[pre];<span class="comment">//给新版本根（父）节点一个空间，并复制上一个版本的根（父）节点给它</span></span><br><span class="line">    now = cnt;<span class="comment">//改变当前版本根（父）结点的编号</span></span><br><span class="line">    ++tree[now].sum;<span class="comment">//由于新加了一个元素，当前版本元素总数加1</span></span><br><span class="line">    <span class="comment">//递归修改（新建）根节点到新的点路径上的所有点</span></span><br><span class="line">    <span class="keyword">if</span>(l == r) <span class="keyword">return</span> ;<span class="comment">//找到这个点return即可</span></span><br><span class="line">    <span class="comment">//判断需要向左儿子改还是向右儿子改</span></span><br><span class="line">    mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(p &lt;= mid) <span class="built_in">updata</span>(l, mid, tree[pre].l, tree[now].l, p);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">updata</span>(mid + <span class="number">1</span>, r, tree[pre].r, tree[now].r, p);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.查询操作</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询区间L + 1到R的第k小的值</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">query</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> L, <span class="type">int</span> R, <span class="type">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l == r) <span class="keyword">return</span> l;<span class="comment">//递归到叶子结点，return 即可</span></span><br><span class="line">    mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    tmp = tree[tree[R].l].sum - tree[tree[L].l].sum;</span><br><span class="line">    <span class="comment">//求出R版本的权值线段树与L版本的权值线段树左子树差多少个树，左子树的数一定小于右子树</span></span><br><span class="line">    <span class="comment">//tmp值即第1~tmp小的值在左子树，再根据tmp值与k值的关系向左/右子树递归。</span></span><br><span class="line">    <span class="keyword">if</span>(k &lt;= tmp) <span class="keyword">return</span> <span class="built_in">query</span>(l, mid, tree[L].l, tree[R].l, k);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">query</span>(mid + <span class="number">1</span>, r, tree[L].r, tree[R].r, k - tmp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="需要维护的容器-amp-变量"><a href="#需要维护的容器-amp-变量" class="headerlink" title="需要维护的容器&amp;变量"></a>需要维护的容器&amp;变量</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> l, r, sum;</span><br><span class="line">&#125;tree[maxn*<span class="number">30</span>]; </span><br><span class="line">存主席树，*<span class="number">30</span>，<span class="number">40</span>，<span class="number">50</span>的都有。。。据上面的分析易知这个数组的类型是个结构体，存三个量，该点的左右儿子l/r，该点包含区间中元素个数sum</span><br><span class="line"><span class="number">2.</span>root[maxn]  存第i版本的根节点在tree[maxn]数组的下标</span><br><span class="line"><span class="number">3.</span>cnt  用于更新主席树时，新加结点的分配。</span><br><span class="line"><span class="number">4.</span>br[maxn]  原数组离散化后的数组</span><br></pre></td></tr></table></figure>
+<p><strong>AC代码：</strong><br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">2e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="type">int</span> n, m, l, r, k;</span><br><span class="line"><span class="type">int</span> mid, id, tmp;</span><br><span class="line"><span class="type">int</span> cnt, en;</span><br><span class="line"><span class="type">int</span> ar[maxn];</span><br><span class="line"><span class="type">int</span> br[maxn];</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> l, r, sum;</span><br><span class="line">&#125;tree[maxn*<span class="number">30</span>];</span><br><span class="line"><span class="type">int</span> root[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">read</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   <span class="type">char</span> ch = <span class="built_in">getchar</span>();<span class="type">int</span> s = <span class="number">0</span>, w = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(ch &lt; <span class="string">&#x27;0&#x27;</span> || ch &gt; <span class="string">&#x27;9&#x27;</span>)&#123;<span class="keyword">if</span>(ch == <span class="string">&#x27;-&#x27;</span>) w = <span class="number">-1</span>;ch = <span class="built_in">getchar</span>();&#125;</span><br><span class="line">    <span class="keyword">while</span>(ch &gt;= <span class="string">&#x27;0&#x27;</span> &amp;&amp; ch &lt;= <span class="string">&#x27;9&#x27;</span>)&#123;s = s * <span class="number">10</span> + ch - <span class="string">&#x27;0&#x27;</span>;ch = <span class="built_in">getchar</span>();&#125;</span><br><span class="line">    <span class="keyword">return</span> s * w;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">updata</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> pre, <span class="type">int</span> &amp;now, <span class="type">int</span> p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    tree[++cnt] = tree[pre];</span><br><span class="line">    now = cnt;</span><br><span class="line">    ++tree[now].sum;</span><br><span class="line">    <span class="keyword">if</span>(l == r) <span class="keyword">return</span> ;</span><br><span class="line">    mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(p &lt;= mid) <span class="built_in">updata</span>(l, mid, tree[pre].l, tree[now].l, p);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">updata</span>(mid + <span class="number">1</span>, r, tree[pre].r, tree[now].r, p);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">query</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> L, <span class="type">int</span> R, <span class="type">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l == r) <span class="keyword">return</span> l;</span><br><span class="line">    mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    tmp = tree[tree[R].l].sum - tree[tree[L].l].sum;</span><br><span class="line">    <span class="keyword">if</span>(k &lt;= tmp) <span class="keyword">return</span> <span class="built_in">query</span>(l, mid, tree[L].l, tree[R].l, k);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">query</span>(mid + <span class="number">1</span>, r, tree[L].r, tree[R].r, k - tmp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    n = <span class="built_in">read</span>(); m = <span class="built_in">read</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        ar[i] = <span class="built_in">read</span>();</span><br><span class="line">        br[i - <span class="number">1</span>] = ar[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(br, br + n);</span><br><span class="line">    en = <span class="built_in">unique</span>(br, br + n) - br;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        id = <span class="built_in">lower_bound</span>(br, br + en, ar[i]) - br + <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">updata</span>(<span class="number">1</span>, n, root[i - <span class="number">1</span>], root[i], id);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(m--)</span><br><span class="line">    &#123;</span><br><span class="line">        l = <span class="built_in">read</span>(); r = <span class="built_in">read</span>(); k = <span class="built_in">read</span>();</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, br[<span class="built_in">query</span>(<span class="number">1</span>, n, root[l - <span class="number">1</span>], root[r], k) - <span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="HDU-6278"><a href="#HDU-6278" class="headerlink" title="HDU 6278"></a><a target="_blank" rel="noopener" href="http://acm.hdu.edu.cn/showproblem.php?pid=6278">HDU 6278</a></h2><p><strong>分析：</strong><br>需要求的是区间最h大值，二分答案判区间第h大的值是否大于等于h即可<br>求第h大的值，查询函数需要稍微修改一下，tmp值应该是两个版本右子树sum值相减。。。<br><strong>AC代码：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">2e5</span> + <span class="number">5</span>;</span><br><span class="line"><span class="type">int</span> n, m, l, r, k;</span><br><span class="line"><span class="type">int</span> mid, id, tmp;</span><br><span class="line"><span class="type">int</span> cnt, en;</span><br><span class="line"><span class="type">int</span> st, enn;</span><br><span class="line"><span class="type">int</span> ar[maxn];</span><br><span class="line"><span class="type">int</span> br[maxn];</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> l, r, sum;</span><br><span class="line">&#125;tree[maxn*<span class="number">30</span>];</span><br><span class="line"><span class="type">int</span> root[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">read</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   <span class="type">char</span> ch = <span class="built_in">getchar</span>();<span class="type">int</span> s = <span class="number">0</span>, w = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(ch &lt; <span class="string">&#x27;0&#x27;</span> || ch &gt; <span class="string">&#x27;9&#x27;</span>)&#123;<span class="keyword">if</span>(ch == <span class="string">&#x27;-&#x27;</span>) w = <span class="number">-1</span>;ch = <span class="built_in">getchar</span>();&#125;</span><br><span class="line">    <span class="keyword">while</span>(ch &gt;= <span class="string">&#x27;0&#x27;</span> &amp;&amp; ch &lt;= <span class="string">&#x27;9&#x27;</span>)&#123;s = s * <span class="number">10</span> + ch - <span class="string">&#x27;0&#x27;</span>;ch = <span class="built_in">getchar</span>();&#125;</span><br><span class="line">    <span class="keyword">return</span> s * w;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">updata</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> pre, <span class="type">int</span> &amp;now, <span class="type">int</span> p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    tree[++cnt] = tree[pre];</span><br><span class="line">    now = cnt;</span><br><span class="line">    ++tree[now].sum;</span><br><span class="line">    <span class="keyword">if</span>(l == r) <span class="keyword">return</span> ;</span><br><span class="line">    mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(p &lt;= mid) <span class="built_in">updata</span>(l, mid, tree[pre].l, tree[now].l, p);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">updata</span>(mid + <span class="number">1</span>, r, tree[pre].r, tree[now].r, p);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">query</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> L, <span class="type">int</span> R, <span class="type">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l == r) <span class="keyword">return</span> l;</span><br><span class="line">    mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    tmp = tree[tree[R].r].sum - tree[tree[L].r].sum;</span><br><span class="line">    <span class="keyword">if</span>(tmp &gt;= k) <span class="keyword">return</span> <span class="built_in">query</span>(mid + <span class="number">1</span>, r, tree[L].r, tree[R].r, k);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">query</span>(l, mid, tree[L].l, tree[R].l, k - tmp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">judge</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(br[<span class="built_in">query</span>(<span class="number">1</span>, n, root[st - <span class="number">1</span>], root[enn], x) - <span class="number">1</span>] &gt;= x) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m))</span><br><span class="line">    &#123;</span><br><span class="line">        cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            ar[i] = <span class="built_in">read</span>();</span><br><span class="line">            br[i - <span class="number">1</span>] = ar[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">sort</span>(br, br + n);</span><br><span class="line">        en = <span class="built_in">unique</span>(br, br + n) - br;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            id = <span class="built_in">lower_bound</span>(br, br + en, ar[i]) - br + <span class="number">1</span>;</span><br><span class="line">            <span class="built_in">updata</span>(<span class="number">1</span>, n, root[i - <span class="number">1</span>], root[i], id);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(m--)</span><br><span class="line">        &#123;</span><br><span class="line">            st = <span class="built_in">read</span>(); enn = <span class="built_in">read</span>();</span><br><span class="line">            l = <span class="number">0</span>; r = enn - st + <span class="number">1</span>;</span><br><span class="line">            <span class="comment">//cout &lt;&lt; l &lt;&lt; &#x27; &#x27; &lt;&lt; r &lt;&lt; endl;</span></span><br><span class="line">            <span class="keyword">while</span>(l &lt;= r)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="type">int</span> midd = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">                <span class="comment">//cout &lt;&lt; mid &lt;&lt; endl;</span></span><br><span class="line">                <span class="keyword">if</span>(<span class="built_in">judge</span>(midd)) l = midd + <span class="number">1</span>;<span class="comment">//cout &lt;&lt; mid &lt;&lt; &#x27; &#x27; ;&#125;</span></span><br><span class="line">                <span class="keyword">else</span> r = midd - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, l - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个题一开始出现了一扭扭错误，因为习惯把所有能用到的变量定义在全局，这样可以避免跑循环是一直定义变量，但这样二分答案时和query查询时，两个函数里都有mid，然后二分退出来的时候就不是一开始传进去的mid了。。。无奈又改了变量名。。。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91/" rel="tag"># 线段树</a>
+              <a href="/tags/%E4%B8%BB%E5%B8%AD%E6%A0%91/" rel="tag"># 主席树</a>
+              <a href="/tags/%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96/" rel="tag"># 可持久化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/05/%E7%BA%BF%E6%AE%B5%E6%A0%91%E3%80%902021%E4%B8%9C%E5%8C%97%E5%9B%9B%E7%9C%81D%EF%BC%88HDU7116%EF%BC%89Lowbit%E3%80%91%E3%80%902021%E6%9D%AD%E7%94%B5%E5%A4%9A%E6%A0%A18-HDU7059-Counting-Stars%E3%80%91/" rel="next" title="势能线段树【2021东北四省D（HDU7116）Lowbit】【2021杭电多校8/HDU7059 Counting Stars】">
+                  势能线段树【2021东北四省D（HDU7116）Lowbit】【2021杭电多校8/HDU7059 Counting Stars】 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

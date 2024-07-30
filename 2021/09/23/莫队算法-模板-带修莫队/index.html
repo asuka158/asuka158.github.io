@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="莫队算法   &emsp;&emsp;这个算法的思想比较简单，我们在做RMQ类问题时，有多次询问的那种，其实在这些询问中有很多都是问的同一段区间，即有的区间被询问的多次，所以我们对询问进行一个排序，假设上次询问我们得到了区间[l,r]的值，那本次询问跟上次相比，多的我们加上即可，少的减掉即可。然后用到分块思想。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="莫队算法(模板+带修莫队)">
+<meta property="og:url" content="http://example.com/2021/09/23/%E8%8E%AB%E9%98%9F%E7%AE%97%E6%B3%95-%E6%A8%A1%E6%9D%BF-%E5%B8%A6%E4%BF%AE%E8%8E%AB%E9%98%9F/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="莫队算法   &emsp;&emsp;这个算法的思想比较简单，我们在做RMQ类问题时，有多次询问的那种，其实在这些询问中有很多都是问的同一段区间，即有的区间被询问的多次，所以我们对询问进行一个排序，假设上次询问我们得到了区间[l,r]的值，那本次询问跟上次相比，多的我们加上即可，少的减掉即可。然后用到分块思想。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-09-23T13:35:57.000Z">
+<meta property="article:modified_time" content="2024-07-30T15:28:06.000Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="莫队">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2021/09/23/%E8%8E%AB%E9%98%9F%E7%AE%97%E6%B3%95-%E6%A8%A1%E6%9D%BF-%E5%B8%A6%E4%BF%AE%E8%8E%AB%E9%98%9F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/09/23/%E8%8E%AB%E9%98%9F%E7%AE%97%E6%B3%95-%E6%A8%A1%E6%9D%BF-%E5%B8%A6%E4%BF%AE%E8%8E%AB%E9%98%9F/","path":"2021/09/23/莫队算法-模板-带修莫队/","title":"莫队算法(模板+带修莫队)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>莫队算法(模板+带修莫队) | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    莫队算法
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#P1494-%E5%B0%8Fz%E7%9A%84%E8%A2%9C%E5%AD%90%EF%BC%88%E6%A8%A1%E6%9D%BF%E9%A2%98%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">P1494 小z的袜子（模板题）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P1903-%E6%95%B0%E9%A2%9C%E8%89%B2%EF%BC%88%E5%B8%A6%E7%AE%80%E5%8D%95%E4%BF%AE%E6%94%B9%E7%9A%84%E8%8E%AB%E9%98%9F%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">P1903 数颜色（带简单修改的莫队）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/09/23/%E8%8E%AB%E9%98%9F%E7%AE%97%E6%B3%95-%E6%A8%A1%E6%9D%BF-%E5%B8%A6%E4%BF%AE%E8%8E%AB%E9%98%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="莫队算法(模板+带修莫队) | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          莫队算法(模板+带修莫队)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-09-23 21:35:57" itemprop="dateCreated datePublished" datetime="2021-09-23T21:35:57+08:00">2021-09-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-07-30 23:28:06" itemprop="dateModified" datetime="2024-07-30T23:28:06+08:00">2024-07-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 style="text-align: center;">
+    莫队算法
+</h1>
+
+<p>&emsp;&emsp;这个算法的思想比较简单，我们在做RMQ类问题时，有多次询问的那种，其实在这些询问中有很多都是问的同一段区间，即有的区间被询问的多次，所以我们对询问进行一个排序，假设上次询问我们得到了区间<code>[l,r]</code>的值，那本次询问跟上次相比，多的我们加上即可，少的减掉即可。然后用到分块思想。</p>
+<span id="more"></span>
+<p>&emsp;&emsp;所以，比较重要的就是这个排序和每次询问与上次之间的转化。<br>&emsp;&emsp;排序：这里用到分块，根据区间左界所在的块的序号从小到大排，若在同一区间，则根据序号的奇偶性，奇则根据右边界从小到大，偶则根据右边界从大到小<br>&emsp;&emsp;与上次的转化：通过四个while来实现。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(l &lt; ask[i].l) <span class="built_in">del</span>(c[l++]);</span><br><span class="line"><span class="keyword">while</span>(l &gt; ask[i].l) <span class="built_in">add</span>(c[--l]);</span><br><span class="line"><span class="keyword">while</span>(r &lt; ask[i].r) <span class="built_in">add</span>(c[++r]);</span><br><span class="line"><span class="keyword">while</span>(r &gt; ask[i].r) <span class="built_in">del</span>(c[r--]);</span><br></pre></td></tr></table></figure>
+<h2 id="P1494-小z的袜子（模板题）"><a href="#P1494-小z的袜子（模板题）" class="headerlink" title="P1494 小z的袜子（模板题）"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1494">P1494 小z的袜子（模板题）</a></h2><p><strong>分析：</strong><br>弄明白那个排列组合和概率就基本模板题惹</p>
+<p><strong>AC代码：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> ll;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m, len;</span><br><span class="line"><span class="type">int</span> ar[<span class="number">50050</span>];</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">    ll l, r, id;</span><br><span class="line">&#125;ask[<span class="number">50050</span>];</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node1</span></span><br><span class="line">&#123;</span><br><span class="line">    ll x, y;</span><br><span class="line">&#125;ans[<span class="number">50050</span>], now;</span><br><span class="line"><span class="type">int</span> pos[<span class="number">50050</span>];</span><br><span class="line">ll cnt[<span class="number">50050</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">cmp</span><span class="params">(node a, node b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(pos[a.l] == pos[b.l])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(pos[a.l] &amp; <span class="number">1</span>) <span class="keyword">return</span> a.r &lt; b.r;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> a.r &gt; b.r;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> pos[a.l] &lt; pos[b.l];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ll <span class="title">gcd</span><span class="params">(ll x, ll y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> !y ? x : <span class="built_in">gcd</span>(y, x % y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ++cnt[x];</span><br><span class="line">    <span class="keyword">if</span>(cnt[x] &gt; <span class="number">1</span>)</span><br><span class="line">        now.x = now.x + cnt[x] * (cnt[x] - <span class="number">1</span>) - (cnt[x] - <span class="number">1</span>) * (cnt[x] - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">del</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    --cnt[x];</span><br><span class="line">    <span class="keyword">if</span>(cnt[x] &gt; <span class="number">0</span>)</span><br><span class="line">        now.x = now.x + cnt[x] * (cnt[x] - <span class="number">1</span>) - (cnt[x] + <span class="number">1</span>) * cnt[x];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">divgcd</span><span class="params">(ll x, ll y, <span class="type">int</span> id)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x) x = <span class="number">0</span>, y = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ll g = <span class="built_in">gcd</span>(x, y);</span><br><span class="line">        x /= g;</span><br><span class="line">        y /= g;</span><br><span class="line">    &#125;</span><br><span class="line">    ans[id].x = x;</span><br><span class="line">    ans[id].y = y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    len = <span class="built_in">sqrt</span>(n + <span class="number">0.5</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;ar[i]);</span><br><span class="line">        pos[i] = (i - <span class="number">1</span>) / len + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld%lld&quot;</span>, &amp;ask[i].l, &amp;ask[i].r);</span><br><span class="line">        ask[i].id = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(ask + <span class="number">1</span>, ask + m + <span class="number">1</span>, cmp);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = ask[<span class="number">1</span>].l; i &lt;= ask[<span class="number">1</span>].r; ++i) <span class="built_in">add</span>(ar[i]);</span><br><span class="line">    now.y = (ask[<span class="number">1</span>].r - ask[<span class="number">1</span>].l + <span class="number">1</span>) * (ask[<span class="number">1</span>].r - ask[<span class="number">1</span>].l);</span><br><span class="line">    <span class="built_in">divgcd</span>(now.x, now.y, ask[<span class="number">1</span>].id);</span><br><span class="line">    <span class="type">int</span> l = ask[<span class="number">1</span>].l, r = ask[<span class="number">1</span>].r;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt;= m; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span>(l &lt; ask[i].l) <span class="built_in">del</span>(ar[l++]);</span><br><span class="line">        <span class="keyword">while</span>(l &gt; ask[i].l) <span class="built_in">add</span>(ar[--l]);</span><br><span class="line">        <span class="keyword">while</span>(r &gt; ask[i].r) <span class="built_in">del</span>(ar[r--]);</span><br><span class="line">        <span class="keyword">while</span>(r &lt; ask[i].r) <span class="built_in">add</span>(ar[++r]);</span><br><span class="line">        now.y = (ask[i].r - ask[i].l + <span class="number">1</span>) * (ask[i].r - ask[i].l);</span><br><span class="line">        <span class="built_in">divgcd</span>(now.x, now.y, ask[i].id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; ++i) <span class="built_in">printf</span>(<span class="string">&quot;%lld/%lld\n&quot;</span>, ans[i].x, ans[i].y);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="P1903-数颜色（带简单修改的莫队）"><a href="#P1903-数颜色（带简单修改的莫队）" class="headerlink" title="P1903 数颜色（带简单修改的莫队）"></a><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1903">P1903 数颜色（带简单修改的莫队）</a></h2><p><strong>题目描述</strong></p>
+<p>墨墨购买了一套 $N$ 支彩色画笔（其中有些颜色可能相同），摆成一排，你需要回答墨墨的提问。墨墨会向你发布如下指令：</p>
+<ol>
+<li><p>$Q\ L\ R$ 代表询问你从第 $L$ 支画笔到第 $R$ 支画笔中共有几种不同颜色的画笔。</p>
+</li>
+<li><p>$R\ P\ C$ 把第 $P$ 支画笔替换为颜色 $C$。</p>
+</li>
+</ol>
+<p>为了满足墨墨的要求，你知道你需要干什么了吗？</p>
+<p><strong>输入格式</strong></p>
+<p>第 $1$ 行两个整数 $N$，$M$，分别代表初始画笔的数量以及墨墨会做的事情的个数。</p>
+<p>第 $2$ 行 $N$ 个整数，分别代表初始画笔排中第 $i$ 支画笔的颜色。</p>
+<p>第 $3$ 行到第 $2+M$ 行，每行分别代表墨墨会做的一件事情，格式见题干部分。</p>
+<p><strong>输出格式</strong></p>
+<p>对于每一个 Query 的询问，你需要在对应的行中给出一个数字，代表第 $L$ 支画笔到第 $R$ 支画笔中共有几种不同颜色的画笔。</p>
+<p><strong>样例输入 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">6 5</span><br><span class="line">1 2 3 4 5 5</span><br><span class="line">Q 1 4</span><br><span class="line">Q 2 6</span><br><span class="line">R 1 2</span><br><span class="line">Q 1 4</span><br><span class="line">Q 2 6</span><br></pre></td></tr></table></figure>
+<p><strong>样例输出 #1</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">4</span><br><span class="line">4</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<p><strong>提示</strong></p>
+<p>对于30%的数据，$n,m \leq 10000$</p>
+<p>对于60%的数据，$n,m \leq 50000$</p>
+<p>对于所有数据，$n,m \leq 133333$</p>
+<p>所有的输入数据中出现的所有整数均大于等于 $1$ 且不超过 $10^6$。</p>
+<p>本题可能轻微卡常数。</p>
+<p><strong>分析：</strong><br>&emsp;&emsp;首先考虑普通的莫队，这个题带了修改，那么我们依旧按照莫队来做，我们需要记录一下当前这次询问经过了几次修改，然后跟上一次比较，那就跟普通莫队一样了，只是4个while要变成6个while了。这是大体方向，然后还有一点点细节。<br>&emsp;&emsp;1.分块大小：<code>sz = pow(n, 0.666);</code><br>&emsp;&emsp;2.排序：第一关键字是区间左界所在的块的序号，第二关键字是区间右界所在的块的序号，第三关键字是这次询问经过了几次修改，均按照从小到大排。<br>&emsp;&emsp;3.对于修改，如果碰到某次修改需要操作，那么一定需要做一个交换<code>swap(ar[qr[t].l], qr[t].r);</code>，交换完之后，ar数组得到了修改，然后这次修改指令也得到了修改，因为后面再操作这次修改的时候就是改回来了，所以一个交换解决。另外，需要判断这次修改是不是发生在查询的区间内，是则需要做一些add和del。<br>&emsp;&emsp;4.维护的容器，以及作用<br>&emsp;&emsp;<code>cnt[i] : 数字i在当前区间出现的次数</code><br>&emsp;&emsp; <code>ar[i]; 原数组在位置i应该是的值</code><br>&emsp;&emsp;<code>qq[i] 表示第i次询问的左右边界已经发生在几次修改之后，id代表修改序号</code><br>&emsp;&emsp;<code>qr[i] 表示第i次修改是将l位置的数字改成r</code></p>
+<p><strong>AC代码：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> sum;</span><br><span class="line"><span class="type">int</span> cnt[<span class="number">1000050</span>];</span><br><span class="line"><span class="type">int</span> ar[<span class="number">10050</span>];</span><br><span class="line"><span class="type">int</span> ans[<span class="number">10050</span>];</span><br><span class="line"><span class="type">int</span> cntq, cntr;</span><br><span class="line"><span class="type">int</span> n, m, sz;</span><br><span class="line"><span class="type">char</span> op[<span class="number">5</span>];</span><br><span class="line"><span class="type">int</span> l, r;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> l, r, t, id;</span><br><span class="line">&#125;qq[<span class="number">10050</span>], qr[<span class="number">10050</span>];<span class="comment">//两个数组分解记录每一个询问以及修改的状态</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">cmp</span><span class="params">(<span class="type">const</span> node &amp;a, <span class="type">const</span> node &amp;b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a.l / sz == b.l / sz)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(a.r / sz == b.r / sz) <span class="keyword">return</span> a.t &lt; b.t;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> a.r &lt; b.r;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> a.l &lt; b.l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sum += !cnt[x]++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">del</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sum -= !--cnt[x];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">upd</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> t)</span><span class="comment">//upd是对于时间上的变化所造成变化的维护</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(qq[x].l &lt;= qr[t].l &amp;&amp; qr[t].l &lt;= qq[x].r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">del</span>(ar[qr[t].l]);</span><br><span class="line">        <span class="built_in">add</span>(qr[t].r);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">swap</span>(ar[qr[t].l], qr[t].r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    sz = <span class="built_in">pow</span>(n, <span class="number">0.666</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;ar[i]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%s%d%d&quot;</span>, op, &amp;l, &amp;r);</span><br><span class="line">        <span class="keyword">if</span>(op[<span class="number">0</span>] == <span class="string">&#x27;Q&#x27;</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ++cntq;</span><br><span class="line">            qq[cntq].id = cntq;</span><br><span class="line">            qq[cntq].l = l;</span><br><span class="line">            qq[cntq].r = r;</span><br><span class="line">            qq[cntq].t = cntr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            ++cntr;</span><br><span class="line">            qr[cntr].l = l;</span><br><span class="line">            qr[cntr].r = r;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sort</span>(qq + <span class="number">1</span>, qq + cntq + <span class="number">1</span>, cmp);</span><br><span class="line">    <span class="type">int</span> lcur = <span class="number">1</span>, rcur = <span class="number">0</span>, tcur = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= cntq; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span>(lcur &gt; qq[i].l) <span class="built_in">add</span>(ar[--lcur]);</span><br><span class="line">        <span class="keyword">while</span>(lcur &lt; qq[i].l) <span class="built_in">del</span>(ar[lcur++]);</span><br><span class="line">        <span class="keyword">while</span>(rcur &gt; qq[i].r) <span class="built_in">del</span>(ar[rcur--]);</span><br><span class="line">        <span class="keyword">while</span>(rcur &lt; qq[i].r) <span class="built_in">add</span>(ar[++rcur]);</span><br><span class="line">        <span class="keyword">while</span>(tcur &lt; qq[i].t) <span class="built_in">upd</span>(i, ++tcur);</span><br><span class="line">        <span class="keyword">while</span>(tcur &gt; qq[i].t) <span class="built_in">upd</span>(i, tcur--);<span class="comment">//增加t轴上的移动</span></span><br><span class="line">        ans[qq[i].id] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= cntq; ++i) <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans[i]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%8E%AB%E9%98%9F/" rel="tag"># 莫队</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/09/21/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/" rel="prev" title="AC自动机">
+                  <i class="fa fa-angle-left"></i> AC自动机
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/09/26/2021ICPC%E7%BD%91%E7%BB%9C%E8%B5%9B%E7%AC%AC%E4%BA%8C%E5%9C%BA%E3%80%90L-Euler-Function%E3%80%91/" rel="next" title="2021ICPC网络赛第二场【L Euler Function】">
+                  2021ICPC网络赛第二场【L Euler Function】 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
