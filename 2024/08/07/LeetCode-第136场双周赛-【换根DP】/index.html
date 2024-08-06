@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="第136场双周赛 【换根DP】        C. 分类讨论       D. 换根DP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode 第136场双周赛 【换根DP】">
+<meta property="og:url" content="http://example.com/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="第136场双周赛 【换根DP】        C. 分类讨论       D. 换根DP">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/image-20240807015514597-17229669189631.png">
+<meta property="og:image" content="http://example.com/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/image-20240807021229456-17229679520092.png">
+<meta property="article:published_time" content="2024-08-06T17:50:00.000Z">
+<meta property="article:modified_time" content="2024-08-06T19:01:26.685Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="动态规划DP">
+<meta property="article:tag" content="换根DP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/image-20240807015514597-17229669189631.png">
+
+
+<link rel="canonical" href="http://example.com/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/","path":"2024/08/07/LeetCode-第136场双周赛-【换根DP】/","title":"LeetCode 第136场双周赛 【换根DP】"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LeetCode 第136场双周赛 【换根DP】 | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    第136场双周赛 【换根DP】
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3240-%E6%9C%80%E5%B0%91%E7%BF%BB%E8%BD%AC%E6%AC%A1%E6%95%B0%E4%BD%BF%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9F%A9%E9%98%B5%E5%9B%9E%E6%96%87-II-%E5%88%86%E7%B1%BB%E8%AE%A8%E8%AE%BA"><span class="nav-number">1.1.</span> <span class="nav-text">3240. 最少翻转次数使二进制矩阵回文 II [分类讨论]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3241-%E6%A0%87%E8%AE%B0%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E9%9C%80%E8%A6%81%E7%9A%84%E6%97%B6%E9%97%B4-%E6%8D%A2%E6%A0%B9DP"><span class="nav-number">1.2.</span> <span class="nav-text">3241. 标记所有节点需要的时间[换根DP]</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LeetCode 第136场双周赛 【换根DP】 | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode 第136场双周赛 【换根DP】
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-08-07 01:50:00 / 修改时间：03:01:26" itemprop="dateCreated datePublished" datetime="2024-08-07T01:50:00+08:00">2024-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 style="text-align: center;">
+    第136场双周赛 【换根DP】
+</h1>
+
+<div style="text-align: center;">
+    <strong>C. 分类讨论</strong>
+</div>
+<div style="text-align: center;">
+    <strong>D. 换根DP</strong>
+</div>
+
+<span id="more"></span>
+<h2 id="3240-最少翻转次数使二进制矩阵回文-II-分类讨论"><a href="#3240-最少翻转次数使二进制矩阵回文-II-分类讨论" class="headerlink" title="3240. 最少翻转次数使二进制矩阵回文 II [分类讨论]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/minimum-number-of-flips-to-make-binary-grid-palindromic-ii/">3240. 最少翻转次数使二进制矩阵回文 II [分类讨论]</a></h2><p><img src="/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/image-20240807015514597-17229669189631.png" alt="image-20240807015514597"></p>
+<p><strong>分析：</strong></p>
+<p>&emsp;&emsp;要求行和列都回文。考虑<code>n</code>和<code>m</code>都是偶数的情况下，正好可以把矩阵分成左上、右上、左下、右下四个每部分。任何一个左上的点都在另外三部分有对应的点，那么只要保证回文，<code>1</code>的数量就一定可以被<code>4</code>整除。</p>
+<p>&emsp;&emsp;对于可能存在的中间一行和一列。首先，如果行和列都是奇数，则正中间的那个数修改为<code>0</code>,因为除了这个点，都是四个一组对应或者是两两对应，如果是<code>1</code>，那么<code>1</code>的总数一定是奇数。其次，对于镜像位置，统计不需要修改的<code>1</code>的数量，记作<code>cnt1</code>，以及有多少位置需要修改，记作<code>sum</code>。最后，分类讨论。</p>
+<p>&emsp;&emsp;若<code>cnt1 % 4 == 0</code>，则将<code>sum</code>对都修改为<code>0</code>即可；</p>
+<p>&emsp;&emsp;若<code>cnt1 % 4 == 2</code>，则需要考虑<code>sum</code>，如果<code>sum &gt; 0</code>，则只需要把其中一对改成<code>1</code>，剩下的都改成<code>0</code>即可。如果<code>sum == 0</code>，则需要额外把<code>cnt1</code>中的两个<code>1</code>改成<code>0</code>。</p>
+<p><strong>AC代码：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">minFlips</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; grid)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> n = grid.<span class="built_in">size</span>(), m = grid[<span class="number">0</span>].<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> num1, ans = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n / <span class="number">2</span>; ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; m / <span class="number">2</span>; ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                num1 = grid[i][j] + grid[n - i - <span class="number">1</span>][j] + grid[i][m - j - <span class="number">1</span>] + grid[n - i - <span class="number">1</span>][m - j - <span class="number">1</span>];</span><br><span class="line">                ans += <span class="built_in">min</span>(num1, <span class="number">4</span> - num1);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(n % <span class="number">2</span> &amp;&amp; m % <span class="number">2</span>) ans += grid[n / <span class="number">2</span>][m / <span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> cnt1 = <span class="number">0</span>, sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(n&amp;<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; m / <span class="number">2</span>; ++j)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(grid[n / <span class="number">2</span>][j] == grid[n / <span class="number">2</span>][m - j - <span class="number">1</span>]) cnt1 += grid[n / <span class="number">2</span>][j] * <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">else</span> ++sum;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(m&amp;<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n / <span class="number">2</span>; ++i)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(grid[i][m / <span class="number">2</span>] == grid[n - i - <span class="number">1</span>][m / <span class="number">2</span>]) cnt1 += grid[i][m / <span class="number">2</span>] * <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">else</span> ++sum;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ans + (sum ? sum : cnt1 % <span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="3241-标记所有节点需要的时间-换根DP"><a href="#3241-标记所有节点需要的时间-换根DP" class="headerlink" title="3241. 标记所有节点需要的时间[换根DP]"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/time-taken-to-mark-all-nodes/">3241. 标记所有节点需要的时间[换根DP]</a></h2><p><img src="/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/image-20240807021229456-17229679520092.png" alt="image-20240807021229456"></p>
+<p><strong>分析：</strong></p>
+<p>&emsp;&emsp;首先，搞明白这题的本质。即有一颗<code>n</code>个节点，<code>2n-2</code>条边的有向树，边权与边的终点的奇偶性有关。求<code>ans[i]</code>，表示以<code>i</code>为根节点时，树的最大深度是多少。</p>
+<p>&emsp;&emsp;暴力的方法是进行<code>n</code>次DFS，正解是换根DP。</p>
+<p>&emsp;&emsp;我们可以先以节点<code>0</code>为根节点进行一次DFS。在此期间，对于每个节点<code>y</code>维护一个三元组<code>[mx1, mx2, mx_node]</code>,表示以节点<code>y</code>为根的子树的最大深度、次大深度、最大深度子树的根节点。之后在第二个DFS中求解<code>ans[i]</code>。假设节点<code>x</code>是<code>y</code>的父节点，当我们需要求<code>ans[y]</code>时，我们考虑把树看成一颗以<code>y</code>为根节点的树，此时树的最大深度与<code>y</code>的所有子树有关，而我们在第一次DFS时维护了考虑除了以<code>x</code>为根节点的所有子树的情况下的最大深度，即<code>y</code>的<code>mx1</code>，记作<code>ans1</code>。那么<code>ans[y]</code>只需要将<code>ans1</code>和以<code>x</code>为根节点的子树的最大深度（记作<code>ans2</code>）取<code>max</code>。</p>
+<p>&emsp;&emsp;<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1F4421S7XU/?spm_id_from=333.999.0.0&amp;vd_source=db13106f8d22cef06c011c3ed739a3e9">视频讲解（b站 灵茶山艾府）</a></p>
+<p>&emsp;&emsp;关于代码，我的代码在第二次DFS中会修改节点对应的三元组，我认为比较便于理解换根的过程(DFS到节点<code>x</code>时会计算其儿子<code>y</code>的答案)。还有一种写法是在DFS的过程中维护从当前节点<code>y</code>的父节点<code>x</code>出发，向上走的最大深度<code>from_up</code>，这样也非常方便答案的更新，在这种方法下，我们始终将树看成以<code>0</code>为根节点（DFS到节点<code>x</code>时计算<code>x</code>的答案）。</p>
+<p>&emsp;&emsp;对于<code>from_up</code>的更新，如果<code>x</code> 的儿子 <code>y = mx_node</code>，那么DFS到<code>y</code>时，<code>form_up</code>应该修改为</p>
+<p>$max(fromup, mx2) + 2 - x \% 2$，如果<code>y! = mx_node</code>,则应该修改为$max(fromup, mx1) + 2 - x \% 2$。</p>
+<p><strong>AC代码：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">timeTaken</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; edges)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">vt</span>(edges.<span class="built_in">size</span>() + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> x: edges)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> u = x[<span class="number">0</span>], v = x[<span class="number">1</span>];</span><br><span class="line">            vt[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">            vt[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        vector&lt;tuple&lt;<span class="type">int</span>, <span class="type">int</span>, <span class="type">int</span>&gt;&gt; <span class="built_in">nodes</span>(vt.<span class="built_in">size</span>());</span><br><span class="line">        function&lt;<span class="type">int</span>(<span class="type">int</span>, <span class="type">int</span>)&gt; dfs = [&amp;](<span class="type">int</span> x, <span class="type">int</span> fa)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mx1 = <span class="number">0</span>, mx2 = <span class="number">0</span>, mx_node = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> y: vt[x])</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(y == fa) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">                <span class="type">int</span> dep = <span class="built_in">dfs</span>(y, x) + <span class="number">2</span> - y % <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">if</span>(dep &gt; mx1)</span><br><span class="line">                &#123;</span><br><span class="line">                    mx2 = mx1;</span><br><span class="line">                    mx1 = dep;</span><br><span class="line">                    mx_node = y;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(dep &gt; mx2) mx2 = dep;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            nodes[x] = &#123;mx1, mx2, mx_node&#125;;</span><br><span class="line">            <span class="keyword">return</span> mx1;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ans</span><span class="params">(vt.size())</span></span>;</span><br><span class="line">        ans[<span class="number">0</span>] = <span class="built_in">dfs</span>(<span class="number">0</span>, <span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">        function&lt;<span class="type">void</span>(<span class="type">int</span>, <span class="type">int</span>)&gt; ddfs = [&amp;](<span class="type">int</span> x, <span class="type">int</span> fa)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mx1, mx2, mx_node;</span><br><span class="line">            <span class="type">int</span> ans1, ans2;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> y: vt[x])</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(y == fa) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">                mx1 = <span class="built_in">get</span>&lt;<span class="number">0</span>&gt;(nodes[y]), mx2 = <span class="built_in">get</span>&lt;<span class="number">1</span>&gt;(nodes[y]), mx_node = <span class="built_in">get</span>&lt;<span class="number">2</span>&gt;(nodes[y]);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(y == <span class="built_in">get</span>&lt;<span class="number">2</span>&gt;(nodes[x])) </span><br><span class="line">                &#123;</span><br><span class="line">                    ans1 = mx1, ans2 = <span class="built_in">get</span>&lt;<span class="number">1</span>&gt;(nodes[x]) + <span class="number">2</span> - x % <span class="number">2</span>;</span><br><span class="line">                    ans[y] = <span class="built_in">max</span>(ans1, ans2);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> </span><br><span class="line">                &#123;</span><br><span class="line">                    ans1 = mx1, ans2 = <span class="built_in">get</span>&lt;<span class="number">0</span>&gt;(nodes[x]) + <span class="number">2</span> - x % <span class="number">2</span>;</span><br><span class="line">                    ans[y] = <span class="built_in">max</span>(ans1, ans2);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span>(ans2 &gt; mx1)</span><br><span class="line">                &#123;</span><br><span class="line">                    mx2 = mx1;</span><br><span class="line">                    mx1 = ans2;</span><br><span class="line">                    mx_node = x;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(ans2 &gt; mx2) mx2 = ans2;</span><br><span class="line"></span><br><span class="line">                nodes[y] = &#123;mx1, mx2, mx_node&#125;;</span><br><span class="line">                </span><br><span class="line">                <span class="built_in">ddfs</span>(y, x);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">ddfs</span>(<span class="number">0</span>, <span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">timeTaken</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; edges)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">vt</span>(edges.<span class="built_in">size</span>() + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> x: edges)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> u = x[<span class="number">0</span>], v = x[<span class="number">1</span>];</span><br><span class="line">            vt[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">            vt[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        vector&lt;tuple&lt;<span class="type">int</span>, <span class="type">int</span>, <span class="type">int</span>&gt;&gt; <span class="built_in">nodes</span>(vt.<span class="built_in">size</span>());</span><br><span class="line">        function&lt;<span class="type">int</span>(<span class="type">int</span>, <span class="type">int</span>)&gt; dfs = [&amp;](<span class="type">int</span> x, <span class="type">int</span> fa)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> mx1 = <span class="number">0</span>, mx2 = <span class="number">0</span>, mx_node = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> y: vt[x])</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(y == fa) <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">                <span class="type">int</span> dep = <span class="built_in">dfs</span>(y, x) + <span class="number">2</span> - y % <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">if</span>(dep &gt; mx1)</span><br><span class="line">                &#123;</span><br><span class="line">                    mx2 = mx1;</span><br><span class="line">                    mx1 = dep;</span><br><span class="line">                    mx_node = y;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span>(dep &gt; mx2) mx2 = dep;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            nodes[x] = &#123;mx1, mx2, mx_node&#125;;</span><br><span class="line">            <span class="keyword">return</span> mx1;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="built_in">dfs</span>(<span class="number">0</span>, <span class="number">-1</span>);</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">ans</span><span class="params">(vt.size())</span></span>;</span><br><span class="line">        </span><br><span class="line">        function&lt;<span class="type">void</span>(<span class="type">int</span>, <span class="type">int</span>, <span class="type">int</span>)&gt; ddfs = [&amp;](<span class="type">int</span> x, <span class="type">int</span> fa, <span class="type">int</span> from_up)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">auto</span>&amp; [mx1, mx2, mx_node] = nodes[x];</span><br><span class="line">            ans[x] = <span class="built_in">max</span>(from_up, mx1);</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> y: vt[x])</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(y == fa) <span class="keyword">continue</span>;</span><br><span class="line">                <span class="built_in">ddfs</span>(y, x, <span class="built_in">max</span>(from_up, (y == mx_node ? mx2 : mx1)) + <span class="number">2</span> - x % <span class="number">2</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">ddfs</span>(<span class="number">0</span>, <span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">//ans[0] = nodes[0][0];</span></span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92DP/" rel="tag"># 动态规划DP</a>
+              <a href="/tags/%E6%8D%A2%E6%A0%B9DP/" rel="tag"># 换根DP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/07/30/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-angle-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
