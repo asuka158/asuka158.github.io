@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="PyTorch 入门        环境配置       示例代码：分类 MNIST 数据集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch 入门">
+<meta property="og:url" content="http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="PyTorch 入门        环境配置       示例代码：分类 MNIST 数据集">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810021228218-17232271509551.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810022157013-17232277182542.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810023031138-17232282322543.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810023729025-17232286500604.png">
+<meta property="article:published_time" content="2024-08-09T17:47:52.000Z">
+<meta property="article:modified_time" content="2024-08-09T19:50:47.477Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810021228218-17232271509551.png">
+
+
+<link rel="canonical" href="http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/","path":"2024/08/10/PyTorch-入门/","title":"PyTorch 入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PyTorch 入门 | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    PyTorch 入门
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Conda"><span class="nav-number">1.1.1.</span> <span class="nav-text">Conda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PyCharm"><span class="nav-number">1.1.2.</span> <span class="nav-text">PyCharm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PyTorch"><span class="nav-number">1.1.3.</span> <span class="nav-text">PyTorch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81%EF%BC%9A%E5%88%86%E7%B1%BB-MNIST-%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.2.</span> <span class="nav-text">示例代码：分类 MNIST 数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%AF%BC%E5%85%A5"><span class="nav-number">1.2.1.</span> <span class="nav-text">软件包导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%B6%85%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">设置超参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%92%8C%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">1.2.3.</span> <span class="nav-text">数据加载和预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E7%AE%80%E5%8D%95%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.4.</span> <span class="nav-text">定义简单的神经网络模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E5%92%8C%E4%BC%98%E5%8C%96%E5%99%A8"><span class="nav-number">1.2.5.</span> <span class="nav-text">定义损失函数和优化器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.6.</span> <span class="nav-text">训练模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.7.</span> <span class="nav-text">测试模型</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PyTorch 入门 | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PyTorch 入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-08-10 01:47:52 / 修改时间：03:50:47" itemprop="dateCreated datePublished" datetime="2024-08-10T01:47:52+08:00">2024-08-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 style="text-align: center;">
+    PyTorch 入门
+</h1>
+
+<p><div style="text-align: center;">
+    <strong>环境配置</strong>
+</div></p>
+<p><div style="text-align: center;">
+    <strong>示例代码：分类 MNIST 数据集</strong>
+</div><br><span id="more"></span></p>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>&emsp;&emsp;是需要PyCharm+Conda+Pytorch的。<strong><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV15U4y1J7Ss/?spm_id_from=333.880.my_history.page.click&amp;vd_source=db13106f8d22cef06c011c3ed739a3e9">B站视频讲解</a></strong>（视频讲解是重点，下面内容不重要）</p>
+<h3 id="Conda"><a href="#Conda" class="headerlink" title="Conda"></a>Conda</h3><p>&emsp;&emsp;Conda分为Miniconda和Anaconda，有一定的区别，但是应该不重要。</p>
+<p>&emsp;&emsp;Conda主要用于管理Python环境和包的工具，为用户提供了一种简化的方式来安装、管理和切换 Python 版本及其相关的包。它们的核心功能是帮助用户创建隔离的环境，以便在不同的项目中使用不同的包和依赖项，而不会产生冲突。</p>
+<p>&emsp;&emsp;简单来说，就是那个b Python的包太多了，然后配那个b环境麻烦的要死。而Conda提供一个虚拟环境，把不同的项目隔开，从来减少上述问题。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">conda env list  # 查看现有的环境列表</span><br><span class="line"></span><br><span class="line"># 为了加快Python包的下载速度，添加国内镜像源</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/</span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/</span><br><span class="line"></span><br><span class="line">conda activate [环境名] # 切换到对应环境</span><br><span class="line"></span><br><span class="line">conda list # 查看环境内可用的软件包</span><br><span class="line"></span><br><span class="line">pip list # 查看环境下下载的软件包</span><br><span class="line"></span><br><span class="line">conda install [包名] # 在对应的环境下下载软件包</span><br><span class="line"></span><br><span class="line">conda remove [包名] # 删除包</span><br><span class="line"></span><br><span class="line">conda remove --help # 查看使用方法</span><br></pre></td></tr></table></figure>
+<h3 id="PyCharm"><a href="#PyCharm" class="headerlink" title="PyCharm"></a>PyCharm</h3><p>&emsp;&emsp;创建使用Conda环境的Python项目。</p>
+<p><img src="/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810021228218-17232271509551.png" alt="image-20240810021228218"></p>
+<h3 id="PyTorch"><a href="#PyTorch" class="headerlink" title="PyTorch"></a>PyTorch</h3><p>&emsp;&emsp;PyTorch官网：<a target="_blank" rel="noopener" href="https://pytorch.org/get-started/previous-versions/">https://pytorch.org/get-started/previous-versions/</a></p>
+<p>&emsp;&emsp;使用<code>nvidia-smi</code>查看电脑显卡的cuda版本。</p>
+<p><img src="/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810022157013-17232277182542.png" alt="image-20240810022157013"></p>
+<p>&emsp;&emsp;在过去版本中找到小于等于的，然后在对应Conda环境下运行安装命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># CUDA 11.3</span><br><span class="line">conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;最后在Anaconda里有个done说明成功了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">print_hi</span>(<span class="params">name</span>):</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;Hi, <span class="subst">&#123;name&#125;</span>&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(torch.__version__) <span class="comment"># pytorch 版本</span></span><br><span class="line">    <span class="built_in">print</span>(torch.version.cuda) <span class="comment"># cuda版本</span></span><br><span class="line">    <span class="built_in">print</span>(torch.backends.cudnn.version()) <span class="comment"># cudnn版本</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;gpu:&#x27;</span>, torch.cuda.is_available()) <span class="comment"># gpu加速是否可用</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print_hi(<span class="string">&#x27;PyCharm&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810023031138-17232282322543.png" alt="image-20240810023031138"></p>
+<h2 id="示例代码：分类-MNIST-数据集"><a href="#示例代码：分类-MNIST-数据集" class="headerlink" title="示例代码：分类 MNIST 数据集"></a>示例代码：分类 MNIST 数据集</h2><p>&emsp;&emsp;一个完整的训练脚本一般包括数据加载、模型定义、训练和评估。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> datasets, transforms</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置超参数</span></span><br><span class="line">batch_size = <span class="number">64</span></span><br><span class="line">learning_rate = <span class="number">0.01</span></span><br><span class="line">epochs = <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据加载和预处理</span></span><br><span class="line">transform = transforms.Compose([</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize((<span class="number">0.1307</span>,), (<span class="number">0.3081</span>,))</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">train_dataset = datasets.MNIST(root=<span class="string">&#x27;./data&#x27;</span>, train=<span class="literal">True</span>, transform=transform, download=<span class="literal">True</span>)</span><br><span class="line">test_dataset = datasets.MNIST(root=<span class="string">&#x27;./data&#x27;</span>, train=<span class="literal">False</span>, transform=transform, download=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=<span class="literal">True</span>)</span><br><span class="line">test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义简单的神经网络模型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(SimpleNet, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.fc1 = nn.Linear(<span class="number">28</span> * <span class="number">28</span>, <span class="number">128</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc2 = nn.Linear(<span class="number">128</span>, <span class="number">64</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc3 = nn.Linear(<span class="number">64</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = x.view(-<span class="number">1</span>, <span class="number">28</span> * <span class="number">28</span>)</span><br><span class="line">        x = torch.relu(<span class="variable language_">self</span>.fc1(x))</span><br><span class="line">        x = torch.relu(<span class="variable language_">self</span>.fc2(x))</span><br><span class="line">        x = <span class="variable language_">self</span>.fc3(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">model = SimpleNet()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数和优化器</span></span><br><span class="line">criterion = nn.CrossEntropyLoss()</span><br><span class="line">optimizer = optim.SGD(model.parameters(), lr=learning_rate)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型</span></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">    model.train()</span><br><span class="line">    running_loss = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> images, labels <span class="keyword">in</span> train_loader:</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        outputs = model(images)</span><br><span class="line">        loss = criterion(outputs, labels)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        running_loss += loss.item()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Epoch [<span class="subst">&#123;epoch+<span class="number">1</span>&#125;</span>/<span class="subst">&#123;epochs&#125;</span>], Loss: <span class="subst">&#123;running_loss/<span class="built_in">len</span>(train_loader):<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试模型</span></span><br><span class="line">model.<span class="built_in">eval</span>()</span><br><span class="line">correct = <span class="number">0</span></span><br><span class="line">total = <span class="number">0</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    <span class="keyword">for</span> images, labels <span class="keyword">in</span> test_loader:</span><br><span class="line">        outputs = model(images)</span><br><span class="line">        _, predicted = torch.<span class="built_in">max</span>(outputs.data, <span class="number">1</span>)</span><br><span class="line">        total += labels.size(<span class="number">0</span>)</span><br><span class="line">        correct += (predicted == labels).<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Accuracy on the test set: <span class="subst">&#123;<span class="number">100</span> * correct / total:<span class="number">.2</span>f&#125;</span>%&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/image-20240810023729025-17232286500604.png" alt="image-20240810023729025"></p>
+<h3 id="软件包导入"><a href="#软件包导入" class="headerlink" title="软件包导入"></a>软件包导入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> datasets, transforms</span><br></pre></td></tr></table></figure>
+<p><strong><code>torch</code></strong>：PyTorch 的核心，处理张量和自动微分。</p>
+<p><strong><code>torch.nn</code></strong>：用于构建和定义神经网络模型。</p>
+<p><strong><code>torch.optim</code></strong>：用于优化模型参数，提供多种优化算法。</p>
+<p><strong><code>DataLoader</code></strong>：用于批量加载数据，特别适合大规模数据集。</p>
+<p><strong><code>torchvision</code></strong>：处理图像数据的工具包，提供数据集、预处理和预训练模型。</p>
+<h3 id="设置超参数"><a href="#设置超参数" class="headerlink" title="设置超参数"></a>设置超参数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置超参数</span></span><br><span class="line">batch_size = <span class="number">64</span></span><br><span class="line">learning_rate = <span class="number">0.01</span></span><br><span class="line">epochs = <span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;学习率控制着优化器在每次迭代时应该调整模型参数的幅度。学习率的设置需要在模型训练的速度与稳定性之间找到一个平衡。过大的学习率虽然可能使模型快速收敛，但容易导致训练不稳定；过小的学习率虽然训练稳定，但速度可能非常慢。常见的初始学习率范围在 0.001 到 0.1 之间。</p>
+<h3 id="数据加载和预处理"><a href="#数据加载和预处理" class="headerlink" title="数据加载和预处理"></a>数据加载和预处理</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数据加载和预处理</span></span><br><span class="line">transform = transforms.Compose([</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize((<span class="number">0.1307</span>,), (<span class="number">0.3081</span>,))</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">train_dataset = datasets.MNIST(root=<span class="string">&#x27;./data&#x27;</span>, train=<span class="literal">True</span>, transform=transform, download=<span class="literal">True</span>)</span><br><span class="line">test_dataset = datasets.MNIST(root=<span class="string">&#x27;./data&#x27;</span>, train=<span class="literal">False</span>, transform=transform, download=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=<span class="literal">True</span>)</span><br><span class="line">test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;通常，原始图像数据以 PIL（Python Imaging Library）图像对象或 NumPy 数组的形式存在。</p>
+<p>&emsp;&emsp;<code>transforms.ToTensor()</code>:将 PIL 图像或 NumPy 数组转换为 PyTorch 的 <code>torch.Tensor</code> 对象，同时将像素值从 <code>[0, 255]</code> 归一化到 <code>[0, 1]</code> 之间。</p>
+<p>&emsp;&emsp;<code>transforms.Normalize((0.1307,), (0.3081,))</code>:对数据进行标准化处理，将每个像素值调整为均值为 <code>0</code>、标准差为 <code>1</code> 的分布。这里的 <code>0.1307</code> 和 <code>0.3081</code> 是在整个数据集上预先计算好的全局均值和标准差，通常在MNIST数据集中使用。</p>
+<p>&emsp;&emsp;标准化后，数据将具有均值为 0，标准差为 1 的分布。这使得模型在处理数据时，各个特征在同一个尺度上，有利于梯度下降法的有效应用。标准化可以防止输入数据的范围过大或过小，避免在神经网络训练过程中出现梯度消失或爆炸的问题。</p>
+<h3 id="定义简单的神经网络模型"><a href="#定义简单的神经网络模型" class="headerlink" title="定义简单的神经网络模型"></a>定义简单的神经网络模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleNet</span>(nn.Module): <span class="comment"># 继承 nn.Module 类</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>): <span class="comment"># 初始化模型</span></span><br><span class="line">        <span class="built_in">super</span>(SimpleNet, <span class="variable language_">self</span>).__init__() <span class="comment"># 调用父类的构造函数</span></span><br><span class="line">        <span class="variable language_">self</span>.fc1 = nn.Linear(<span class="number">28</span> * <span class="number">28</span>, <span class="number">128</span>)   <span class="comment"># 定义第一层全连接层，将输入（28x28图像）展平成一个784维的向量，输出128维</span></span><br><span class="line">        <span class="variable language_">self</span>.fc2 = nn.Linear(<span class="number">128</span>, <span class="number">64</span>) <span class="comment"># 定义第二层全连接层，将128维的输入转换为64维的输出</span></span><br><span class="line">        <span class="variable language_">self</span>.fc3 = nn.Linear(<span class="number">64</span>, <span class="number">10</span>) <span class="comment"># 定义第三层全连接层，将64维的输入转换为10维的输出（对应10个类别）</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>): <span class="comment"># 定义前向传播过程</span></span><br><span class="line">        x = x.view(-<span class="number">1</span>, <span class="number">28</span> * <span class="number">28</span>)	<span class="comment"># 将输入图像展平为一个784维的向量</span></span><br><span class="line">        x = torch.relu(<span class="variable language_">self</span>.fc1(x)) <span class="comment"># 通过第一层全连接层并应用ReLU激活函数</span></span><br><span class="line">        x = torch.relu(<span class="variable language_">self</span>.fc2(x)) <span class="comment"># 通过第二层全连接层并应用ReLU激活函数</span></span><br><span class="line">        x = <span class="variable language_">self</span>.fc3(x) <span class="comment"># 通过第三层全连接层输出10个类别的得分</span></span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line">model = SimpleNet() <span class="comment"># 实例化模型</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>x.view(-1, 28 * 28)</code></strong>：将输入的图像展平为一个 784 维的向量，以便输入到全连接层。<ul>
+<li><code>-1</code> 表示自动推断批次的大小（batch size），因此如果输入是多个图像，将每张图像展平成 784 维的向量。</li>
+<li>例如，如果输入是一个形状为 <code>(batch_size, 1, 28, 28)</code> 的四维张量，那么经过 <code>view</code> 操作后，形状将变为 <code>(batch_size, 784)</code>。 </li>
+</ul>
+</li>
+<li><code>ReLU</code>: 将输入的负值置为 0，正值保持不变。</li>
+<li><strong><code>return x</code></strong>：返回最终的输出，即每个类别的得分。通常在后续步骤中，会将这个输出传递给 <code>softmax</code> 函数，以转换为概率分布，从而得到最终的分类结果。</li>
+</ul>
+<h3 id="定义损失函数和优化器"><a href="#定义损失函数和优化器" class="headerlink" title="定义损失函数和优化器"></a>定义损失函数和优化器</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义损失函数和优化器</span></span><br><span class="line">criterion = nn.CrossEntropyLoss()  <span class="comment"># 使用交叉熵损失函数，用于多分类问题</span></span><br><span class="line">optimizer = optim.SGD(model.parameters(), lr=learning_rate)  <span class="comment"># 使用随机梯度下降优化器</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>criterion</code></strong>：变量 <code>criterion</code> 是损失函数的实例。在训练过程中，损失函数用于评估模型的预测与真实标签之间的差异。</li>
+<li><p><strong><code>nn.CrossEntropyLoss()</code></strong>：</p>
+<ul>
+<li><strong>交叉熵损失函数</strong>：<code>CrossEntropyLoss</code> 是 PyTorch 中用于多分类问题的标准损失函数。它结合了 <code>LogSoftmax</code> 和 <code>NLLLoss</code>，适合于分类任务。</li>
+</ul>
+</li>
+<li><p><strong><code>optimizer</code></strong>：变量 <code>optimizer</code> 是优化器的实例。优化器用于更新模型的参数，以最小化损失函数。</p>
+</li>
+<li><strong><code>optim.SGD()</code></strong>：<ul>
+<li><strong>随机梯度下降（SGD）</strong>：<code>SGD</code> 是一种常用的优化算法。它通过对每一批次的数据计算梯度，然后沿梯度的反方向更新模型参数，从而减少损失函数的值。</li>
+<li><strong><code>model.parameters()</code></strong>：<code>model.parameters()</code> 是一个迭代器，包含模型中所有需要更新的参数。这些参数将在训练过程中被优化器更新。</li>
+</ul>
+</li>
+</ul>
+<h3 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 训练模型</span></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(epochs):  <span class="comment"># 训练过程，循环执行epochs次</span></span><br><span class="line">    model.train()  <span class="comment"># 设置模型为训练模式（启用dropout等）</span></span><br><span class="line">    running_loss = <span class="number">0.0</span>  <span class="comment"># 初始化累计损失</span></span><br><span class="line">    <span class="keyword">for</span> images, labels <span class="keyword">in</span> train_loader:  <span class="comment"># 遍历训练数据集，每次获取一个批次的数据和标签</span></span><br><span class="line">        optimizer.zero_grad()  <span class="comment"># 将优化器的梯度缓存清零</span></span><br><span class="line">        outputs = model(images)  <span class="comment"># 前向传播：计算模型输出</span></span><br><span class="line">        loss = criterion(outputs, labels)  <span class="comment"># 计算损失</span></span><br><span class="line">        loss.backward()  <span class="comment"># 反向传播：计算梯度</span></span><br><span class="line">        optimizer.step()  <span class="comment"># 更新模型参数</span></span><br><span class="line">        running_loss += loss.item()  <span class="comment"># 累加损失</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输出当前epoch的平均损失</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Epoch [<span class="subst">&#123;epoch+<span class="number">1</span>&#125;</span>/<span class="subst">&#123;epochs&#125;</span>], Loss: <span class="subst">&#123;running_loss/<span class="built_in">len</span>(train_loader):<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="测试模型"><a href="#测试模型" class="headerlink" title="测试模型"></a>测试模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 测试模型</span></span><br><span class="line">model.<span class="built_in">eval</span>()  <span class="comment"># 设置模型为评估模式（禁用dropout等）</span></span><br><span class="line">correct = <span class="number">0</span>  <span class="comment"># 初始化正确预测数</span></span><br><span class="line">total = <span class="number">0</span>  <span class="comment"># 初始化样本总数</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad():  <span class="comment"># 禁用梯度计算（节省内存和计算资源）</span></span><br><span class="line">    <span class="keyword">for</span> images, labels <span class="keyword">in</span> test_loader:  <span class="comment"># 遍历测试数据集</span></span><br><span class="line">        outputs = model(images)  <span class="comment"># 前向传播：计算模型输出</span></span><br><span class="line">        _, predicted = torch.<span class="built_in">max</span>(outputs.data, <span class="number">1</span>)  <span class="comment"># 获取每个样本预测得分最高的类别</span></span><br><span class="line">        total += labels.size(<span class="number">0</span>)  <span class="comment"># 累加样本总数</span></span><br><span class="line">        correct += (predicted == labels).<span class="built_in">sum</span>().item()  <span class="comment"># 累加正确预测的样本数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出测试集上的分类准确率</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Accuracy on the test set: <span class="subst">&#123;<span class="number">100</span> * correct / total:<span class="number">.2</span>f&#125;</span>%&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/07/LeetCode-%E7%AC%AC136%E5%9C%BA%E5%8F%8C%E5%91%A8%E8%B5%9B-%E3%80%90%E6%8D%A2%E6%A0%B9DP%E3%80%91/" rel="prev" title="LeetCode 第136场双周赛 【换根DP】">
+                  <i class="fa fa-angle-left"></i> LeetCode 第136场双周赛 【换根DP】
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
