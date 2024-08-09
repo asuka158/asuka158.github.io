@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="PyG Use-Cases &amp; Applications        1.通过邻居采样扩展GNN(Scaling GNNs via Neighbor Sampling)       2.点云处理 (Point Cloud Processing)       3.解释图神经网络(Explaining Graph Neural Networks)       4.浅节点嵌入(Shallow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyG Use-Cases &amp; Applications">
+<meta property="og:url" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="PyG Use-Cases &amp; Applications        1.通过邻居采样扩展GNN(Scaling GNNs via Neighbor Sampling)       2.点云处理 (Point Cloud Processing)       3.解释图神经网络(Explaining Graph Neural Networks)       4.浅节点嵌入(Shallow">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/image-20240720004031177.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/image-20240714230048566.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/image-20240715000731922.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/image-20240715001320125.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/image-20240715002400717.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/image-20240720004400400.png">
+<meta property="og:image" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/shallow_node_embeddings.png">
+<meta property="article:published_time" content="2024-08-09T19:57:15.000Z">
+<meta property="article:modified_time" content="2024-08-09T20:12:10.517Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="PyG">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/08/10/PyG-Use-Cases-Applications/image-20240720004031177.png">
+
+
+<link rel="canonical" href="http://example.com/2024/08/10/PyG-Use-Cases-Applications/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/08/10/PyG-Use-Cases-Applications/","path":"2024/08/10/PyG-Use-Cases-Applications/","title":"PyG Use-Cases & Applications"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PyG Use-Cases & Applications | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    PyG Use-Cases &amp; Applications
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%80%9A%E8%BF%87%E9%82%BB%E5%B1%85%E9%87%87%E6%A0%B7%E6%89%A9%E5%B1%95GNN-Scaling-GNNs-via-Neighbor-Sampling"><span class="nav-number">1.1.</span> <span class="nav-text">1.通过邻居采样扩展GNN(Scaling GNNs via Neighbor Sampling)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1%E9%82%BB%E5%B1%85%E9%87%87%E6%A0%B7-Neighbor-Sampling"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1邻居采样(Neighbor Sampling)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">具体步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">存在的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">代码示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">模型训练</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%B1%82%E6%AC%A1%E5%8C%96%E9%82%BB%E5%B1%85%E9%87%87%E6%A0%B7-Hierarchical-Extension"><span class="nav-number">1.1.3.</span> <span class="nav-text">1.3 层次化邻居采样(Hierarchical Extension)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.4.</span> <span class="nav-text">1.4 高级功能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E8%B4%A8%E5%9B%BE%E5%92%8C%E5%BC%82%E8%B4%A8%E5%9B%BE%E7%9A%84%E9%87%87%E6%A0%B7%E6%94%AF%E6%8C%81"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">同质图和异质图的采样支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8A%82%E7%9C%81%E5%86%85%E5%AD%98%E7%9A%84%E8%8A%82%E7%82%B9%E5%90%88%E5%B9%B6"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">节省内存的节点合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E5%90%91%E5%92%8C%E5%8F%8C%E5%90%91%E5%AD%90%E5%9B%BE%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">有向和双向子图的生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5%E9%A2%84%E6%B5%8B%E7%9A%84%E4%B8%93%E7%94%A8%E9%87%87%E6%A0%B7"><span class="nav-number">1.1.4.4.</span> <span class="nav-text">链接预测的专用采样</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%82%B9%E4%BA%91%E5%A4%84%E7%90%86-Point-Cloud-Processing"><span class="nav-number">1.2.</span> <span class="nav-text">2. 点云处理 (Point Cloud Processing)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3D%E7%82%B9%E4%BA%91%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 3D点云数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BDGeometricShapes-%E6%95%B0%E6%8D%AE%E9%9B%86%EF%BC%88%E7%BD%91%E6%A0%BC%EF%BC%89"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">加载GeometricShapes 数据集（网格）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E6%A0%BC%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%82%B9%E4%BA%91"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">网格转换为点云</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%82%B9%E4%BA%91%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%9B%BE"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">点云转换为图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-PointNet-%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 PointNet++ 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E8%81%9A%E5%90%88-Neighborhood-Aggregation"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">领域聚合(Neighborhood Aggregation)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84-Network-Architecture"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">网络架构(Network Architecture)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">训练过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%A7%A3%E9%87%8A%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-Explaining-Graph-Neural-Networks"><span class="nav-number">1.3.</span> <span class="nav-text">3.解释图神经网络(Explaining Graph Neural Networks)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%8E%A5%E5%8F%A3-Explainer-Interface"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 解释器接口(Explainer Interface)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E9%80%89%E6%8B%A9%E8%A7%A3%E9%87%8A%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">1. 选择解释算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%AE%9A%E4%B9%89%E8%A7%A3%E9%87%8A%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">2. 定义解释的类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%AE%BE%E7%BD%AE%E6%8E%A9%E7%A0%81%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">3. 设置掩码类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%8E%A9%E7%A0%81%E5%90%8E%E5%A4%84%E7%90%86"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">4. 掩码后处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E5%90%8C%E8%B4%A8%E5%9B%BE%E4%B8%8A%E7%9A%84%E8%8A%82%E7%82%B9%E5%88%86%E7%B1%BB"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">解释同质图上的节点分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E5%BC%82%E6%9E%84%E5%9B%BE%E4%B8%8A%E7%9A%84%E8%8A%82%E7%82%B9%E5%88%86%E7%B1%BB"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">解释异构图上的节点分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A%E5%90%8C%E8%B4%A8%E5%9B%BE%E4%B8%8A%E7%9A%84%E5%9B%BE%E5%9B%9E%E5%BD%92"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">解释同质图上的图回归</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%B5%85%E8%8A%82%E7%82%B9%E5%B5%8C%E5%85%A5-Shallow-Node-Embeddings"><span class="nav-number">1.4.</span> <span class="nav-text">4.浅节点嵌入(Shallow Node Embeddings)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1DeepWalk"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1DeepWalk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2Node2Vec"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2Node2Vec</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">加载数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E8%AF%86%E5%8C%96Node2Vec%E6%A8%A1%E5%9D%97"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">初识化Node2Vec模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">创建数据加载器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%B8%B8%E8%B5%B0"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">生成随机游走</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83-1"><span class="nav-number">1.4.2.5.</span> <span class="nav-text">模型训练</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%8A%82%E7%82%B9%E5%B5%8C%E5%85%A5"><span class="nav-number">1.4.2.6.</span> <span class="nav-text">获取节点嵌入</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-MetaPath2Vec"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 MetaPath2Vec</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/10/PyG-Use-Cases-Applications/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PyG Use-Cases & Applications | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PyG Use-Cases & Applications
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-08-10 03:57:15 / 修改时间：04:12:10" itemprop="dateCreated datePublished" datetime="2024-08-10T03:57:15+08:00">2024-08-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 style="text-align: center;">
+    PyG Use-Cases & Applications
+</h1>
+
+<div style="text-align: center;">
+    <strong>1.通过邻居采样扩展GNN(Scaling GNNs via Neighbor Sampling)</strong>
+</div>
+<div style="text-align: center;">
+    <strong>2.点云处理 (Point Cloud Processing)</strong>
+</div>
+<div style="text-align: center;">
+    <strong>3.解释图神经网络(Explaining Graph Neural Networks)</strong>
+</div>
+<div style="text-align: center;">
+    <strong>4.浅节点嵌入(Shallow Node Embeddings)</strong>
+</div>
+
+<span id="more"></span>
+<h2 id="1-通过邻居采样扩展GNN-Scaling-GNNs-via-Neighbor-Sampling"><a href="#1-通过邻居采样扩展GNN-Scaling-GNNs-via-Neighbor-Sampling" class="headerlink" title="1.通过邻居采样扩展GNN(Scaling GNNs via Neighbor Sampling)"></a><a target="_blank" rel="noopener" href="https://pytorch-geometric.readthedocs.io/en/latest/tutorial/neighbor_loader.html">1.通过邻居采样扩展GNN(Scaling GNNs via Neighbor Sampling)</a></h2><p>&emsp;&emsp;主要是针对<strong>节点级别的学习</strong>的过程。        </p>
+<p>&emsp;&emsp;在大型图中的图神经网络（GNNs）中实现扩展是一个重要的挑战，特别是在工业和社交应用中。<strong>传统的深度神经网络</strong>通过将训练损失分解为单个样本（称为小批量<strong>Mini-batches</strong>)并近似精确梯度随机地进行训练，已知能够很好地扩展到大量数据中。然而，在<strong>图神经网络（GNNs）</strong>中，应用随机小批量训练是具有挑战性，这是因为<strong>图的节点和边之间的相互依赖性很强</strong>。具体来说，每个节点的表示（即嵌入）不仅依赖于它自己的特征，还依赖于它的邻居节点的嵌入，而这些邻居节点的嵌入又依赖于它们各自的邻居节点的嵌入。这种依赖关系是递归的，随着网络层数的增加，这种依赖性会迅速扩大。这种现象通常被称为<strong>邻居爆炸</strong>。</p>
+<p>&emsp;&emsp;GNNs通常以<strong>全批量</strong>方式执行是一种简单的解决方法，这种方法意味着在每次训练时，整个图的数据都会被加载到内存中，并且所有节点的嵌入都会在所有层中同时计算和更新。这种方法存在<strong>内存需求大、计算需要大、收敛速度慢、不可扩展</strong>等问题。因此，<strong>可扩展技术</strong>对于将 GNN 应用于大规模图是必不可少的，以缓解由<strong>Mini-batches</strong>训练引起的<strong>邻居爆炸</strong>问题。</p>
+<p>&emsp;&emsp;可扩展技术有<strong>节点采样</strong>、<strong>层采样</strong>或<strong>子图采样技术</strong>、<strong>将传播与预测分离</strong>。这部分主要讲解<strong>节点采样（Node-wise Sampling）</strong>。节点采样是一种解决邻居爆炸问题的有效方法。该方法通过限制每个节点<strong>只采样一部分邻居节点</strong>，从而减少计算量和内存使用。（节点采样和邻居采样是同一个意思）。</p>
+<h3 id="1-1邻居采样-Neighbor-Sampling"><a href="#1-1邻居采样-Neighbor-Sampling" class="headerlink" title="1.1邻居采样(Neighbor Sampling)"></a>1.1邻居采样(Neighbor Sampling)</h3><h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>&emsp;&emsp;PyG通过<code>torch_geometric.loader.NeighborLoader</code>类实现邻居采样。邻居采样通过递归地为每个节点采样固定数量的邻居节点来工作，即对每个节点 $v$，最多采样 $k$ 个邻居节点。这种方法确保了整体的 $L$-跳邻域大小是有界的。</p>
+<h4 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h4><p>​        1.<strong>初始化种子节点</strong>：从一组种子节点集合 $S$ 开始，初始化采样过程。</p>
+<p>​        2.<strong>递归采样邻居</strong>：对于每一跳，从当前节点集合 $S_i$ 中的每个节点，最多采样 $k$ 个邻居节点，形成下一跳的节点集合 $S_{i+1}$。</p>
+<p>​        3.<strong>重复步骤</strong>：继续对每一跳采样，直到达到预定的跳数 $L$。</p>
+<p>​        4.<strong>构建子图</strong>：最终结果是围绕每个种子节点 $S$ 的一个有向 $L$-跳子图，其中保证每个节点与至少一个种子节点之间有一条长度不超过 $L$ 的路径。</p>
+<p><img src="/2024/08/10/PyG-Use-Cases-Applications/image-20240720004031177.png" alt="image-20240720004031177"></p>
+<h4 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h4><p>&emsp;&emsp;值得注意的是，邻域采样只能在一定程度上缓解邻域爆炸问题，因为整体邻域大小仍会随着层数的增加而呈指数增长。因此，通常不适合进行超过两到三跳的采样。</p>
+<p>&emsp;&emsp;通常情况下，采样的跳数和消息传递层数保持同步是合理的，因为采样更多跳数的数据无法被GNN的消息传递层利用。例如，如果GNN只有两层，那么采样三跳或更多邻居是浪费的，因为第三跳及其之后的节点特征不会被用到。尽管如此，如果需要使用更深层的GNN（超过两到三层），需要将采样的子图转换为双向子图，以确保正确的消息传递流。这样做可以使消息在反向路径上传递，确保节点之间的信息能够被有效整合。</p>
+<p>&emsp;&emsp;除了<strong>邻居采样</strong>，PyG还提供了其他适合更深层GNN的采样方法，例如：</p>
+<ol>
+<li><strong>ClusterLoader</strong>：将图划分为多个子图，每次加载一个子图进行训练。适用于大规模图数据的分布式训练。</li>
+<li><strong>GraphSAINTSampler</strong>：基于图结构的采样方法，通过随机游走或边采样生成子图，适用于捕捉复杂图结构。</li>
+<li><strong>ShaDowKHopSampler</strong>：直接采样固定数量跳数的子图，确保每个子图中的节点数量受限，适用于深层消息传递。</li>
+</ol>
+<h3 id="1-2-基本用法"><a href="#1-2-基本用法" class="headerlink" title="1.2 基本用法"></a>1.2 基本用法</h3><h4 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch_geometric.data <span class="keyword">import</span> Data</span><br><span class="line"><span class="keyword">from</span> torch_geometric.loader <span class="keyword">import</span> NeighborLoader</span><br><span class="line"></span><br><span class="line"><span class="comment"># 节点特征，形状为 [num_nodes, num_features]</span></span><br><span class="line">x = torch.randn(<span class="number">8</span>, <span class="number">32</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 节点标签，形状为 [num_nodes]</span></span><br><span class="line">y = torch.randint(<span class="number">0</span>, <span class="number">4</span>, (<span class="number">8</span>, ))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 边的索引，形状为 [2, num_edges]</span></span><br><span class="line">edge_index = torch.tensor([</span><br><span class="line">    [<span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建图数据</span></span><br><span class="line">data = Data(x=x, y=y, edge_index=edge_index)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 NeighborLoader</span></span><br><span class="line">loader = NeighborLoader(</span><br><span class="line">    data,</span><br><span class="line">    input_nodes=torch.tensor([<span class="number">0</span>, <span class="number">1</span>]),  <span class="comment"># 初始种子节点</span></span><br><span class="line">    num_neighbors=[<span class="number">2</span>, <span class="number">1</span>],  <span class="comment"># 每跳采样的邻居节点数</span></span><br><span class="line">    batch_size=<span class="number">1</span>,   <span class="comment"># 批处理大小</span></span><br><span class="line">    replace=<span class="literal">False</span>,  <span class="comment"># 不放回采样</span></span><br><span class="line">    shuffle=<span class="literal">False</span>,  <span class="comment"># 不打乱种子节点</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#   0  1</span></span><br><span class="line"><span class="comment">#  / \/ \</span></span><br><span class="line"><span class="comment"># 2  3  4</span></span><br><span class="line"><span class="comment"># |  |  |</span></span><br><span class="line"><span class="comment"># 5  6  7</span></span><br></pre></td></tr></table></figure>
+<p><code>input_nodes</code>：初始种子节点集合，从这些节点开始进行采样。在这个示例中，初始种子节点是<code>[0, 1]</code>。</p>
+<p><code>num_neighbors</code>：定义每一跳要采样的邻居节点数。在这个示例中，第一跳采样2个邻居，第二跳采样1个邻居。</p>
+<p><code>batch_size</code>：每次采样处理的种子节点数量。在这个示例中，<code>batch_size</code>为1，意味着<code>input_nodes</code>将被分成每次一个节点的小批量进行采样。</p>
+<p><code>replace</code>：是否进行有放回采样。<code>False</code>表示无放回采样，每个邻居节点只能被采样一次。</p>
+<p><code>shuffle</code>：是否在每个epoch中打乱种子节点的顺序。<code>False</code>表示不打乱。</p>
+<p>此外，节点和边特征将被过滤为仅包含采样节点/边的特征。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">batch = <span class="built_in">next</span>(<span class="built_in">iter</span>(loader))</span><br><span class="line"></span><br><span class="line">batch.edge_index</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tensor([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">            [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]])</span><br><span class="line"></span><br><span class="line"> batch.n_id</span><br><span class="line"> &gt;&gt;&gt; tensor([<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">6</span>])</span><br><span class="line"></span><br><span class="line"> batch.batch_size</span><br><span class="line"> &gt;&gt;&gt; <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><code>NeighborLoader</code>从种子节点开始采样，结果子图中的边会指向种子节点。这与PyG的默认消息传递流程（从源节点到目标节点）很好地契合</p>
+<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>&emsp;&emsp;使用<code>NeighborLoader</code>进行子图采样，使用一个两层的GraphSAGE模型来训练GNN。(对<strong>种子节点</strong>进行监督学习)</p>
+<p>&emsp;&emsp;GraphSAGE（Graph Sample and AggregatE）是一种用于大规模图数据的节点表示学习的模型。它通过采样节点的邻居并聚合邻居的特征来学习<strong>节点</strong>的表示。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> GraphSAGE</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">device = torch.device(<span class="string">&#x27;cuda&#x27;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&#x27;cpu&#x27;</span>)</span><br><span class="line"></span><br><span class="line">model = GraphSAGE(</span><br><span class="line">    in_channels=<span class="number">32</span>,</span><br><span class="line">    hidden_channels=<span class="number">64</span>,</span><br><span class="line">    out_channels=<span class="number">4</span>,</span><br><span class="line">    num_layers=<span class="number">2</span></span><br><span class="line">).to(device)</span><br><span class="line"></span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.01</span>)</span><br></pre></td></tr></table></figure>
+<p><code>model = GraphSAGE(...)</code>：定义一个两层的 <code>GraphSAGE</code> 模型。</p>
+<ul>
+<li><code>in_channels=32</code>：输入特征的维度是 32。</li>
+<li><code>hidden_channels=64</code>：隐藏层特征的维度是 64。</li>
+<li><code>out_channels=4</code>：输出特征的维度是 4（通常是<strong>类别数</strong>）。</li>
+<li><code>num_layers=2</code>：使用两层的 <code>GraphSAGE</code>。</li>
+<li><code>.to(device)</code>：将模型移动到指定设备（CPU 或 GPU）上。</li>
+</ul>
+<p><code>optimizer = torch.optim.Adam(model.parameters(), lr=0.01)</code>：定义一个 Adam 优化器，用于更新模型参数，学习率设为 0.01。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> batch <span class="keyword">in</span> loader:</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    batch = batch.to(device)</span><br><span class="line">    out = model(batch.x, batch.edge_index)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 仅考虑种子节点的预测和标签</span></span><br><span class="line">    y = batch.y[:batch.batch_size]</span><br><span class="line">    out = out[:batch.batch_size]</span><br><span class="line"></span><br><span class="line">    loss = F.cross_entropy(out, y)</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>optimizer.zero_grad()</code>：清除优化器中存储的梯度，确保不累积梯度。</p>
+<p><code>out = model(batch.x, batch.edge_index)</code>：将批次中的节点特征 <code>batch.x</code> 和边索引 <code>batch.edge_index</code> 输入模型，计算输出 <code>out</code>。</p>
+<p><code>y = batch.y[:batch.batch_size]</code>：提取批次中前 <code>batch_size</code> 个种子节点的标签。</p>
+<p><code>out = out[:batch.batch_size]</code>：提取批次中前 <code>batch_size</code> 个种子节点的预测结果。</p>
+<p><code>loss = F.cross_entropy(out, y)</code>：计算交叉熵损失，仅考虑种子节点的预测和标签。</p>
+<p><code>loss.backward()</code>：反向传播计算梯度。</p>
+<p><code>optimizer.step()</code>：使用优化器更新模型参数。</p>
+<h3 id="1-3-层次化邻居采样-Hierarchical-Extension"><a href="#1-3-层次化邻居采样-Hierarchical-Extension" class="headerlink" title="1.3 层次化邻居采样(Hierarchical Extension)"></a>1.3 层次化邻居采样(Hierarchical Extension)</h3><p>&emsp;&emsp;<code>NeighborLoader</code> 的缺点: 可能会进行<strong>无效的计算</strong>，造成计算资源的浪费。</p>
+<p>&emsp;&emsp;在 GNN 的训练过程中，<code>NeighborLoader</code> 会在每一层采样相应数量的邻居节点。这些采样节点的表示将被用于更新种子节点的表示。然而，在较深的层中采样的邻居节点，其信息可能不再用于更新种子节点的最终表示。例如，在第 3 层中采样的节点，其信息可能在前两层中已经被充分利用，后续层中这些节点的信息不再贡献新的信息。对这些无用节点进行计算是多余的，因为它们的信息不会影响种子节点的最终表示。</p>
+<p>&emsp;&emsp;层次化邻居采样就是为了消除这一开销，并进一步加速 mini-batch GNN 的训练。</p>
+<h3 id="1-4-高级功能"><a href="#1-4-高级功能" class="headerlink" title="1.4 高级功能"></a>1.4 高级功能</h3><p>&emsp;&emsp;<code>NeighborLoader</code> 提供了许多高级功能，以满足不同的使用需求。</p>
+<h4 id="同质图和异质图的采样支持"><a href="#同质图和异质图的采样支持" class="headerlink" title="同质图和异质图的采样支持"></a>同质图和异质图的采样支持</h4><p>&emsp;&emsp;<strong>同质图</strong>：所有节点和边都是同一类型。</p>
+<p>&emsp;&emsp;<strong>异质图</strong>：包含不同类型的节点和边。</p>
+<p>&emsp;&emsp;对于异质图的采样，只需使用 <code>HeteroData</code> 对象进行初始化。采样异质图时，可以对每种边类型单独指定采样参数，例如为每种边类型单独指定采样的邻居数量。</p>
+<h4 id="节省内存的节点合并"><a href="#节省内存的节点合并" class="headerlink" title="节省内存的节点合并"></a>节省内存的节点合并</h4><p>&emsp;&emsp;默认情况下，<code>NeighborLoader</code> 将不同种子节点的采样节点融合到一个子图中。这种方式下，共享的邻居节点不会在结果子图中重复，从而节省内存。通过这种方式，可以减少内存消耗。当然也可以通过传递 <code>disjoint=True</code> 选项给 <code>NeighborLoader</code> 来禁用此行为。</p>
+<h4 id="有向和双向子图的生成"><a href="#有向和双向子图的生成" class="headerlink" title="有向和双向子图的生成"></a>有向和双向子图的生成</h4><p>&emsp;&emsp;默认情况下，从 <code>NeighborLoader</code> 返回的子图将是有向的，这限制了其使用到与采样跳数相等深度的 GNN。</p>
+<p>&emsp;&emsp;<code>subgraph_type=&quot;bidirectional&quot;</code>：将采样的边转换为双向边，适用于更深层的 GNN。</p>
+<p>&emsp;&emsp;<code>subgraph_type=&quot;induced&quot;</code>：返回包含所有采样节点的诱导子图。</p>
+<h4 id="链接预测的专用采样"><a href="#链接预测的专用采样" class="headerlink" title="链接预测的专用采样"></a>链接预测的专用采样</h4><p>&emsp;&emsp;<code>NeighborLoader</code> 主要用于节点级别的采样。<code>LinkNeighborLoader</code> 专为链接预测场景设计,接收一组输入边，进行邻居采样，并返回包含源节点和目标节点的子图。</p>
+<h2 id="2-点云处理-Point-Cloud-Processing"><a href="#2-点云处理-Point-Cloud-Processing" class="headerlink" title="2. 点云处理 (Point Cloud Processing)"></a><a target="_blank" rel="noopener" href="https://pytorch-geometric.readthedocs.io/en/latest/tutorial/point_cloud.html">2. 点云处理 (Point Cloud Processing)</a></h2><p>&emsp;&emsp;点云是空间中点的数据集，可以表示三维形状或对象，通常由三维扫描仪获取。点云中的每一个点包含有三维坐标，有些可能含有颜色信息（RGB）或反射强度信息（Intensity）。</p>
+<p><img src="/2024/08/10/PyG-Use-Cases-Applications/image-20240714230048566.png" alt="image-20240714230048566"></p>
+<p>&emsp;&emsp;点云默认情况下没有图结构，但我们可以使用PyG的转换工具使其适用于PyG中的全套GNN。关键思想是从点云中创建一个<strong>合成图</strong>，之后再通过GNN的消息传递方案学习有意义的局部几何结构。然后可以使用这些点的表示来执行点云分类或分割等任务。</p>
+<h3 id="2-1-3D点云数据集"><a href="#2-1-3D点云数据集" class="headerlink" title="2.1 3D点云数据集"></a>2.1 3D点云数据集</h3><p>&emsp;&emsp;PyG 提供了几个点云数据集，例如 PCPNetDataset、S3DIS 和 ShapeNet 数据集。为了便于学习，教程中以GeometricShapes 数据集为例。这是一个包含各种几何形状（如立方体、球体或金字塔）的玩具数据集。GeometricShapes 数据集默认包含的是网格，而不是点云，通过 <code>pos</code> 和 <code>face</code> 属性表示顶点及其三角连接信息。</p>
+<h4 id="加载GeometricShapes-数据集（网格）"><a href="#加载GeometricShapes-数据集（网格）" class="headerlink" title="加载GeometricShapes 数据集（网格）"></a>加载GeometricShapes 数据集（网格）</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.datasets <span class="keyword">import</span> GeometricShapes</span><br><span class="line"></span><br><span class="line">dataset = GeometricShapes(root=<span class="string">&#x27;data/GeometricShapes&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(dataset)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>GeometricShapes(<span class="number">40</span>)</span><br><span class="line"></span><br><span class="line">data = dataset[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(data)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Data(pos=[<span class="number">32</span>, <span class="number">3</span>], face=[<span class="number">3</span>, <span class="number">30</span>], y=[<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+<p><strong><code>pos</code> 属性</strong>：表示网格的顶点坐标。每个顶点有三个坐标值（x, y, z），因此 <code>pos</code> 的形状为 <code>[num_vertices, 3]</code>。<code>pos=[32, 3]</code> 表示这个网格有 32 个顶点，每个顶点由 3 个坐标值表示。</p>
+<p><strong><code>face</code> 属性</strong>：表示网格的三角连接信息。每个面（face）由三个顶点索引组成，表示这个三角面是由哪三个顶点构成的。<code>face</code> 的形状为 <code>[3, num_faces]</code>。<code>face=[3, 30]</code> 表示这个网格有 30 个三角面，每个面由三个顶点索引表示。</p>
+<p><strong><code>y</code> 属性</strong>：表示标签信息，用于分类任务。<code>y=[1]</code> 表示这个网格有一个标签。</p>
+<p><img src="/2024/08/10/PyG-Use-Cases-Applications/image-20240715000731922.png" alt="image-20240715000731922"></p>
+<h4 id="网格转换为点云"><a href="#网格转换为点云" class="headerlink" title="网格转换为点云"></a>网格转换为点云</h4><p>&emsp;&emsp;由于我们对点云感兴趣，我们可以通过使用 <code>torch_geometric.transforms</code> 将网格转换为点云。具体来说，PyG 提供了 <code>SamplePoints</code> 转换，该转换将根据面面积均匀采样网格面上的固定数量的点。需要注意的是，采样点是随机的，因此每次访问时都会收到一个新的点云。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch_geometric.transforms <span class="keyword">as</span> T</span><br><span class="line"></span><br><span class="line">dataset.transform = T.SamplePoints(num=<span class="number">256</span>)</span><br><span class="line"></span><br><span class="line">data = dataset[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(data)</span><br><span class="line"><span class="comment"># 输出: Data(pos=[256, 3], y=[1])</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/10/PyG-Use-Cases-Applications/image-20240715001320125.png" alt="image-20240715001320125"></p>
+<h4 id="点云转换为图"><a href="#点云转换为图" class="headerlink" title="点云转换为图"></a>点云转换为图</h4><p>&emsp;&emsp;由于我们感兴趣的是学习局部几何结构，我们希望构建一个图形，以便连接附近的点。通常，这可以通过$k$-最近邻搜索或通过球查询（每个点找到在给定半径 $r$ 内的所有邻居）等方式完成。 PyG中的<code>KNNGraph</code>和<code>RadiusGraph</code>转换提供此类图形生成的实用程序。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.transforms <span class="keyword">import</span> SamplePoints, KNNGraph</span><br><span class="line"></span><br><span class="line">dataset.transform = T.Compose([SamplePoints(num=<span class="number">256</span>), KNNGraph(k=<span class="number">6</span>)])</span><br><span class="line"></span><br><span class="line">data = dataset[<span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(data)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Data(pos=[<span class="number">256</span>, <span class="number">3</span>], edge_index=[<span class="number">2</span>, <span class="number">1536</span>], y=[<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;此时，<code>data</code>对象包含<code>edge_index</code>,说明这是一个图，总共有1536条边，256个点。</p>
+<p><img src="/2024/08/10/PyG-Use-Cases-Applications/image-20240715002400717.png" alt="image-20240715002400717"></p>
+<h3 id="2-2-PointNet-实现"><a href="#2-2-PointNet-实现" class="headerlink" title="2.2 PointNet++ 实现"></a>2.2 PointNet++ 实现</h3><p>&emsp;&emsp;PointNet++提出了一种用于点云分类和分割的图神经网络架构。PointNet++ 通过分组、邻域聚合和下采样迭代地处理点云。</p>
+<p><img src="/2024/08/10/PyG-Use-Cases-Applications/image-20240720004400400.png" alt="image-20240720004400400"></p>
+<p>​        1.<strong>分组阶段</strong>：通过$k$ -近邻搜索或球查询构建图。</p>
+<p>​        2.<strong>邻域聚合阶段</strong>：执行 GNN 层，对于每个点，从其直接邻居（由前一阶段构建的图给出）聚合信息。这样，PointNet++ 可以捕获不同尺度的局部上下文。</p>
+<p>​        3.<strong>下采样阶段</strong>：实现适合具有不同大小点云的池化方案。</p>
+<h4 id="领域聚合-Neighborhood-Aggregation"><a href="#领域聚合-Neighborhood-Aggregation" class="headerlink" title="领域聚合(Neighborhood Aggregation)"></a>领域聚合(Neighborhood Aggregation)</h4><p>&emsp;&emsp;PointNet++ 定义的简单神经信息传递方案：$h_{i}^{(l+1)}=max_{j∈\mathcal{N}(i)}MLP(h_j^{(l)},p_j−p_i)$</p>
+<p>其中：</p>
+<ul>
+<li>$h_i^{(l+1)}$ 表示在第$l+1$层时点 $i$ 的隐藏特征。</li>
+<li>$h_j^{(l)}$ 表示在第 $l$ 层时点 $j$ 的隐藏特征。</li>
+<li>$p_i$和 $p_j$ 分别表示点 $i$ 和点 $j$ 的位置。</li>
+<li>$\mathcal{N}(i)$ 表示点 $i$的邻域。</li>
+<li>$\text{MLP}$ 是多层感知器，用于映射邻居点的特征和位置差异。</li>
+<li>$\max$ 表示在邻域内进行最大池化操作。</li>
+</ul>
+<p>&emsp;&emsp;通过使用 PyTorch Geometric (PyG) 的 <code>MessagePassing</code> 接口来实现这一层。这一接口帮助我们自动处理消息传递过程，只需定义消息函数 <code>message()</code> 和聚合方式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> Tensor</span><br><span class="line"><span class="keyword">from</span> torch.nn <span class="keyword">import</span> Sequential, Linear, ReLU</span><br><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> MessagePassing</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PointNetLayer</span>(<span class="title class_ inherited__">MessagePassing</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels: <span class="built_in">int</span>, out_channels: <span class="built_in">int</span></span>):</span><br><span class="line">        <span class="comment"># 使用&quot;max&quot;聚合的消息传递</span></span><br><span class="line">        <span class="built_in">super</span>().__init__(aggr=<span class="string">&#x27;max&#x27;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 初始化MLP</span></span><br><span class="line">        <span class="comment"># 输入特征维度是隐藏节点维度加上3个位置维度</span></span><br><span class="line">        <span class="variable language_">self</span>.mlp = Sequential(</span><br><span class="line">            Linear(in_channels + <span class="number">3</span>, out_channels),</span><br><span class="line">            ReLU(),</span><br><span class="line">            Linear(out_channels, out_channels),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, h: Tensor, pos: Tensor, edge_index: Tensor</span>) -&gt; Tensor:</span><br><span class="line">        <span class="comment"># 开始传播消息</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.propagate(edge_index, h=h, pos=pos)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">message</span>(<span class="params">self, h_j: Tensor, pos_j: Tensor, pos_i: Tensor</span>) -&gt; Tensor:</span><br><span class="line">        <span class="comment"># h_j: 邻居点的特征 [num_edges, in_channels]</span></span><br><span class="line">        <span class="comment"># pos_j: 邻居点的位置 [num_edges, 3]</span></span><br><span class="line">        <span class="comment"># pos_i: 中心点的位置 [num_edges, 3]</span></span><br><span class="line"></span><br><span class="line">        edge_feat = torch.cat([h_j, pos_j - pos_i], dim=-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.mlp(edge_feat)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong><code>self.mlp</code></strong>:</p>
+<ul>
+<li>初始化一个多层感知器（MLP），用于将邻居点的特征和位置差异映射到新的特征空间。</li>
+<li><code>Sequential</code>：按顺序堆叠神经网络层。</li>
+<li><code>Linear(in_channels + 3, out_channels)</code>：全连接层，将输入特征（邻居点的特征和位置差异）映射到输出特征。<ul>
+<li><code>in_channels</code> 是输入特征的维度。</li>
+<li><code>+3</code> 是因为每个点有3个位置维度。</li>
+</ul>
+</li>
+<li><code>ReLU()</code>：ReLU激活函数，用于增加模型的非线性能力。</li>
+<li><code>Linear(out_channels, out_channels)</code>：再次创建一个全连接层，将前一层的输出特征映射到输出维度。</li>
+</ul>
+<p><strong><code>forward</code> 函数:</strong></p>
+<ul>
+<li><code>h</code>：输入特征（每个点的特征）。</li>
+<li><code>pos</code>：每个点的位置。</li>
+<li><code>edge_index</code>：边索引，定义了图中的连接关系。</li>
+<li><code>self.propagate(edge_index, h=h, pos=pos)</code>：调用 <code>propagate</code> 方法开始消息传递,这个方法会自动处理消息计算、消息聚合和节点更新的整个流程。</li>
+</ul>
+<p><strong><code>message</code> 函数:</strong></p>
+<ul>
+<li><code>h_j</code>：邻居点的特征。</li>
+<li><code>pos_j</code>：邻居点的位置。</li>
+<li><code>pos_i</code>：中心点的位置。</li>
+<li><code>edge_feat = torch.cat([h_j, pos_j - pos_i], dim=-1)</code>：计算位置差异，并将邻居点的特征和位置差异连接起来。<code>dim=-1</code> 表示沿着最后一个维度进行拼接。<code>h_j</code> 的形状为 <code>[num_edges, in_channels]</code>，<code>pos_j - pos_i</code> 的形状为 <code>[num_edges, 3]</code>，结果张量 <code>edge_feat</code> 的形状为 <code>[num_edges, in_channels + 3]</code>。</li>
+<li><code>return self.mlp(edge_feat)</code>：通过 MLP 处理连接后的特征，生成消息。</li>
+</ul>
+<h4 id="网络架构-Network-Architecture"><a href="#网络架构-Network-Architecture" class="headerlink" title="网络架构(Network Architecture)"></a>网络架构(Network Architecture)</h4><p>&emsp;&emsp;我们可以利用上面的 <code>PointNetLayer</code> 来定义我们的网络架构。<strong>(对点云进行学习)</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> global_max_pool</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PointNet</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.conv1 = PointNetLayer(<span class="number">3</span>, <span class="number">32</span>)</span><br><span class="line">        <span class="variable language_">self</span>.conv2 = PointNetLayer(<span class="number">32</span>, <span class="number">32</span>)</span><br><span class="line">        <span class="variable language_">self</span>.classifier = Linear(<span class="number">32</span>, dataset.num_classes)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, pos: Tensor, edge_index: Tensor, batch: Tensor</span>) -&gt; Tensor:</span><br><span class="line">        <span class="comment"># 进行两层消息传递</span></span><br><span class="line">        h = <span class="variable language_">self</span>.conv1(h=pos, pos=pos, edge_index=edge_index)</span><br><span class="line">        h = h.relu()</span><br><span class="line">        h = <span class="variable language_">self</span>.conv2(h=h, pos=pos, edge_index=edge_index)</span><br><span class="line">        h = h.relu()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 全局池化</span></span><br><span class="line">        h = global_max_pool(h, batch)  <span class="comment"># [num_examples, hidden_channels]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 分类器</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.classifier(h)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model = PointNet()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(model)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>PointNet(</span><br><span class="line"><span class="meta">... </span>  (conv1): PointNetLayer()</span><br><span class="line"><span class="meta">... </span>  (conv2): PointNetLayer()</span><br><span class="line"><span class="meta">... </span>  (classifier): Linear(in_features=<span class="number">32</span>, out_features=<span class="number">40</span>, bias=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">... </span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>构造函数 <code>__init__</code></strong></p>
+<ul>
+<li><strong><code>self.conv1 = PointNetLayer(3, 32)</code></strong>：第一个 PointNet 层，输入特征维度为 3（节点的位置），输出特征维度为 32。</li>
+<li><strong><code>self.conv2 = PointNetLayer(32, 32)</code></strong>：第二个 PointNet 层，输入特征维度为 32，输出特征维度为 32。</li>
+<li><strong><code>self.classifier = Linear(32, dataset.num_classes)</code></strong>：线性分类器，将 32 维的全局特征映射到数据集的类别数量。</li>
+</ul>
+<p><strong>前向传播函数 <code>forward</code>:</strong></p>
+<ul>
+<li>第一个 <code>PointNetLayer</code> 将节点的位置特征 <code>pos</code> 转换为 32 维的输出特征，并应用 ReLU 激活函数。</li>
+<li><p>第二个 <code>PointNetLayer</code> 接收第一个层的输出特征并再次转换为 32 维的输出特征，同样应用 ReLU 激活函数。</p>
+</li>
+<li><p><code>global_max_pool</code> 函数在每个样本的节点维度上取最大值，生成每个点云的全局特征,运行全局池化后，<code>h</code> 的形状会变成 <code>[num_examples, hidden_channels]</code>,其中<code>num_examples</code> 表示输入中点云的数量，即点云的个数，<code>hidden_channels</code> 表示每个点云经过特征提取后的特征向量维度，在这个例子中是 32 维。</p>
+</li>
+</ul>
+<p><strong>(classifier): Linear(in_features=32, out_features=40, bias=True)</strong></p>
+<p>线性分类器的公式为：</p>
+<p>$\text{output} = \text{input} \times \text{weight}^T + \text{bias}$</p>
+<ul>
+<li><strong><code>input</code></strong> 是输入特征矩阵，形状为 <code>[batch_size, in_features]</code>，在这里是 <code>[batch_size, 32]</code>。</li>
+<li><strong><code>weight</code></strong> 是权重矩阵，形状为 <code>[out_features, in_features]</code>，在这里是 <code>[40, 32]</code>。</li>
+<li><strong><code>bias</code></strong> 是偏置向量，形状为 <code>[out_features]</code>，在这里是 <code>[40]</code>。</li>
+</ul>
+<p>当 <code>bias=True</code> 时，线性层会在计算输出时添加一个偏置向量，使得每个输出单元都有一个可训练的偏置参数。这可以帮助模型更好地拟合数据，因为偏置项允许每个输出单元在没有输入信号时仍能产生一个激活信号。</p>
+<p>&emsp;&emsp;总的来说，这份代码通过继承 <code>torch.nn.Module</code> 创建了我们的网络架构，并在其构造函数中初始化了两个 <code>PointNetLayer</code> 模块和一个最终的线性分类器。</p>
+<p>&emsp;&emsp;在 <code>forward()</code> 方法中，我们应用了两个基于图的卷积操作，并通过 ReLU 非线性函数增强它们。第一个操作接收 3 个输入特征（节点的位置），并将它们映射到 32 个输出特征。之后，每个点都包含其二跳邻域的信息，并且应该已经能够区分简单的局部形状。</p>
+<p>&emsp;&emsp;接下来，我们应用了一个全局图汇聚函数，即 <code>global_max_pool()</code>，它对每个样本沿节点维度取最大值。为了将不同的节点映射到其对应的样本中，我们使用批次向量，这在使用小批量 <code>torch_geometric.loader.DataLoader</code> 时会自动创建和使用。最后，我们应用一个线性分类器，将每个点云的全局 32 维特征映射到其中的一个类别，该类别属于 40 个可能的类别之一。</p>
+<h4 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.loader <span class="keyword">import</span> DataLoader</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义和准备数据集</span></span><br><span class="line">train_dataset = GeometricShapes(root=<span class="string">&#x27;data/GeometricShapes&#x27;</span>, train=<span class="literal">True</span>)</span><br><span class="line">train_dataset.transform = T.Compose([SamplePoints(num=<span class="number">256</span>), KNNGraph(k=<span class="number">6</span>)])</span><br><span class="line">test_dataset = GeometricShapes(root=<span class="string">&#x27;data/GeometricShapes&#x27;</span>, train=<span class="literal">False</span>)</span><br><span class="line">test_dataset.transform = T.Compose([SamplePoints(num=<span class="number">256</span>), KNNGraph(k=<span class="number">6</span>)])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建数据加载器</span></span><br><span class="line">train_loader = DataLoader(train_dataset, batch_size=<span class="number">10</span>, shuffle=<span class="literal">True</span>)</span><br><span class="line">test_loader = DataLoader(test_dataset, batch_size=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 PointNet 模型、优化器和损失函数</span></span><br><span class="line">model = PointNet()</span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.01</span>)</span><br><span class="line">criterion = torch.nn.CrossEntropyLoss()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练过程</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">    model.train()</span><br><span class="line">    total_loss = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> data <span class="keyword">in</span> train_loader:</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        logits = model(data.pos, data.edge_index, data.batch)</span><br><span class="line">        loss = criterion(logits, data.y)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        total_loss += <span class="built_in">float</span>(loss) * data.num_graphs</span><br><span class="line">    <span class="keyword">return</span> total_loss / <span class="built_in">len</span>(train_loader.dataset)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试过程</span></span><br><span class="line"><span class="meta">@torch.no_grad()</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>():</span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    total_correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> data <span class="keyword">in</span> test_loader:</span><br><span class="line">        logits = model(data.pos, data.edge_index, data.batch)</span><br><span class="line">        pred = logits.argmax(dim=-<span class="number">1</span>)</span><br><span class="line">        total_correct += <span class="built_in">int</span>((pred == data.y).<span class="built_in">sum</span>())</span><br><span class="line">    <span class="keyword">return</span> total_correct / <span class="built_in">len</span>(test_loader.dataset)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主训练循环</span></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">51</span>):</span><br><span class="line">    loss = train()</span><br><span class="line">    test_acc = test()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;Epoch: <span class="subst">&#123;epoch:02d&#125;</span>, Loss: <span class="subst">&#123;loss:<span class="number">.4</span>f&#125;</span>, Test Acc: <span class="subst">&#123;test_acc:<span class="number">.4</span>f&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>创建优化器（Optimizer）:</strong></p>
+<ul>
+<li><strong>Adam 优化器</strong>：<code>torch.optim.Adam</code> 是 PyTorch 中的 Adam 优化器，用于更新神经网络模型的参数，以最小化损失函数。</li>
+<li><strong><code>model.parameters()</code></strong>：这个函数会返回模型中所有需要学习的参数。在这里，优化器会使用这些参数来计算梯度并更新它们，使得模型在训练过程中逐渐优化损失函数。</li>
+<li><strong>学习率 (<code>lr=0.01</code>)</strong>：指定了优化器在每次参数更新时应该采取的步长(学习率)大小。较大的学习率可能会导致快速收敛，但可能会错过最优解；较小的学习率可能会导致收敛速度过慢。选择合适的学习率是训练深度学习模型中的重要考虑因素。</li>
+</ul>
+<p><strong>定义损失函数（Loss Criterion）：</strong></p>
+<ul>
+<li><code>torch.nn.CrossEntropyLoss()</code> 是交叉熵损失函数，常用于多类别分类问题中计算模型预测值与真实标签之间的差异。</li>
+<li>在多类别分类任务中，模型的输出是一个概率分布，交叉熵损失函数衡量了模型预测的概率分布与实际标签的差异程度，越小表示模型预测得越准确。</li>
+<li><strong>交叉熵损失函数</strong>：对于每个样本，交叉熵损失函数计算预测概率分布与真实概率分布之间的损失，然后求取平均值作为最终的损失值。在神经网络的反向传播过程中，优化器根据这个损失值来调整模型参数，使得模型能够更好地预测出正确的类别。</li>
+</ul>
+<h2 id="3-解释图神经网络-Explaining-Graph-Neural-Networks"><a href="#3-解释图神经网络-Explaining-Graph-Neural-Networks" class="headerlink" title="3.解释图神经网络(Explaining Graph Neural Networks)"></a><a target="_blank" rel="noopener" href="https://pytorch-geometric.readthedocs.io/en/latest/tutorial/explain.html">3.解释图神经网络(Explaining Graph Neural Networks)</a></h2><p>&emsp;&emsp;PyTorch Geometric（PyG）从版本2.3开始提供了强大的图神经网络（GNN）解释性功能。这些功能包括：</p>
+<ol>
+<li><strong>Explainer类</strong>：PyG的<code>Explainer</code>类提供了灵活的接口，能够生成多种类型的解释，帮助理解模型如何基于输入的图数据进行决策或预测。</li>
+<li><strong>解释算法</strong>：提供多种解释算法，例如GNNExplainer、PGExplainer和CaptumExplainer。</li>
+<li><strong>可视化支持</strong>：支持通过<code>Explanation</code>或<code>HeteroExplanation</code>类可视化解释。</li>
+<li><strong>评估指标</strong>：提供<code>metric</code>包中的指标，用于评估解释质量。</li>
+</ol>
+<h3 id="3-1-解释器接口-Explainer-Interface"><a href="#3-1-解释器接口-Explainer-Interface" class="headerlink" title="3.1 解释器接口(Explainer Interface)"></a>3.1 解释器接口(Explainer Interface)</h3><p>&emsp;&emsp;<code>torch_geometric.explain.Explainer</code> 类为图神经网络（GNN）的解释性提供了一个统一的接口。以下是 <code>Explainer</code> 接口的详细说明：</p>
+<h4 id="1-选择解释算法"><a href="#1-选择解释算法" class="headerlink" title="1. 选择解释算法"></a>1. 选择解释算法</h4><p>&emsp;&emsp;<code>Explainer</code> 类允许用户从 <code>torch_geometric.explain.algorithm</code> 模块中选择一种解释算法。例如，<code>GNNExplainer</code>：通过掩码节点和边来解释GNN模型的预测。</p>
+<h4 id="2-定义解释的类型"><a href="#2-定义解释的类型" class="headerlink" title="2. 定义解释的类型"></a>2. 定义解释的类型</h4><ul>
+<li><code>explanation_type=&quot;phenomenon&quot;</code>：解释数据集的底层现象。</li>
+<li><code>explanation_type=&quot;model&quot;</code>：解释GNN模型的预测。</li>
+</ul>
+<h4 id="3-设置掩码类型"><a href="#3-设置掩码类型" class="headerlink" title="3. 设置掩码类型"></a>3. 设置掩码类型</h4><p>掩码用于确定哪些节点和边对解释是重要的。</p>
+<ul>
+<li><code>mask=&quot;object&quot;</code>：掩码整个对象。</li>
+<li><code>mask=&quot;attributes&quot;</code>：掩码对象的特定属性。</li>
+</ul>
+<h4 id="4-掩码后处理"><a href="#4-掩码后处理" class="headerlink" title="4. 掩码后处理"></a>4. 掩码后处理</h4><ul>
+<li><code>threshold_type=&quot;topk&quot;</code>：选择前 k 个重要的节点或边。</li>
+<li><code>threshold_type=&quot;hard&quot;</code>：应用硬阈值以选择重要的节点或边。（只有掩码值超过阈值的节点或边才会被选为重要节点或边）</li>
+</ul>
+<h3 id="3-2-示例"><a href="#3-2-示例" class="headerlink" title="3.2 示例"></a>3.2 示例</h3><h4 id="解释同质图上的节点分类"><a href="#解释同质图上的节点分类" class="headerlink" title="解释同质图上的节点分类"></a>解释同质图上的节点分类</h4><p>&emsp;&emsp;假设已经有一个同构图的数据对象 <code>data</code> 和一个 GNN 模型 <code>model</code>。我们将使用 <code>GNNExplainer</code> 进行解释。使得最终<code>Explanation</code>对象包含 <code>node_mask</code>（表示哪些节点和特征对于预测至关重要）和 <code>edge_mask</code>（表示哪些边对于预测至关重要）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.data <span class="keyword">import</span> Data</span><br><span class="line"><span class="keyword">from</span> torch_geometric.explain <span class="keyword">import</span> Explainer, GNNExplainer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设已经有一个同构图的数据对象</span></span><br><span class="line">data = Data(...)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Explainer实例</span></span><br><span class="line">explainer = Explainer(</span><br><span class="line">    model=model,</span><br><span class="line">    algorithm=GNNExplainer(epochs=<span class="number">200</span>),</span><br><span class="line">    explanation_type=<span class="string">&#x27;model&#x27;</span>,</span><br><span class="line">    node_mask_type=<span class="string">&#x27;attributes&#x27;</span>,  <span class="comment"># 节点掩码类型为属性掩码</span></span><br><span class="line">    edge_mask_type=<span class="string">&#x27;object&#x27;</span>,      <span class="comment"># 边掩码类型为对象掩码</span></span><br><span class="line">    model_config=<span class="built_in">dict</span>(</span><br><span class="line">        mode=<span class="string">&#x27;multiclass_classification&#x27;</span>,</span><br><span class="line">        task_level=<span class="string">&#x27;node&#x27;</span>,</span><br><span class="line">        return_type=<span class="string">&#x27;log_probs&#x27;</span>,  <span class="comment"># 模型返回对数概率</span></span><br><span class="line">    ),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为索引为10的节点生成解释</span></span><br><span class="line">explanation = explainer(data.x, data.edge_index, index=<span class="number">10</span>)</span><br><span class="line"><span class="built_in">print</span>(explanation.edge_mask)</span><br><span class="line"><span class="built_in">print</span>(explanation.node_mask)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;然后，我们可以将特征重要性和解释的关键子图可视化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可视化特征重要性，选择前10个重要特征</span></span><br><span class="line">explanation.visualize_feature_importance(top_k=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化解释结果中的子图</span></span><br><span class="line">explanation.visualize_graph()</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;最后，我们可以使用 <code>torch_geometric.explain.metric</code> 模块中的 <code>unfaithfulness</code> 函数对解释结果进行评估。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.explain <span class="keyword">import</span> unfaithfulness</span><br><span class="line"></span><br><span class="line">metric = unfaithfulness(explainer, explanation)</span><br><span class="line"><span class="built_in">print</span>(metric)</span><br></pre></td></tr></table></figure>
+<p><code>model_config</code>:用于指定模型的详细信息。包含关于模型的操作模式、任务级别和返回类型的配置信息。</p>
+<ul>
+<li><code>mode</code>:指定模型的操作模式。<code>multiclass_classification</code>（多类分类任务）、<code>binary_classification</code>（二元分类）和 <code>regression</code>（回归）。</li>
+<li><code>task_level</code>:指定任务的级别。<code>node</code>（节点级别的任务）、<code>edge</code>（边级别）、<code>graph</code>（图级别）。</li>
+<li><code>return_type</code> ：指定模型返回的输出类型。<code>log_probs</code>（对数概率）、<code>probs</code>（原始概率）、<code>raw</code>（原始未处理的输出值）。</li>
+</ul>
+<h4 id="解释异构图上的节点分类"><a href="#解释异构图上的节点分类" class="headerlink" title="解释异构图上的节点分类"></a>解释异构图上的节点分类</h4><p>&emsp;&emsp;解释在异构图上进行节点分类的过程可以通过使用 <code>CaptumExplainer</code> 算法结合 <code>IntegratedGradients</code> 归因方法来完成。<code>CaptumExplainer</code> 是对 Captum 库的包装，支持大多数归因方法以解释任何同构或异构的 PyG 模型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.data <span class="keyword">import</span> HeteroData</span><br><span class="line"><span class="keyword">from</span> torch_geometric.explain <span class="keyword">import</span> Explainer, CaptumExplainer</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设已经有一个异构图的数据对象</span></span><br><span class="line">hetero_data = HeteroData(...)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Explainer实例</span></span><br><span class="line">explainer = Explainer(</span><br><span class="line">    model=model,</span><br><span class="line">    algorithm=CaptumExplainer(<span class="string">&#x27;IntegratedGradients&#x27;</span>),  <span class="comment"># 使用IntegratedGradients算法</span></span><br><span class="line">    explanation_type=<span class="string">&#x27;model&#x27;</span>,</span><br><span class="line">    node_mask_type=<span class="string">&#x27;attributes&#x27;</span>,  <span class="comment"># 节点掩码类型为属性掩码</span></span><br><span class="line">    edge_mask_type=<span class="string">&#x27;object&#x27;</span>,      <span class="comment"># 边掩码类型为对象掩码</span></span><br><span class="line">    model_config=<span class="built_in">dict</span>(</span><br><span class="line">        mode=<span class="string">&#x27;multiclass_classification&#x27;</span>,  <span class="comment"># 模型进行多类分类</span></span><br><span class="line">        task_level=<span class="string">&#x27;node&#x27;</span>,                 <span class="comment"># 节点级别的任务</span></span><br><span class="line">        return_type=<span class="string">&#x27;probs&#x27;</span>,               <span class="comment"># 模型返回概率</span></span><br><span class="line">    ),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为索引为1和3的节点生成批处理的异构解释</span></span><br><span class="line">hetero_explanation = explainer(</span><br><span class="line">    hetero_data.x_dict,</span><br><span class="line">    hetero_data.edge_index_dict,</span><br><span class="line">    index=torch.tensor([<span class="number">1</span>, <span class="number">3</span>]),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(hetero_explanation.edge_mask_dict)</span><br><span class="line"><span class="built_in">print</span>(hetero_explanation.node_mask_dict)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="解释同质图上的图回归"><a href="#解释同质图上的图回归" class="headerlink" title="解释同质图上的图回归"></a>解释同质图上的图回归</h4><p>&emsp;&emsp;在同构图上进行图回归任务时，我们可以使用<code>torch_geometric.explain.algorithm.PGExplainer</code>算法生成一个解释。我们将解释器配置为使用<code>edge_mask_type</code>，使最终的<code>Explanation</code>对象包含一个<code>edge_mask</code>（指示哪些边对预测至关重要）。需要哦注意的是，如果向解释器传递<code>node_mask_type</code>，则会抛出错误，因为PGExplainer无法解释节点的重要性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.data <span class="keyword">import</span> DataLoader</span><br><span class="line"><span class="keyword">from</span> torch_geometric.explain <span class="keyword">import</span> Explainer, PGExplainer</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设已经有一个同构图的数据集</span></span><br><span class="line">dataset = ...</span><br><span class="line">loader = DataLoader(dataset, batch_size=<span class="number">1</span>, shuffle=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建Explainer实例</span></span><br><span class="line">explainer = Explainer(</span><br><span class="line">    model=model,</span><br><span class="line">    algorithm=PGExplainer(epochs=<span class="number">30</span>, lr=<span class="number">0.003</span>),  <span class="comment"># 使用PGExplainer算法，指定训练的epochs和学习率</span></span><br><span class="line">    explanation_type=<span class="string">&#x27;phenomenon&#x27;</span>,  <span class="comment"># 解释现象，而非模型</span></span><br><span class="line">    edge_mask_type=<span class="string">&#x27;object&#x27;</span>,  <span class="comment"># 边掩码类型为对象掩码</span></span><br><span class="line">    model_config=<span class="built_in">dict</span>(</span><br><span class="line">        mode=<span class="string">&#x27;regression&#x27;</span>,  <span class="comment"># 模型进行回归任务</span></span><br><span class="line">        task_level=<span class="string">&#x27;graph&#x27;</span>,  <span class="comment"># 图级别的任务</span></span><br><span class="line">        return_type=<span class="string">&#x27;raw&#x27;</span>,  <span class="comment"># 模型返回原始值</span></span><br><span class="line">    ),</span><br><span class="line">    <span class="comment"># 仅包含前10个最重要的边</span></span><br><span class="line">    threshold_config=<span class="built_in">dict</span>(threshold_type=<span class="string">&#x27;topk&#x27;</span>, value=<span class="number">10</span>),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练PGExplainer</span></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">30</span>):</span><br><span class="line">    <span class="keyword">for</span> batch <span class="keyword">in</span> loader:</span><br><span class="line">        loss = explainer.algorithm.train(</span><br><span class="line">            epoch, model, batch.x, batch.edge_index, target=batch.target)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为特定的图生成解释</span></span><br><span class="line">explanation = explainer(dataset[<span class="number">0</span>].x, dataset[<span class="number">0</span>].edge_index)</span><br><span class="line"><span class="built_in">print</span>(explanation.edge_mask)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="4-浅节点嵌入-Shallow-Node-Embeddings"><a href="#4-浅节点嵌入-Shallow-Node-Embeddings" class="headerlink" title="4.浅节点嵌入(Shallow Node Embeddings)"></a><a target="_blank" rel="noopener" href="https://pytorch-geometric.readthedocs.io/en/latest/tutorial/shallow_node_embeddings.html">4.浅节点嵌入(Shallow Node Embeddings)</a></h2><p>&emsp;&emsp;浅层节点嵌入是一种将图中的节点表示为低维向量的技术。浅层节点嵌入的主要目标是通过一些无监督的学习方法将每个节点嵌入到一个低维空间中，同时保留原始图中的拓扑结构和节点属性信息。通过这种方式，可以在低维空间中进行各种机器学习任务，如节点分类、聚类、链接预测等。</p>
+<p>&emsp;&emsp;浅层节点嵌入技术通过浅嵌入查找表将节点嵌入到低维向量表示中，使保留邻域的可能性最大化，即附近的节点应该接收相似的嵌入，而远处的节点应该接收不同的嵌入。</p>
+<p><img src="/2024/08/10/PyG-Use-Cases-Applications/shallow_node_embeddings.png" alt="浅节点嵌入"></p>
+<p>​        公式 $\text{ENC}(v, G) = Z_v$用于描述节点嵌入的结果。</p>
+<h3 id="4-1DeepWalk"><a href="#4-1DeepWalk" class="headerlink" title="4.1DeepWalk"></a>4.1DeepWalk</h3><p>&emsp;&emsp;具体来说，给定一个长度为 $k$ 的随机游走 $w=(v_{\Pi(1)}, v_{\Pi(2)}, \ldots, v_{\Pi(k)})$，起始于节点 $v∈V$，其目标是最大化在给定节点 $v$ 的情况下观测到节点 $v_{\Pi(i)}$的可能性。这一目标可以通过在对比学习场景中使用随机梯度下降（SGD）高效地训练。</p>
+<p>&emsp;&emsp;损失函数为：</p>
+<p>&emsp;&emsp;$L = \sum -\log(\sigma(z_v^T z_{v_{\Pi(i)}})) + \sum -\log(1 - \sigma(z_v^T z_{w’}))$</p>
+<p>&emsp;&emsp;其中，非存在的游走（即所谓的负样本）被采样并联合训练， $\sigma$ 表示 Sigmoid 函数。值得注意的是，通常使用嵌入向量间的点积 $z_v^T z_w$ 来衡量相似性，但其他相似性度量也适用。</p>
+<p>&emsp;&emsp;重要的是，浅层节点嵌入是以无监督方式进行训练的，最终可以作为给定下游任务的输入。例如，对于节点级别任务，可以直接将节点嵌入$ z_v $用作最终分类器的输入。对于边级别任务，可以通过平均值 $\frac{1}{2}(z_v + z_w)$ 或通过 Hadamard 积 $z_v \cdot z_w$ 获取边级别的表示。</p>
+<p>&emsp;&emsp;尽管节点嵌入技术非常简单，但它们也存在一些缺点。特别是，它们无法融入节点和边附带的丰富特征信息，并且由于可学习参数固定于特定图的节点上，无法简单地应用于未见过的图（使这种方法具有归纳性。然而，这种方法仍然是将结构图信息保存在固定大小向量中的常用技术，并且在初始节点特征不丰富的情况下，通常也用于生成 GNN 进一步处理的输入。</p>
+<p>&emsp;&emsp;上面的内容是官方文档写的，然鹅，我认为这写的就是一坨，下面是我自己搜索总结的。</p>
+<p>&emsp;&emsp;节点 $v$ 是随机游走的起点，也是我们希望学习其嵌入向量$ z_v $的目标节点。随机游走序列$ w = (v_{\Pi(1)}, v_{\Pi(2)}, \ldots, v_{\Pi(k)})$是从节点 $v$ 出发按照一定的随机策略访问的节点序列。我们可以通过生成的序列 $w$ 学习节点 $v$ 的嵌入向量 $z_v$，从而捕捉节点的局部邻域特征和全局结构信息。序列 $ w$ 的生成过程可以通过优化算法（如Skip-gram模型）来提高节点嵌入的质量，使其更好地反映节点在图中的语义和结构位置。</p>
+<p>&emsp;&emsp;损失函数 $ L$  的目的是在 DeepWalk 方法中用来优化节点嵌入向量的学习过程。损失函数 $L$ 通常是通过对比学习（contrastive learning）的方式定义的:</p>
+<p>&emsp;&emsp;$L = \sum -\log(\sigma(z_v^T z_{v_{\Pi(i)}})) + \sum -\log(1 - \sigma(z_v^T z_{w’}))$</p>
+<p>其中：</p>
+<ul>
+<li>$z_v$ 是节点 $v$ 的嵌入向量。</li>
+<li>$z_{v_{\Pi(i)}}$ 是随机游走序列 $w$ 中第 $i$ 步访问到的节点 $v_{\Pi(i)}$ 的嵌入向量。</li>
+<li>$w’$ 是随机选择的负样本节点的嵌入向量。</li>
+<li>$\sigma(\cdot)$ 是 Sigmoid 函数，定义为 $\sigma(x) = \frac{1}{1 + e^{-x}}$，用于将相似性度量映射到 (0, 1) 的概率范围内。</li>
+<li><p><strong>正样本项 $-\log(\sigma(z_v^T z_{v_{\Pi(i)}}))$</strong>：</p>
+<ul>
+<li>正样本项用于最大化节点 $v$ 和其在随机游走序列 $w$ 中访问到的节点 $v_{\Pi(i)}$ 的相似性概率。这部分的优化过程使得在嵌入空间中，节点 $v$ 的嵌入向量 $z_v$ 更接近于其在实际图结构中的邻居节点 $v_{\Pi(i)}$，从而保留了图的局部结构特征。(相似的节点更近)</li>
+</ul>
+</li>
+<li><p><strong>负样本项 $-\log(1 - \sigma(z_v^T z_{w’}))$</strong>：</p>
+<ul>
+<li>负样本项用于最小化节点 $v$ 和随机选择的负样本节点 $w’$ 的相似性概率。负样本节点 $w’$ 通常是从未与节点 $v$ 相邻的节点或者通过一定的采样策略选择的其他节点。通过最小化这一项，DeepWalk 强化了节点嵌入向量 $z_v$ 在嵌入空间中与非邻居节点的区分能力。（不相似的节点更远）</li>
+</ul>
+</li>
+</ul>
+<p>&emsp;&emsp;采用梯度下降等优化算法，对损失函数 $L$ 进行优化。通过调整节点 $v$ 的嵌入向量 $z_v$，使得 $L$ 的值最小化或达到收敛，从而学习到节点 $v$ 的最优嵌入表示。</p>
+<p>&emsp;&emsp;最终优化得到的节点嵌入向量$ z_v $能够在低维空间中有效地表示节点 $v$ 的结构信息和语义特征。这些嵌入向量可以用于后续的节点分类、链接预测、社区发现等图数据分析任务。</p>
+<h3 id="4-2Node2Vec"><a href="#4-2Node2Vec" class="headerlink" title="4.2Node2Vec"></a>4.2Node2Vec</h3><p>&emsp;&emsp;Node2Vec 是另一种学习浅层节点嵌入的方法，它是DeepWalk的优化。Node2Vec 方法具有两个重要的参数：</p>
+<ol>
+<li><strong>参数 $p$</strong>：参数 $p$ 控制在随机游走过程中立即重新访问节点的概率。具体来说，当 $p &gt; 1$ 时，更倾向于多次访问先前访问过的节点，这种策略有助于捕捉图中的局部结构信息；当 $p&lt;1$ 时，更倾向于向前探索新的节点，有助于扩展搜索空间。</li>
+<li><strong>参数 $q$</strong>：参数 $q$ 控制随机游走过程中选择广度优先策略还是深度优先策略。当 $q&gt;1$时，随机游走更倾向于向广度优先策略转变；当 $q&lt;1$ 时，更倾向于向深度优先策略转变。</li>
+</ol>
+<p>​        </p>
+<h4 id="加载数据"><a href="#加载数据" class="headerlink" title="加载数据"></a>加载数据</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> Node2Vec</span><br><span class="line"></span><br><span class="line">data = Planetoid(<span class="string">&#x27;./data/Planetoid&#x27;</span>, name=<span class="string">&#x27;Cora&#x27;</span>)[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="初识化Node2Vec模块"><a href="#初识化Node2Vec模块" class="headerlink" title="初识化Node2Vec模块"></a>初识化<code>Node2Vec</code>模块</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> Node2Vec</span><br><span class="line"></span><br><span class="line">device = <span class="string">&#x27;cuda&#x27;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&#x27;cpu&#x27;</span></span><br><span class="line"></span><br><span class="line">model = Node2Vec(</span><br><span class="line">    data.edge_index,</span><br><span class="line">    embedding_dim=<span class="number">128</span>,</span><br><span class="line">    walks_per_node=<span class="number">10</span>,  <span class="comment"># 每个节点执行10次随机游走</span></span><br><span class="line">    walk_length=<span class="number">20</span>,     <span class="comment"># 每次随机游走长度为20</span></span><br><span class="line">    context_size=<span class="number">10</span>,    <span class="comment"># 用于梯度优化的随机游走窗口大小</span></span><br><span class="line">    p=<span class="number">1.0</span>,</span><br><span class="line">    q=<span class="number">1.0</span>,</span><br><span class="line">    num_negative_samples=<span class="number">1</span>, <span class="comment"># 每个正样本随机游走生成的负样本数目</span></span><br><span class="line">).to(device)</span><br><span class="line"></span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.01</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="创建数据加载器"><a href="#创建数据加载器" class="headerlink" title="创建数据加载器"></a>创建数据加载器</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loader = model.loader(batch_size=<span class="number">128</span>, shuffle=<span class="literal">True</span>, num_workers=<span class="number">4</span>) <span class="comment"># num_workers表示用于数据加载的工作线程数</span></span><br></pre></td></tr></table></figure>
+<h4 id="生成随机游走"><a href="#生成随机游走" class="headerlink" title="生成随机游走"></a>生成随机游走</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pos_rw, neg_rw = <span class="built_in">next</span>(<span class="built_in">iter</span>(loader))</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;通过迭代加载器获取下一个批次的正样本和负样本随机游走序列。<code>pos_rw</code>包含正随机游走节点索引的张量，形状是 <code>[batch_size * walks_per_node * (2 + walk_length - context_size), context_size]</code>，<code>neg_rw</code>包含负随机游走节点索引的张量，形状是 <code>[num_negative_samples * pos_rw.size(0), context_size]</code>。</p>
+<h4 id="模型训练-1"><a href="#模型训练-1" class="headerlink" title="模型训练"></a>模型训练</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">    model.train()</span><br><span class="line">    total_loss = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> pos_rw, neg_rw <span class="keyword">in</span> loader:</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        <span class="comment"># 计算正样本和负样本随机游走序列的损失。</span></span><br><span class="line">        loss = model.loss(pos_rw.to(device), neg_rw.to(device))</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        <span class="comment"># 累计当前批次的损失值</span></span><br><span class="line">        total_loss += loss.item()</span><br><span class="line">    <span class="keyword">return</span> total_loss / <span class="built_in">len</span>(loader)</span><br></pre></td></tr></table></figure>
+<h4 id="获取节点嵌入"><a href="#获取节点嵌入" class="headerlink" title="获取节点嵌入"></a>获取节点嵌入</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">z = model()  <span class="comment"># 获取所有节点的嵌入向量</span></span><br><span class="line">z = model(torch.tensor([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]))  <span class="comment"># 获取前三个节点的嵌入向量</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-3-MetaPath2Vec"><a href="#4-3-MetaPath2Vec" class="headerlink" title="4.3 MetaPath2Vec"></a>4.3 MetaPath2Vec</h3><p>&emsp;&emsp;MetaPath2Vec 是 Node2Vec 的一种扩展，专门用于处理异构图。异构图包含多种类型的节点和边，与传统的同质图不同。在 MetaPath2Vec 中，我们通过元路径（metapath）定义如何在不同类型的节点之间进行随机游走。</p>
+<ol>
+<li><p><strong>异构图</strong>：</p>
+<ul>
+<li>包含多种类型的节点和边。例如，在学术网络中，节点可以是作者、论文和期刊，边可以是“写作”、“发表”等。</li>
+</ul>
+</li>
+<li><p><strong>元路径</strong>（metapath）：</p>
+<ul>
+<li><p>定义了一条特定类型的节点和边之间的路径模式。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">metapath = [</span><br><span class="line">    (&#x27;author&#x27;, &#x27;writes&#x27;, &#x27;paper&#x27;),</span><br><span class="line">    (&#x27;paper&#x27;, &#x27;published_in&#x27;, &#x27;venue&#x27;),</span><br><span class="line">    (&#x27;venue&#x27;, &#x27;publishes&#x27;, &#x27;paper&#x27;),</span><br><span class="line">    (&#x27;paper&#x27;, &#x27;written_by&#x27;, &#x27;author&#x27;),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这个元路径表示随机游走从作者节点到论文节点，再到期刊节点，然后回到论文节点和作者节点。</p>
+</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> MetaPath2Vec</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设 edge_index_dict 是一个包含每种边类型的边索引的字典</span></span><br><span class="line">edge_index_dict = &#123;</span><br><span class="line">    (<span class="string">&#x27;author&#x27;</span>, <span class="string">&#x27;writes&#x27;</span>, <span class="string">&#x27;paper&#x27;</span>): ...,</span><br><span class="line">    (<span class="string">&#x27;paper&#x27;</span>, <span class="string">&#x27;published_in&#x27;</span>, <span class="string">&#x27;venue&#x27;</span>): ...,</span><br><span class="line">    (<span class="string">&#x27;venue&#x27;</span>, <span class="string">&#x27;publishes&#x27;</span>, <span class="string">&#x27;paper&#x27;</span>): ...,</span><br><span class="line">    (<span class="string">&#x27;paper&#x27;</span>, <span class="string">&#x27;written_by&#x27;</span>, <span class="string">&#x27;author&#x27;</span>): ...,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义元路径</span></span><br><span class="line">metapath = [</span><br><span class="line">    (<span class="string">&#x27;author&#x27;</span>, <span class="string">&#x27;writes&#x27;</span>, <span class="string">&#x27;paper&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;paper&#x27;</span>, <span class="string">&#x27;published_in&#x27;</span>, <span class="string">&#x27;venue&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;venue&#x27;</span>, <span class="string">&#x27;publishes&#x27;</span>, <span class="string">&#x27;paper&#x27;</span>),</span><br><span class="line">    (<span class="string">&#x27;paper&#x27;</span>, <span class="string">&#x27;written_by&#x27;</span>, <span class="string">&#x27;author&#x27;</span>),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 MetaPath2Vec 模型</span></span><br><span class="line">model = MetaPath2Vec(</span><br><span class="line">    edge_index_dict=edge_index_dict,</span><br><span class="line">    embedding_dim=<span class="number">128</span>,</span><br><span class="line">    metapath=metapath,</span><br><span class="line">    walks_per_node=<span class="number">10</span>,</span><br><span class="line">    walk_length=<span class="number">20</span>,</span><br><span class="line">    context_size=<span class="number">10</span>,</span><br><span class="line">    num_negative_samples=<span class="number">1</span>,</span><br><span class="line">).to(device)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+              <a href="/tags/PyG/" rel="tag"># PyG</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/10/PyTorch-%E5%85%A5%E9%97%A8/" rel="prev" title="PyTorch 入门">
+                  <i class="fa fa-angle-left"></i> PyTorch 入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
