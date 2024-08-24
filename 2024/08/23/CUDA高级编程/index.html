@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="CUDA 高级编程       1. Hello world，Cuda in C       2. VectorAdd，Cuda的线程组织       3. CPU与GPU之间的数据传输       4. CUDA中的各级存储资源       5. CUDA的流与事件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA高级编程">
+<meta property="og:url" content="http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="CUDA 高级编程       1. Hello world，Cuda in C       2. VectorAdd，Cuda的线程组织       3. CPU与GPU之间的数据传输       4. CUDA中的各级存储资源       5. CUDA的流与事件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824000906903.png">
+<meta property="og:image" content="http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824003637345.png">
+<meta property="og:image" content="http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824003703940.png">
+<meta property="og:image" content="http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824003727588.png">
+<meta property="article:published_time" content="2024-08-22T18:52:48.000Z">
+<meta property="article:modified_time" content="2024-08-23T19:27:09.639Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="CUDA编程">
+<meta property="article:tag" content="GPU编程">
+<meta property="article:tag" content="并行计算">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824000906903.png">
+
+
+<link rel="canonical" href="http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/","path":"2024/08/23/CUDA高级编程/","title":"CUDA高级编程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CUDA高级编程 | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    CUDA 高级编程
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6"><span class="nav-number">1.1.</span> <span class="nav-text">CUDA中的同步与通信机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%87%BD%E6%95%B0%E4%B9%8B%E9%97%B4%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B0%E7%9A%84%E5%BC%82%E6%AD%A5%E6%89%A7%E8%A1%8C%E4%B8%8E%E9%98%BB%E5%A1%9E%E5%90%8C%E6%AD%A5%EF%BC%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">核函数之间（核函数的异步执行与阻塞同步）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%97%E5%86%85%E6%89%80%E6%9C%89%E7%BA%BF%E7%A8%8B%E9%97%B4%E7%9A%84%E5%90%8C%E6%AD%A5%EF%BC%88-syncthreads-%EF%BC%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">块内所有线程间的同步（ __syncthreads()）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90%EF%BC%9A-%E8%B7%A8%E7%BA%BF%E7%A8%8B%E5%9D%97%E7%9A%84%E5%85%A8%E5%B1%80%E9%98%9F%E5%88%97%E7%9A%84%E5%AE%9E%E7%8E%B0-Global-work-queue"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">例子： 跨线程块的全局队列的实现(Global work queue)</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CUDA高级编程 | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CUDA高级编程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-08-23 02:52:48" itemprop="dateCreated datePublished" datetime="2024-08-23T02:52:48+08:00">2024-08-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-08-24 03:27:09" itemprop="dateModified" datetime="2024-08-24T03:27:09+08:00">2024-08-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97HPC/" itemprop="url" rel="index"><span itemprop="name">高性能计算HPC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p></p><h1 style="text-align: center;">
+    CUDA 高级编程
+</h1><p></p>
+<div style="text-align: center;">
+    <strong>1. Hello world，Cuda in C</strong>
+</div>
+<div style="text-align: center;">
+    <strong>2. VectorAdd，Cuda的线程组织</strong>
+</div>
+<div style="text-align: center;">
+    <strong>3. CPU与GPU之间的数据传输</strong>
+</div>
+<div style="text-align: center;">
+    <strong>4. CUDA中的各级存储资源</strong>
+</div>
+<div style="text-align: center;">
+    <strong>5. CUDA的流与事件</strong>
+</div>
+
+<span id="more"></span>
+<h2 id="CUDA中的同步与通信机制"><a href="#CUDA中的同步与通信机制" class="headerlink" title="CUDA中的同步与通信机制"></a>CUDA中的同步与通信机制</h2><h3 id="核函数之间（核函数的异步执行与阻塞同步）"><a href="#核函数之间（核函数的异步执行与阻塞同步）" class="headerlink" title="核函数之间（核函数的异步执行与阻塞同步）"></a>核函数之间（核函数的异步执行与阻塞同步）</h3><ol>
+<li><p><code>cudaDeviceSynchronize()</code></p>
+<p>&emsp;&emsp;<code>cudaDeviceSynchronize()</code> 的主要功能是 <strong>阻塞 CPU 线程，直到 GPU 上的所有任务都完成</strong>。除此之外，还能帮助<strong>检测错误</strong>。在cuda 11.6中device端的<code>cudaDeviceSynchronize()</code>已经被弃置了，主机端仍支持。</p>
+</li>
+<li><p><code>cudaStreamSynchronize（）</code></p>
+<p>&emsp;&emsp;与<code>cudaDeviceSynchronize()</code>类型，只不过是等待特定的流中所有任务完成，而不是设备上的所有任务。</p>
+</li>
+<li><p><code>cudaSetDeviceFlags ()</code></p>
+<p>&emsp;&emsp;用于设置CPU阻塞后的等待方式，默认模式（<code>cudaDeviceScheduleAuto</code>）是轮询（polling）模式，<code>cudaDeviceScheduleBlockingSync</code> 模式是让主机进入休眠状态，不会轮询GPU任务完成情况，只有当GPU完成任务发出信号时，主机线程才会被唤醒继续执行。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__host__ cudaError_t <span class="title">cudaSetDeviceFlags</span> <span class="params">( <span class="type">unsigned</span> <span class="type">int</span> flags )</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cudaSetDeviceFlags</span>(cudaDeviceScheduleBlockingSync);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>cudaLaunchKernel()</code></p>
+<p>&emsp;&emsp;用于 <strong>手动启动核函数</strong> 的 API，它允许以更加灵活的方式配置和启动核函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cudaError_t <span class="title">cudaLaunchKernel</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">void</span>* func,             <span class="comment">// 核函数的指针</span></span></span></span><br><span class="line"><span class="params"><span class="function">    dim3 gridDim,                 <span class="comment">// 网格的维度 (网格大小)</span></span></span></span><br><span class="line"><span class="params"><span class="function">    dim3 blockDim,                <span class="comment">// 每个线程块的维度 (块大小)</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">void</span>** args,                  <span class="comment">// 核函数参数的数组</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">size_t</span> sharedMem,             <span class="comment">// 每个块的动态共享内存大小（字节）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cudaStream_t stream           <span class="comment">// 要在其上执行核函数的流</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//示例代码</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __INTELLISENSE__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __global__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __device__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __host__</span></span><br><span class="line">dim3 blockIdx, threadIdx, blockDim, gridDim;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">myKernel</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span>* c)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> idx = threadIdx.x + blockIdx.x * blockDim.x;</span><br><span class="line">    <span class="keyword">if</span> (idx == <span class="number">0</span>) *c = a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">5</span>, b = <span class="number">10</span>;</span><br><span class="line">    <span class="type">int</span> h_c;</span><br><span class="line">    <span class="type">int</span>* d_c;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaMalloc</span>(&amp;d_c, <span class="built_in">sizeof</span>(<span class="type">int</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 准备参数</span></span><br><span class="line">    <span class="type">void</span>* args[] = &#123; &amp;a, &amp;b, &amp;d_c &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 cudaLaunchKernel 启动核函数</span></span><br><span class="line">    <span class="function">dim3 <span class="title">grid</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">block</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaLaunchKernel</span>((<span class="type">void</span>*)myKernel, grid, block, args, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 同步并检查结果</span></span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(&amp;h_c, d_c, <span class="built_in">sizeof</span>(<span class="type">int</span>), cudaMemcpyDeviceToHost);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Result: %d\n&quot;</span>, h_c);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">cudaFree</span>(d_c);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824000906903.png" alt="image-20240824000906903"></p>
+</li>
+</ol>
+<h3 id="块内所有线程间的同步（-syncthreads-）"><a href="#块内所有线程间的同步（-syncthreads-）" class="headerlink" title="块内所有线程间的同步（ __syncthreads()）"></a>块内所有线程间的同步（ __syncthreads()）</h3><p>&emsp;&emsp;在 CUDA 编程中，<code>__syncthreads()</code> 是一个非常重要的内建函数，用于在一个线程块内同步所有线程。它确保在调用点之前，线程块内的所有线程都已经执行到 <code>__syncthreads()</code> 这一行代码，并且所有线程的内存操作（读写）都已经完成。这对于确保线程块内共享内存中的数据一致性至关重要。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __INTELLISENSE__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __global__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __device__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __host__</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> __syncthreads()</span></span><br><span class="line">dim3 blockIdx, threadIdx, blockDim, gridDim;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> THREADS_PER_BLOCK 256</span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">globFunction</span><span class="params">(<span class="type">int</span>* arr, <span class="type">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    __shared__ <span class="type">int</span> local_array[THREADS_PER_BLOCK]; <span class="comment">// local block memory cache</span></span><br><span class="line">    <span class="type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 计算结果</span></span><br><span class="line">    <span class="type">int</span> results = idx * <span class="number">2</span>; <span class="comment">// 举例说明的计算</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 写入共享内存</span></span><br><span class="line">    local_array[threadIdx.x] = results;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 同步线程，确保所有线程都已完成对共享内存的写操作</span></span><br><span class="line">    __syncthreads();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取另一个线程在共享内存中的值</span></span><br><span class="line">    <span class="type">int</span> val = local_array[(threadIdx.x + <span class="number">1</span>) % THREADS_PER_BLOCK];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 写回到全局内存</span></span><br><span class="line">    <span class="keyword">if</span> (idx &lt; N) arr[idx] = val;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> N = <span class="number">1024</span>;</span><br><span class="line">    <span class="type">int</span>* d_arr, * h_arr;</span><br><span class="line">    <span class="type">size_t</span> size = N * <span class="built_in">sizeof</span>(<span class="type">int</span>);</span><br><span class="line"></span><br><span class="line">    h_arr = (<span class="type">int</span>*)<span class="built_in">malloc</span>(size);</span><br><span class="line">    <span class="built_in">cudaMalloc</span>(&amp;d_arr, size);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Launch kernel</span></span><br><span class="line">    <span class="function">dim3 <span class="title">grid</span><span class="params">((N + THREADS_PER_BLOCK - <span class="number">1</span>) / THREADS_PER_BLOCK)</span></span>;</span><br><span class="line">    <span class="function">dim3 <span class="title">block</span><span class="params">(THREADS_PER_BLOCK)</span></span>;</span><br><span class="line">    globFunction &lt;&lt; &lt;grid, block &gt;&gt; &gt; (d_arr, N);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Copy results back to host</span></span><br><span class="line">    <span class="built_in">cudaMemcpy</span>(h_arr, d_arr, size, cudaMemcpyDeviceToHost);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Print results</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, i, h_arr[i]);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Free memory</span></span><br><span class="line">    <span class="built_in">free</span>(h_arr);</span><br><span class="line">    <span class="built_in">cudaFree</span>(d_arr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824003637345.png" alt="image-20240824003637345"></p>
+<p><img src="/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824003703940.png" alt="image-20240824003703940"></p>
+<p><img src="/2024/08/23/CUDA%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/image-20240824003727588.png" alt="image-20240824003727588"></p>
+<p>&emsp;&emsp;注意死锁问题！ <code>__syncthreads()</code>必须要能被块内所有线程均可以执行！因此，不要将其放置在IF语句中，以免导致某些线程永远无法到达<code>__syncthreads()</code>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//错误写法</span></span><br><span class="line"><span class="keyword">if</span>&#123;</span><br><span class="line">...</span><br><span class="line">__syncthreads();</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">...</span><br><span class="line">__syncthreads();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正确写法</span></span><br><span class="line"><span class="keyword">if</span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line">__syncthreads();</span><br></pre></td></tr></table></figure>
+<h4 id="例子：-跨线程块的全局队列的实现-Global-work-queue"><a href="#例子：-跨线程块的全局队列的实现-Global-work-queue" class="headerlink" title="例子： 跨线程块的全局队列的实现(Global work queue)"></a>例子： 跨线程块的全局队列的实现(Global work queue)</h4><ul>
+<li>背景：同一个核函数的多个线程块共同处理一个大任务</li>
+<li>思路：可以将大任务划分成小任务队列，然后由各个线程块处理这些小任务。这里有一个全局任务队列的实现问题。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">WorkQueue</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    WorkItem* gItems; <span class="comment">// 全局内存中，队列项数据</span></span><br><span class="line">    <span class="type">size_t</span> totalSize;</span><br><span class="line">    <span class="type">size_t</span> current; <span class="comment">// 全局内存中，当前队列索引位置</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">__device__ WorkItem&amp; <span class="title">fetch</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        __shared__ WorkItem item; <span class="comment">// 块内的共享内存中</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (threadIdx.x == <span class="number">0</span>) &#123; <span class="comment">// 0号线程</span></span><br><span class="line">            <span class="type">size_t</span> itemIdx = <span class="built_in">atomicAdd</span>(&amp;current, <span class="number">1</span>);</span><br><span class="line">            <span class="comment">// 前进一个位置，块内所有线程均取出该队列项</span></span><br><span class="line">            <span class="keyword">if</span> (itemIdx &lt; totalSize)</span><br><span class="line">                item = gItems[itemIdx];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                item = WorkItem::<span class="built_in">none</span>(); <span class="comment">// 假设 WorkItem::none() 代表没有有效的任务项</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        __syncthreads(); <span class="comment">// 同步等待！所有线程已经得到队列项</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> item; <span class="comment">// 返回对共享内存的引用</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CUDA%E7%BC%96%E7%A8%8B/" rel="tag"># CUDA编程</a>
+              <a href="/tags/GPU%E7%BC%96%E7%A8%8B/" rel="tag"># GPU编程</a>
+              <a href="/tags/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/" rel="tag"># 并行计算</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/18/CUDA%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" rel="prev" title="CUDA 编程基础">
+                  <i class="fa fa-angle-left"></i> CUDA 编程基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
