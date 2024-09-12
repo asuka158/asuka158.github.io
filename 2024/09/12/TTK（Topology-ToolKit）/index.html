@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="概念TTK和VTK&emsp;&emsp;TTK（The Topology ToolKit）是一个用于拓扑数据分析的开源库，专注于处理和分析复杂数据集中的拓扑结构。它提供了各种算法和工具，用于从数据集中提取和分析拓扑特征。TTK 是一个功能强大的库，能够处理大规模的数据集，并用于科学计算和可视化。 &emsp;&emsp;VTK（Visualization Toolkit）是一个开源的库，用于科学">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TTK（Topology ToolKit）">
+<meta property="og:url" content="http://example.com/2024/09/12/TTK%EF%BC%88Topology-ToolKit%EF%BC%89/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="概念TTK和VTK&emsp;&emsp;TTK（The Topology ToolKit）是一个用于拓扑数据分析的开源库，专注于处理和分析复杂数据集中的拓扑结构。它提供了各种算法和工具，用于从数据集中提取和分析拓扑特征。TTK 是一个功能强大的库，能够处理大规模的数据集，并用于科学计算和可视化。 &emsp;&emsp;VTK（Visualization Toolkit）是一个开源的库，用于科学">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-12T07:15:08.000Z">
+<meta property="article:modified_time" content="2024-09-12T15:14:37.416Z">
+<meta property="article:author" content="Asuka">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2024/09/12/TTK%EF%BC%88Topology-ToolKit%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/09/12/TTK%EF%BC%88Topology-ToolKit%EF%BC%89/","path":"2024/09/12/TTK（Topology-ToolKit）/","title":"TTK（Topology ToolKit）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TTK（Topology ToolKit） | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TTK%E5%92%8CVTK"><span class="nav-number">1.1.</span> <span class="nav-text">TTK和VTK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vtk-module"><span class="nav-number">1.3.</span> <span class="nav-text">vtk module</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ttkhelloworld-h"><span class="nav-number">2.</span> <span class="nav-text">ttkhelloworld.h</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#override"><span class="nav-number">2.1.</span> <span class="nav-text">override</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/12/TTK%EF%BC%88Topology-ToolKit%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TTK（Topology ToolKit） | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TTK（Topology ToolKit）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-09-12 15:15:08 / 修改时间：23:14:37" itemprop="dateCreated datePublished" datetime="2024-09-12T15:15:08+08:00">2024-09-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="TTK和VTK"><a href="#TTK和VTK" class="headerlink" title="TTK和VTK"></a>TTK和VTK</h3><p>&emsp;&emsp;<strong>TTK</strong>（The Topology ToolKit）是一个用于拓扑数据分析的开源库，专注于处理和分析复杂数据集中的拓扑结构。它提供了各种算法和工具，用于从数据集中提取和分析拓扑特征。TTK 是一个功能强大的库，能够处理大规模的数据集，并用于科学计算和可视化。</p>
+<p>&emsp;&emsp;<strong>VTK</strong>（Visualization Toolkit）是一个开源的库，用于科学数据的可视化。VTK 提供了广泛的功能，包括数据处理、数据可视化和图形渲染。它是科学计算和可视化领域中非常重要的工具之一。</p>
+<ul>
+<li><p><strong>TTK</strong> 是一个拓扑分析工具包，专注于从复杂数据集中提取和分析拓扑特征。</p>
+</li>
+<li><p><strong>VTK</strong> 是一个科学数据可视化工具，提供数据处理和渲染功能。</p>
+</li>
+<li><p><strong>TTK</strong> 使用 <strong>VTK</strong> 提供的基础设施来实现高级拓扑分析，<strong>VTK</strong> 则通过 <strong>TTK</strong> 扩展了其功能以支持更多的数据分析和可视化应用。</p>
+</li>
+</ul>
+<h3 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h3><p>&emsp;&emsp;<strong>简单的说就是一个程序（好像是对象），对输入进行处理，变成输出。</strong></p>
+<p>&emsp;&emsp;在 VTK（Visualization Toolkit）中，<strong>过滤器</strong>是一种处理数据的对象，它可以对输入数据进行操作或转换，并生成输出数据。可以将其视为数据处理的“管道”或“处理单元”。每个 VTK 过滤器通常执行一个具体的任务，比如数据转换、数据处理、数据分析等。</p>
+<h3 id="vtk-module"><a href="#vtk-module" class="headerlink" title="vtk module"></a>vtk module</h3><p>&emsp;&emsp;<strong>方便编译用的，说明当前模块的依赖项，使得在编译的时候只需要编译依赖的即可。</strong></p>
+<p>&emsp;&emsp;<strong><code>vtk.module</code> 文件</strong> 是描述一个 VTK 模块的配置文件，定义了模块的基本信息、依赖关系和构建要求。在该文件中，包含了模块的名称、版本号、依赖的其他模块，以及构建时需要的编译标志。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NAME</span><br><span class="line">  VTK::FiltersSources</span><br><span class="line"></span><br><span class="line">DEPENDS</span><br><span class="line">  VTK::CommonDataModel</span><br><span class="line">  VTK::CommonCore</span><br></pre></td></tr></table></figure>
+<p>这个文件告诉构建系统：</p>
+<ul>
+<li>模块名是 <code>VTK::FiltersSources</code>。</li>
+<li>这个模块依赖于两个其他模块：<code>VTK::CommonDataModel</code> 和 <code>VTK::CommonCore</code>。</li>
+</ul>
+<p><strong>vtk.module 文件中的关键部分</strong></p>
+<ul>
+<li><strong>NAME</strong>：表示模块的名称。通常模块名称与其所在的路径相关联。</li>
+<li><strong>DEPENDS</strong>：列出该模块依赖的其他模块。这些模块需要在编译时一同加载。</li>
+<li><strong>PRIVATE_DEPENDS</strong>：列出在模块内部使用的依赖模块（这些依赖不会暴露给模块的使用者）。</li>
+</ul>
+<p>&emsp;&emsp;VTK module 是一个用于管理 VTK 代码依赖、组织和编译过程的模块化系统，通过 <code>vtk.module</code> 文件来定义模块的依赖和功能。TTK module类似。</p>
+<h2 id="ttkhelloworld-h"><a href="#ttkhelloworld-h" class="headerlink" title="ttkhelloworld.h"></a>ttkhelloworld.h</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// TODO 4: 提供你的信息并**更新**文档（特别是当输入数组需要用标准的 VTK 函数 SetInputArrayToProcess() 指定时，更新顺序约定）。</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// \ingroup vtk</span></span><br><span class="line"><span class="comment">/// \class ttkHelloWorld</span></span><br><span class="line"><span class="comment">/// \author 这里填上你的名字 &lt;你的邮箱地址&gt;</span></span><br><span class="line"><span class="comment">/// \date 填上日期</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// \brief TTK 的 VTK 过滤器，封装了 ttk::HelloWorld 模块。</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// 该 VTK 过滤器使用 ttk::HelloWorld 模块来对输入 vtkDataSet 中定义的输入点数据数组进行数据值的平均计算。</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// \param Input vtkDataSet。</span></span><br><span class="line"><span class="comment">/// \param Output vtkDataSet。</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// 该过滤器可以像其他 VTK 过滤器一样使用（例如通过调用 SetInputData(), Update(), GetOutputDataObject() 的顺序）。</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// 输入数据数组需要通过标准的 VTK 调用 vtkAlgorithm::SetInputArrayToProcess() 来指定，参数如下：</span></span><br><span class="line"><span class="comment">/// \param idx 0（固定值：算法所需的第一个数组）</span></span><br><span class="line"><span class="comment">/// \param port 0（固定值：第一个端口）</span></span><br><span class="line"><span class="comment">/// \param connection 0（固定值：第一个连接）</span></span><br><span class="line"><span class="comment">/// \param fieldAssociation 0（固定值：点数据）</span></span><br><span class="line"><span class="comment">/// \param arrayName（动态值：输入数组的字符串标识符）</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// 参见相应的独立程序使用示例：</span></span><br><span class="line"><span class="comment">///   - standalone/HelloWorld/main.cpp</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// 参见相关的 ParaView 示例状态文件，以了解 VTK 管道中使用的示例。</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// \sa ttk::HelloWorld</span></span><br><span class="line"><span class="comment">/// \sa ttkAlgorithm</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// VTK 模块</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ttkHelloWorldModule.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// VTK 包含文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ttkAlgorithm.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 关于包含 VTK 模块的说明</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 每个包含头文件的 VTK 模块都需要在该模块的 vtk.module 文件中指定，放在 DEPENDS 或 PRIVATE_DEPENDS（如果头文件仅包含在 cpp 文件中）部分。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 为了找到相应的模块，检查头文件在 VTK 源代码中的位置。VTK 模块名称是由头文件的路径组成的。你也可以在与头文件位于相同目录的 vtk.module 文件中找到模块名称。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 例如，vtkSphereSource.h 位于目录 VTK/Filters/Sources/ 中，因此它相应的 VTK 模块名称是 VTK::FiltersSources。在这种情况下，vtk.module 文件需要扩展为</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * NAME</span></span><br><span class="line"><span class="comment"> *   ttkHelloWorld</span></span><br><span class="line"><span class="comment"> * DEPENDS</span></span><br><span class="line"><span class="comment"> *   ttkAlgorithm</span></span><br><span class="line"><span class="comment"> *   VTK::FiltersSources</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// TTK 基础包含文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;HelloWorld.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TTKHELLOWORLD_EXPORT</span> ttkHelloWorld</span><br><span class="line">  : <span class="keyword">public</span> ttkAlgorithm <span class="comment">// 我们继承自泛型 ttkAlgorithm 类</span></span><br><span class="line">  ,</span><br><span class="line">    <span class="keyword">protected</span> ttk::HelloWorld <span class="comment">// 并且我们继承自基础类</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * TODO 5: 将所有过滤器参数仅作为私有成员变量添加，并在这里初始化。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  std::string OutputArrayName&#123;<span class="string">&quot;AveragedScalarField&quot;</span>&#125;; <span class="comment">// 输出数组名称，初始化为 &quot;AveragedScalarField&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * TODO 6: 通过 vtk 宏自动生成过滤器参数的 getter 和 setter。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="built_in">vtkSetMacro</span>(OutputArrayName, <span class="type">const</span> std::string &amp;); <span class="comment">// 设置输出数组名称的函数</span></span><br><span class="line">  <span class="built_in">vtkGetMacro</span>(OutputArrayName, std::string);         <span class="comment">// 获取输出数组名称的函数</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 这个静态方法和下面的宏是 VTK 约定的如何实例化 VTK 对象的方式。你不需要修改它们。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="type">static</span> ttkHelloWorld *<span class="title">New</span><span class="params">()</span></span>; <span class="comment">// 用于创建 ttkHelloWorld 实例的静态方法</span></span><br><span class="line">  <span class="built_in">vtkTypeMacro</span>(ttkHelloWorld, ttkAlgorithm); <span class="comment">// VTK 类型宏，定义类 RTTI 信息</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * TODO 7: 实现过滤器的构造函数和析构函数（参见 cpp 文件）。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="built_in">ttkHelloWorld</span>(); <span class="comment">// 构造函数</span></span><br><span class="line">  ~<span class="built_in">ttkHelloWorld</span>() <span class="keyword">override</span> = <span class="keyword">default</span>; <span class="comment">// 析构函数，默认行为</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * TODO 8: 指定每个输入端口的数据类型（参见 cpp 文件）。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">FillInputPortInformation</span><span class="params">(<span class="type">int</span> port, vtkInformation *info)</span> <span class="keyword">override</span></span>; <span class="comment">// 填充输入端口信息</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * TODO 9: 指定每个输出端口的数据对象类型（参见 cpp 文件）。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">FillOutputPortInformation</span><span class="params">(<span class="type">int</span> port, vtkInformation *info)</span> <span class="keyword">override</span></span>; <span class="comment">// 填充输出端口信息</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * TODO 10: 将 VTK 数据传递到基础代码并将基础代码的输出转换为 VTK 格式（参见 cpp 文件）。</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="type">int</span> <span class="title">RequestData</span><span class="params">(vtkInformation *request, <span class="comment">// 请求数据处理的主要方法</span></span></span></span><br><span class="line"><span class="params"><span class="function">                  vtkInformationVector **inputVector, </span></span></span><br><span class="line"><span class="params"><span class="function">                  vtkInformationVector *outputVector)</span> <span class="keyword">override</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="override"><a href="#override" class="headerlink" title="override"></a>override</h3><p>&emsp;&emsp;用于标识一个成员函数是用于重写基类中的虚函数。目的是提高代码的安全性、可维护性、可读性。</p>
+<p>&emsp;&emsp;在 <code>override = default</code> 的情况下，<code>default</code> 用于告诉编译器使用默认的实现。这通常用于默认构造函数、拷贝构造函数、析构函数等。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/09/08/2024-9-7/" rel="prev" title="2024.9.7">
+                  <i class="fa fa-angle-left"></i> 2024.9.7
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
