@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="CUDA 学习笔记1        入门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA编程">
+<meta property="og:url" content="http://example.com/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="CUDA 学习笔记1        入门">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/image-20240916163123447-17264754847062.png">
+<meta property="og:image" content="http://example.com/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/image-20240916163918864-17264759602963.png">
+<meta property="og:image" content="http://example.com/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/image-20240916194401750-17264870429444.png">
+<meta property="article:published_time" content="2024-09-16T08:26:07.000Z">
+<meta property="article:modified_time" content="2024-09-16T13:54:21.753Z">
+<meta property="article:author" content="Asuka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/image-20240916163123447-17264754847062.png">
+
+
+<link rel="canonical" href="http://example.com/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/","path":"2024/09/16/CUDA编程/","title":"CUDA编程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CUDA编程 | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    CUDA 学习笔记1
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CUDA%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8%E6%9E%81%E7%AE%80%E6%95%99%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">CUDA编程入门极简教程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">线程唯一标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">CUDA内存模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CUDA%E7%BC%96%E7%A8%8B%E7%9A%84%E9%80%BB%E8%BE%91%E5%B1%82%E5%92%8C%E7%89%A9%E7%90%86%E5%B1%82"><span class="nav-number">1.1.3.</span> <span class="nav-text">CUDA编程的逻辑层和物理层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E8%87%AA%E5%B7%B1%E7%9A%84GPU%E7%A1%AC%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.4.</span> <span class="nav-text">检查自己的GPU硬件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nvprof%E5%B7%A5%E5%85%B7%E5%88%86%E6%9E%90kernel%E8%BF%90%E8%A1%8C%E6%83%85%E5%86%B5"><span class="nav-number">1.1.5.</span> <span class="nav-text">nvprof工具分析kernel运行情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E5%86%85%E5%AD%98%EF%BC%88Unified-Memory%EF%BC%89"><span class="nav-number">1.1.6.</span> <span class="nav-text">统一内存（Unified Memory）</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CUDA编程 | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CUDA编程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-09-16 16:26:07 / 修改时间：21:54:21" itemprop="dateCreated datePublished" datetime="2024-09-16T16:26:07+08:00">2024-09-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 style="text-align: center;">
+    CUDA 学习笔记1
+</h1>
+
+<div style="text-align: center;">
+    <strong>入门</strong>
+</div>
+
+<span id="more"></span>
+<h2 id="CUDA编程入门极简教程"><a href="#CUDA编程入门极简教程" class="headerlink" title="CUDA编程入门极简教程"></a><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34587739">CUDA编程入门极简教程</a></h2><p>&emsp;&emsp;内容来自知乎文章，<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/34587739">CUDA编程入门极简教程</a>，本文是学习笔记。</p>
+<h3 id="线程唯一标识"><a href="#线程唯一标识" class="headerlink" title="线程唯一标识"></a>线程唯一标识</h3><p><img src="/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/image-20240916163123447-17264754847062.png" alt="image-20240916163123447"></p>
+<p>&emsp;&emsp;一个线程需要两个内置的坐标变量（blockIdx，threadIdx）来唯一标识，它们都是<code>dim3</code>类型变量，其中<code>blockIdx</code>指明线程所在grid中的位置，而<code>threaIdx</code>指明线程所在block中的位置。</p>
+<p>&emsp;&emsp;这是没问题的，因为核函数只会调一个grid，所以不需要gridIdx，CUDA中也没有gridIdx。</p>
+<h3 id="CUDA内存模型"><a href="#CUDA内存模型" class="headerlink" title="CUDA内存模型"></a>CUDA内存模型</h3><p>&emsp;&emsp;每个线程有自己的私有本地内存（Local Memory），而每个线程块有包含共享内存（Shared Memory）,可以被线程块中所有线程共享，其生命周期与线程块一致。此外，所有的线程都可以访问全局内存（Global Memory）。还可以访问一些只读内存块：常量内存（Constant Memory）和纹理内存（Texture Memory）。</p>
+<p><img src="/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/image-20240916163918864-17264759602963.png" alt="image-20240916163918864"></p>
+<h3 id="CUDA编程的逻辑层和物理层"><a href="#CUDA编程的逻辑层和物理层" class="headerlink" title="CUDA编程的逻辑层和物理层"></a>CUDA编程的逻辑层和物理层</h3><p><img src="/2024/09/16/CUDA%E7%BC%96%E7%A8%8B/image-20240916194401750-17264870429444.png" alt="image-20240916194401750"></p>
+<p>&emsp;&emsp;GPU存在很多CUDA核心，充分利用CUDA核心可以充分发挥GPU的并行计算能力。GPU硬件的一个核心组件是SM，英文名是 Streaming Multiprocessor，翻译过来就是流式多处理器。SM的核心组件包括CUDA核心，共享内存，寄存器等，SM可以并发地执行数百个线程，并发能力就取决于SM所拥有的资源数。当一个kernel被执行时，它的gird中的线程块被分配到SM上，一个线程块只能在一个SM上被调度。SM一般可以调度多个线程块，这要看SM本身的能力。那么有可能一个kernel的各个线程块被分配多个SM，所以grid只是逻辑层，而SM才是执行的物理层。</p>
+<p>&emsp;&emsp;SM采用的是SIMT (Single-Instruction, Multiple-Thread，单指令多线程)架构，基本的执行单元是线程束（warps)，线程束包含32个线程，这些线程同时执行相同的指令，但是每个线程都包含自己的指令地址计数器和寄存器状态，也有自己独立的执行路径。所以尽管线程束中的线程同时从同一程序地址执行，但是可能具有不同的行为，比如遇到了分支结构，一些线程可能进入这个分支，但是另外一些有可能不执行，它们只能死等，因为GPU规定线程束中所有线程在同一周期执行相同的指令，线程束分化会导致性能下降。</p>
+<p>&emsp;&emsp;当线程块被划分到某个SM上时，它将进一步划分为多个线程束，因为这才是SM的基本执行单元，但是一个SM同时并发的线程束数是有限的。这是因为资源限制，SM要为每个线程块分配共享内存，而也要为每个线程束中的线程分配独立的寄存器。所以SM的配置会影响其所支持的线程块和线程束并发数量。总之，就是网格和线程块只是逻辑划分，一个kernel的所有线程其实在物理层是不一定同时并发的。所以kernel的grid和block的配置不同，性能会出现差异，这点是要特别注意的。还有，由于SM的基本执行单元是包含32个线程的线程束，所以block大小一般要设置为32的倍数。</p>
+<h3 id="检查自己的GPU硬件配置"><a href="#检查自己的GPU硬件配置" class="headerlink" title="检查自己的GPU硬件配置"></a>检查自己的GPU硬件配置</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> dev = <span class="number">0</span>;</span><br><span class="line">    cudaDeviceProp devProp;</span><br><span class="line">    <span class="built_in">cudaGetDeviceProperties</span>(&amp;devProp, dev);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;使用GPU device &quot;</span> &lt;&lt; dev &lt;&lt; <span class="string">&quot;: &quot;</span> &lt;&lt; devProp.name &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;SM的数量：&quot;</span> &lt;&lt; devProp.multiProcessorCount &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;每个线程块的共享内存大小：&quot;</span> &lt;&lt; devProp.sharedMemPerBlock / <span class="number">1024.0</span> &lt;&lt; <span class="string">&quot; KB&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;每个线程块的最大线程数：&quot;</span> &lt;&lt; devProp.maxThreadsPerBlock &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;每个SM的最大线程数：&quot;</span> &lt;&lt; devProp.maxThreadsPerMultiProcessor &lt;&lt; std::endl;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;每个SM的最大线程束数：&quot;</span> &lt;&lt; devProp.maxThreadsPerMultiProcessor / <span class="number">32</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">使用GPU device 0: NVIDIA GeForce MX350</span></span><br><span class="line"><span class="comment">SM的数量：5</span></span><br><span class="line"><span class="comment">每个线程块的共享内存大小：48 KB</span></span><br><span class="line"><span class="comment">每个线程块的最大线程数：1024</span></span><br><span class="line"><span class="comment">每个SM的最大线程数：2048</span></span><br><span class="line"><span class="comment">每个SM的最大线程束数：64</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h3 id="nvprof工具分析kernel运行情况"><a href="#nvprof工具分析kernel运行情况" class="headerlink" title="nvprof工具分析kernel运行情况"></a>nvprof工具分析kernel运行情况</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$ nvprof cuda<span class="number">2.</span>exe</span><br><span class="line">▒▒▒▒▒▒: <span class="number">0</span></span><br><span class="line">==<span class="number">23472</span>== NVPROF is profiling process <span class="number">23472</span>, command: cuda<span class="number">2.</span>exe</span><br><span class="line">==<span class="number">23472</span>== Profiling application: cuda<span class="number">2.</span>exe</span><br><span class="line">==<span class="number">23472</span>== Profiling result:</span><br><span class="line">            Type  <span class="built_in">Time</span>(%)      Time     Calls       Avg       Min       Max  Name</span><br><span class="line"> GPU activities:   <span class="number">61.00</span>%  <span class="number">3.1966</span>ms         <span class="number">2</span>  <span class="number">1.5983</span>ms  <span class="number">1.5409</span>ms  <span class="number">1.6557</span>ms  [CUDA memcpy HtoD]</span><br><span class="line">                   <span class="number">27.48</span>%  <span class="number">1.4400</span>ms         <span class="number">1</span>  <span class="number">1.4400</span>ms  <span class="number">1.4400</span>ms  <span class="number">1.4400</span>ms  [CUDA memcpy DtoH]</span><br><span class="line">                   <span class="number">11.53</span>%  <span class="number">604.06</span>us         <span class="number">1</span>  <span class="number">604.06</span>us  <span class="number">604.06</span>us  <span class="number">604.06</span>us  <span class="built_in">add</span>(<span class="type">float</span>*, <span class="type">float</span>*, <span class="type">float</span>*, <span class="type">int</span>)</span><br><span class="line">      API calls:   <span class="number">80.95</span>%  <span class="number">115.10</span>ms         <span class="number">3</span>  <span class="number">38.368</span>ms  <span class="number">158.60</span>us  <span class="number">114.77</span>ms  cudaMalloc</span><br><span class="line">                   <span class="number">13.99</span>%  <span class="number">19.900</span>ms         <span class="number">1</span>  <span class="number">19.900</span>ms  <span class="number">19.900</span>ms  <span class="number">19.900</span>ms  cuDevicePrimaryCtxRelease</span><br><span class="line">                    <span class="number">4.24</span>%  <span class="number">6.0248</span>ms         <span class="number">3</span>  <span class="number">2.0083</span>ms  <span class="number">1.3885</span>ms  <span class="number">2.9045</span>ms  cudaMemcpy</span><br><span class="line">                    <span class="number">0.74</span>%  <span class="number">1.0526</span>ms         <span class="number">3</span>  <span class="number">350.87</span>us  <span class="number">312.10</span>us  <span class="number">377.80</span>us  cudaFree</span><br><span class="line">                    <span class="number">0.03</span>%  <span class="number">48.900</span>us         <span class="number">1</span>  <span class="number">48.900</span>us  <span class="number">48.900</span>us  <span class="number">48.900</span>us  cudaLaunchKernel</span><br><span class="line">                    <span class="number">0.03</span>%  <span class="number">43.000</span>us         <span class="number">1</span>  <span class="number">43.000</span>us  <span class="number">43.000</span>us  <span class="number">43.000</span>us  cuModuleUnload</span><br><span class="line">                    <span class="number">0.01</span>%  <span class="number">16.500</span>us       <span class="number">101</span>     <span class="number">163</span>ns     <span class="number">100</span>ns  <span class="number">1.1000</span>us  cuDeviceGetAttribute</span><br><span class="line">                    <span class="number">0.00</span>%  <span class="number">4.7000</span>us         <span class="number">3</span>  <span class="number">1.5660</span>us     <span class="number">200</span>ns  <span class="number">3.6000</span>us  cuDeviceGetCount</span><br><span class="line">                    <span class="number">0.00</span>%  <span class="number">1.3000</span>us         <span class="number">2</span>     <span class="number">650</span>ns     <span class="number">300</span>ns  <span class="number">1.0000</span>us  cuDeviceGet</span><br><span class="line">                    <span class="number">0.00</span>%     <span class="number">800</span>ns         <span class="number">1</span>     <span class="number">800</span>ns     <span class="number">800</span>ns     <span class="number">800</span>ns  cuDeviceGetName</span><br><span class="line">                    <span class="number">0.00</span>%     <span class="number">600</span>ns         <span class="number">1</span>     <span class="number">600</span>ns     <span class="number">600</span>ns     <span class="number">600</span>ns  cuDeviceGetLuid</span><br><span class="line">                    <span class="number">0.00</span>%     <span class="number">400</span>ns         <span class="number">1</span>     <span class="number">400</span>ns     <span class="number">400</span>ns     <span class="number">400</span>ns  cuDeviceTotalMem</span><br><span class="line">                    <span class="number">0.00</span>%     <span class="number">200</span>ns         <span class="number">1</span>     <span class="number">200</span>ns     <span class="number">200</span>ns     <span class="number">200</span>ns  cuDeviceGetUuid</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="统一内存（Unified-Memory）"><a href="#统一内存（Unified-Memory）" class="headerlink" title="统一内存（Unified Memory）"></a>统一内存（Unified Memory）</h3><p>&emsp;&emsp;在CUDA 6.0引入统一内存（<a href="https://link.zhihu.com/?target=http%3A//docs.nvidia.com/cuda/cuda-c-programming-guide/index.html%23um-unified-memory-programming-hd">Unified Memory</a>）来避免单独在host和device上进行内存分配并进行数据拷贝，简单来说就是统一内存使用一个托管内存来共同管理host和device中的内存，并且自动在host和device中进行数据传输。CUDA中使用cudaMallocManaged函数分配托管内存：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cudaError_t <span class="title">cudaMallocManaged</span><span class="params">(<span class="type">void</span> **devPtr, <span class="type">size_t</span> size, <span class="type">unsigned</span> <span class="type">int</span> flag=<span class="number">0</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;使用统一内存的代码更简洁了，值得注意的是kernel执行是与host异步的，由于托管内存自动进行数据传输，这里要用cudaDeviceSynchronize()函数保证device和host同步，这样后面才可以正确访问kernel计算的结果。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/09/12/TTK%EF%BC%88Topology-ToolKit%EF%BC%89/" rel="prev" title="TTK（Topology ToolKit）">
+                  <i class="fa fa-angle-left"></i> TTK（Topology ToolKit）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
