@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+
+    <meta name="description" content="VTK Tutorial        VTK 新手教程详解       可视化、交互">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VTK Tutorial">
+<meta property="og:url" content="http://example.com/2024/12/20/VTK-Tutorial/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="VTK Tutorial        VTK 新手教程详解       可视化、交互">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220222908306.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220223128292.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220223556300.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220223646925.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220223829133.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220224038069.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220162536164.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220170753621.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220174347952.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220180902464.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220184447967.png">
+<meta property="og:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220222459509.png">
+<meta property="article:published_time" content="2024-12-20T14:43:12.000Z">
+<meta property="article:modified_time" content="2024-12-20T14:48:19.550Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="VTK">
+<meta property="article:tag" content="科学可视化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/bupt/vtk/tutorial/tutorial/image-20241220222908306.png">
+
+
+<link rel="canonical" href="http://example.com/2024/12/20/VTK-Tutorial/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/12/20/VTK-Tutorial/","path":"2024/12/20/VTK-Tutorial/","title":"VTK Tutorial"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>VTK Tutorial | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    VTK Tutorial
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Step1"><span class="nav-number">1.1.</span> <span class="nav-text">Step1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">代码流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">1.1.2.</span> <span class="nav-text">示例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">1.1.3.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step2"><span class="nav-number">1.2.</span> <span class="nav-text">Step2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">示例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step3"><span class="nav-number">1.3.</span> <span class="nav-text">step3</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-2"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">示例代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step4"><span class="nav-number">1.4.</span> <span class="nav-text">step4</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">示例代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step5"><span class="nav-number">1.5.</span> <span class="nav-text">step5</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-4"><span class="nav-number">1.5.1.</span> <span class="nav-text">示例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C-3"><span class="nav-number">1.5.2.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#step6"><span class="nav-number">1.6.</span> <span class="nav-text">step6</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81-5"><span class="nav-number">1.6.1.</span> <span class="nav-text">示例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C-4"><span class="nav-number">1.6.2.</span> <span class="nav-text">效果</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/20/VTK-Tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="VTK Tutorial | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VTK Tutorial
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-12-20 22:43:12 / 修改时间：22:48:19" itemprop="dateCreated datePublished" datetime="2024-12-20T22:43:12+08:00">2024-12-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">计算机图形学</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 style="text-align: center;">
+    VTK Tutorial
+</h1>
+
+<div style="text-align: center;">
+    <strong>VTK 新手教程详解</strong>
+</div>
+<div style="text-align: center;">
+    <strong>可视化、交互</strong>
+</div>
+
+<span id="more"></span>
+<p>&emsp;&emsp;官方教程:<a target="_blank" rel="noopener" href="https://examples.vtk.org/site/Cxx/#tutorial">https://examples.vtk.org/site/Cxx/#tutorial</a></p>
+<p>&emsp;&emsp;关于如何编译运行，我使用官方的方法无法运行，下面介绍我使用的方法。我的配置是windows10 + vs2017 + vtk9.1 + cmake3.30。</p>
+<p>第一步：使用cmake gui编译</p>
+<p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220222908306.png" alt="image-20241220222908306"></p>
+<p>第二步：</p>
+<p>点击一次configure，会弹出一个对话框，选择你的vs版本，以及x64.</p>
+<p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220223128292.png" alt="image-20241220223128292"></p>
+<p>第三步：</p>
+<p>点击一次后，gui中间可能是红的，不必管他，保证gui最下面出现Configuring done 即可。此时再点击一次Configure，应该就不报红了，然后点击generate。</p>
+<p>第四步：</p>
+<p>去build文件夹下，用vs打开.sln</p>
+<p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220223556300.png" alt="image-20241220223556300"></p>
+<p>改成release，再右键all_build,点击生成。</p>
+<p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220223646925.png" alt="image-20241220223646925"></p>
+<p>生成成功。</p>
+<p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220223829133.png" alt="image-20241220223829133"></p>
+<p>第五步：</p>
+<p>去release文件夹下，执行exe</p>
+<p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220224038069.png" alt="image-20241220224038069"></p>
+<h2 id="Step1"><a href="#Step1" class="headerlink" title="Step1"></a>Step1</h2><p>&emsp;&emsp;此示例创建了一个圆锥体的多边形模型，然后将其渲染到屏幕上。它将圆锥体旋转 360 度，然后退出。大多数VTK程序的基本流程都是<code>source -&gt; mapper -&gt; actor -&gt; renderer -&gt; renderwindow</code></p>
+<h3 id="代码流程"><a href="#代码流程" class="headerlink" title="代码流程"></a>代码流程</h3><ol>
+<li><strong>创建并设置圆锥源</strong>（source）： 生成几何数据（例如，圆锥体的几何形状）。创建了一个 <code>vtkConeSource</code> 对象，设置了圆锥的高度、半径和分辨率。这个源对象负责生成圆锥体的几何数据。</li>
+<li><strong>创建 <code>vtkPolyDataMapper</code> 映射器</strong>（mapper）：将几何数据映射到图形原语（如三角形）。 <code>vtkPolyDataMapper</code> 用于将几何数据（在本例中是圆锥的多边形数据）映射到图形原语（例如三角形）上，使得数据可以被渲染。通过 <code>SetInputConnection</code> 方法将圆锥的数据连接到映射器。</li>
+<li><strong>创建并设置演员 (<code>vtkActor</code>)</strong>（actor）：负责在场景中呈现物体（管理位置、颜色等属性）。 <code>vtkActor</code> 代表一个可渲染的对象。它是实际显示在场景中的对象，包含了映射器、颜色等信息。将圆锥的映射器设置到演员中，并且通过 <code>GetProperty()-&gt;SetColor</code> 设置了演员的颜色为 “Tomato”（番茄红）。</li>
+<li><strong>创建渲染器和渲染窗口</strong>（renderer）：负责管理场景中的所有演员，执行渲染操作。 <code>vtkRenderer</code> 是负责渲染场景的对象，我们将渲染器添加到渲染窗口 (<code>vtkRenderWindow</code>) 中。渲染窗口是实际显示 3D 场景的窗口。</li>
+<li><strong>创建并设置渲染窗口交互器</strong>（renderwindow）：展示渲染结果的窗口。 <code>vtkRenderWindowInteractor</code> 允许用户与渲染窗口进行交互，例如旋转、缩放或平移视图。</li>
+</ol>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个 vtkNamedColors 的实例，使用它来为对象和背景选择颜色。</span></span><br><span class="line">vtkNew&lt;vtkNamedColors&gt; colors;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>vtkNamedColors</code> 是一个类，提供了对常见颜色名称的访问。例如，它可以让我们用 <code>&quot;Tomato&quot;</code>、<code>&quot;CadetBlue&quot;</code> 等预定义的颜色名称，而不是手动指定 RGB 值。这里创建了一个 <code>colors</code> 对象，方便我们在后续代码中选择颜色。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 现在我们创建一个 vtkConeSource 的实例，并设置它的一些属性。</span></span><br><span class="line"><span class="comment">// vtkConeSource 的实例 &quot;cone&quot; 是可视化管道的一部分（它是一个源处理对象）；它生成数据</span></span><br><span class="line"><span class="comment">// （输出类型是 vtkPolyData），这些数据可以被其他过滤器处理。</span></span><br><span class="line">vtkNew&lt;vtkConeSource&gt; cone;</span><br><span class="line">cone-&gt;<span class="built_in">SetHeight</span>(<span class="number">3.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetRadius</span>(<span class="number">1.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetResolution</span>(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>vtkConeSource</code> 是一个源对象，用于生成一个圆锥体的几何数据。通过设置以下参数来控制圆锥的属性：<ul>
+<li><code>SetHeight(3.0)</code>：设置圆锥的高度为 3.0 单位。</li>
+<li><code>SetRadius(1.0)</code>：设置圆锥的底面半径为 1.0 单位。</li>
+<li><code>SetResolution(10)</code>：设置圆锥底面的分辨率，即底面多边形的边数。较高的分辨率会使圆锥底面更平滑。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在这个例子中，我们通过一个映射器处理对象来终结管道。</span></span><br><span class="line"><span class="comment">// （可以在源和映射器之间插入中间过滤器，如 vtkShrinkPolyData。）我们创建了一个</span></span><br><span class="line"><span class="comment">// vtkPolyDataMapper 的实例，用于将多边形数据映射成图形原语。我们将圆锥源的输出连接到映射器的输入。</span></span><br><span class="line">vtkNew&lt;vtkPolyDataMapper&gt; coneMapper;</span><br><span class="line">coneMapper-&gt;<span class="built_in">SetInputConnection</span>(cone-&gt;<span class="built_in">GetOutputPort</span>());</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>vtkPolyDataMapper</code> 是一个用于将多边形数据（例如圆锥的几何数据）转换为图形原语的对象。它是 VTK 渲染管线中的重要组件。<ul>
+<li><code>SetInputConnection(cone-&gt;GetOutputPort())</code>：将圆锥源的输出数据连接到映射器的输入端，表示映射器将使用圆锥的数据进行渲染。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个演员来表示圆锥体。演员协调映射器的图形原语的渲染。</span></span><br><span class="line"><span class="comment">// 演员还通过 vtkProperty 实例引用属性，并包含一个内部变换矩阵。</span></span><br><span class="line"><span class="comment">// 我们将这个演员的映射器设置为我们之前创建的 coneMapper。</span></span><br><span class="line">vtkNew&lt;vtkActor&gt; coneActor;</span><br><span class="line">coneActor-&gt;<span class="built_in">SetMapper</span>(coneMapper);</span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;MistyRose&quot;</span>).<span class="built_in">GetData</span>());</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>vtkActor</code> 是一个表示可视化对象的核心组件，它将多边形数据通过映射器传递给渲染器。演员将负责场景中对象的可视化表示。<ul>
+<li><code>SetMapper(coneMapper)</code>：将映射器 <code>coneMapper</code> 与演员 <code>coneActor</code> 绑定，使得演员可以使用映射器渲染的数据。</li>
+<li>每个演员都有一个 <code>vtkProperty</code> 对象，用于管理它的可视化属性（例如颜色、透明度等）。<ul>
+<li><code>GetProperty()</code> 获取演员的属性对象。</li>
+<li><code>SetColor(colors-&gt;GetColor3d(&quot;MistyRose&quot;).GetData())</code> 设置演员的颜色为 <code>MistyRose</code>（雾玫瑰色）。<code>colors-&gt;GetColor3d(&quot;MistyRose&quot;)</code> 返回一个 <code>vtkColor3d</code> 对象，它表示 MistyRose 颜色的 RGB 值。通过 <code>.GetData()</code> 方法，实际的 RGB 数据被提取出来并应用到演员的属性上。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建渲染器并将演员分配给它。渲染器像一个视口。</span></span><br><span class="line"><span class="comment">// 它是屏幕上窗口的一部分或全部，负责绘制它所拥有的演员。</span></span><br><span class="line"><span class="comment">// 我们还在这里设置背景颜色。</span></span><br><span class="line">vtkNew&lt;vtkRenderer&gt; ren1;</span><br><span class="line">ren1-&gt;<span class="built_in">AddActor</span>(coneActor);</span><br><span class="line">ren1-&gt;<span class="built_in">SetBackground</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;MidnightBlue&quot;</span>).<span class="built_in">GetData</span>());</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>vtkNew&lt;vtkRenderer&gt; ren1;</code></strong>：使用 <code>vtkNew</code> 创建了一个新的渲染器对象 <code>ren1</code>。渲染器是 VTK 中的核心组件之一，负责控制场景的绘制，类似于一个视口（viewport）。渲染器会管理显示在窗口中的所有对象，并决定如何绘制它们。</li>
+<li><strong><code>ren1-&gt;AddActor(coneActor);</code></strong>：将之前创建的演员 <code>coneActor</code> 添加到渲染器 <code>ren1</code> 中。演员是负责渲染可视化对象的组件。在这个例子中，演员代表了一个圆锥体对象。渲染器将会根据演员的属性（如颜色、位置等）来绘制它。</li>
+<li><strong><code>ren1-&gt;SetBackground(colors-&gt;GetColor3d(&quot;MidnightBlue&quot;).GetData());</code></strong>：设置渲染器的背景颜色为 <strong>MidnightBlue</strong>（午夜蓝）。<code>colors-&gt;GetColor3d(&quot;MidnightBlue&quot;)</code> 返回一个 <code>vtkColor3d</code> 对象，该对象包含 RGB 颜色值， <code>.GetData()</code> 方法用于提取实际的 RGB 数据并传递给 <code>SetBackground()</code> 方法。这使得渲染窗口的背景色变为午夜蓝。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 最后，我们创建一个渲染窗口，渲染窗口将显示在屏幕上。</span></span><br><span class="line"><span class="comment">// 我们使用 AddRenderer 将渲染器添加到渲染窗口中。我们还设置窗口的大小为 300 像素 x 300 像素。</span></span><br><span class="line">vtkNew&lt;vtkRenderWindow&gt; renWin;</span><br><span class="line">renWin-&gt;<span class="built_in">AddRenderer</span>(ren1);</span><br><span class="line">renWin-&gt;<span class="built_in">SetSize</span>(<span class="number">300</span>, <span class="number">300</span>);</span><br><span class="line">renWin-&gt;<span class="built_in">SetWindowName</span>(<span class="string">&quot;Tutorial_Step1&quot;</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>vtkNew&lt;vtkRenderWindow&gt; renWin;</code></strong>：创建了一个新的渲染窗口 <code>renWin</code>。渲染窗口是一个图形界面窗口，负责显示渲染器中所有的对象。它通常对应于用户看到的图形输出窗口。</li>
+<li><strong><code>renWin-&gt;AddRenderer(ren1);</code></strong>：将之前创建的渲染器 <code>ren1</code> 添加到渲染窗口 <code>renWin</code> 中。通过这个设置，渲染窗口 <code>renWin</code> 就能够显示渲染器 <code>ren1</code> 中的图形内容（如圆锥体及其背景色）。</li>
+<li><strong><code>renWin-&gt;SetSize(300, 300);</code></strong>：设置渲染窗口的大小为 300 像素 x 300 像素。</li>
+<li><strong><code>renWin-&gt;SetWindowName(&quot;Tutorial_Step1&quot;);</code></strong>：设置渲染窗口的标题为 <code>&quot;Tutorial_Step1&quot;</code>。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 现在我们循环 360 度，每次渲染圆锥体。</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">360</span>; ++i)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 渲染图像</span></span><br><span class="line">  renWin-&gt;<span class="built_in">Render</span>();</span><br><span class="line">  <span class="comment">// 使活动相机旋转 1 度。</span></span><br><span class="line">  ren1-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">Azimuth</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>renWin-&gt;Render();</code></strong>：负责触发渲染窗口的绘制操作。每次调用 <code>Render()</code> 方法时，渲染窗口会根据渲染器中的内容更新图形显示。</li>
+<li><strong><code>ren1-&gt;GetActiveCamera()-&gt;Azimuth(1);</code></strong>：通过 <code>ren1-&gt;GetActiveCamera()</code> 获取当前渲染器中正在使用的相机，并调用 <code>Azimuth(1)</code> 方法让相机绕其垂直轴旋转 1 度。<code>Azimuth()</code> 方法用于使相机沿水平方向（围绕 z 轴）旋转指定的角度。</li>
+</ul>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220162536164.png" alt="image-20241220162536164"></p>
+<h2 id="Step2"><a href="#Step2" class="headerlink" title="Step2"></a>Step2</h2><p>&emsp;&emsp;VTK 使用命令/观察者设计模式。也就是说，观察者会监视任何vtkObject（或子类）可能对其自身调用的特定事件。例如，vtkRenderer在开始渲染时会调用“StartEvent”。这里我们添加了一个观察者，当观察到此事件时，它会调用命令。</p>
+<p>&emsp;&emsp;与step1的区别主要在于随着圆锥体的旋转，回调函数会打印出当前活动摄像机的三维位置。</p>
+<h3 id="示例代码-1"><a href="#示例代码-1" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 首先包含我们正在使用的 VTK 类所需的头文件。</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkActor.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkCamera.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkCommand.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkConeSource.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkNamedColors.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkNew.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkPolyDataMapper.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkProperty.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkRenderWindow.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vtkRenderer.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// 我们将回调放在一个匿名命名空间中，即没有名称的命名空间。</span></span><br><span class="line"><span class="comment">// 这个匿名命名空间只在你创建它的文件内可访问。</span></span><br><span class="line"><span class="comment">// 因此它是一种声明唯一标识符并避免创建全局静态变量的好方法。</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="keyword">namespace</span> &#123;</span><br><span class="line"><span class="comment">// 交互回调。</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">vtkMyCallback</span> : <span class="keyword">public</span> vtkCommand</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">static</span> vtkMyCallback* <span class="title">New</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> vtkMyCallback;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">Execute</span><span class="params">(vtkObject* caller, <span class="type">unsigned</span> <span class="type">long</span>, <span class="type">void</span>*)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="comment">// 注意使用 reinterpret_cast 将 caller 转换为预期的类型。</span></span><br><span class="line">    <span class="keyword">auto</span> renderer = <span class="built_in">reinterpret_cast</span>&lt;vtkRenderer*&gt;(caller);</span><br><span class="line">    std::cout &lt;&lt; renderer-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">GetPosition</span>()[<span class="number">0</span>] &lt;&lt; <span class="string">&quot; &quot;</span></span><br><span class="line">              &lt;&lt; renderer-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">GetPosition</span>()[<span class="number">1</span>] &lt;&lt; <span class="string">&quot; &quot;</span></span><br><span class="line">              &lt;&lt; renderer-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">GetPosition</span>()[<span class="number">2</span>] &lt;&lt; std::endl;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">vtkMyCallback</span>() = <span class="keyword">default</span>;</span><br><span class="line">&#125;;</span><br><span class="line">&#125; <span class="comment">// namespace</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>命名空间：</strong> 使用匿名命名空间（<code>namespace &#123;&#125;</code>）封装回调函数，确保它仅在当前文件中可见。这是一种避免全局变量命名冲突的好方法。</li>
+<li><strong>vtkMyCallback 类：</strong><ul>
+<li><code>vtkMyCallback</code> 类继承自 <code>vtkCommand</code>，这是 VTK 中处理事件和回调的基类。</li>
+<li><code>Execute()</code> 方法是回调函数的核心。当事件触发时，该方法会被调用。在这里，它从 <code>vtkRenderer</code> 获取活动相机的位置并将其打印出来。</li>
+</ul>
+</li>
+<li><strong><code>reinterpret_cast</code>：</strong> 使用 <code>reinterpret_cast</code> 将传递给回调函数的 <code>caller</code> 对象转换为 <code>vtkRenderer*</code> 类型。<code>caller</code> 是触发回调的对象（在此为 <code>vtkRenderer</code>），通过这种方式获取相机位置。</li>
+<li><strong>打印相机位置：</strong> 使用 <code>renderer-&gt;GetActiveCamera()-&gt;GetPosition()</code> 获取相机的 3D 坐标（x, y, z），并打印到控制台。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">vtkNew&lt;vtkNamedColors&gt; colors;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// The pipeline creation is documented in Tutorial_Step1.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">vtkNew&lt;vtkConeSource&gt; cone;</span><br><span class="line">cone-&gt;<span class="built_in">SetHeight</span>(<span class="number">3.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetRadius</span>(<span class="number">1.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetResolution</span>(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkPolyDataMapper&gt; coneMapper;</span><br><span class="line">coneMapper-&gt;<span class="built_in">SetInputConnection</span>(cone-&gt;<span class="built_in">GetOutputPort</span>());</span><br><span class="line">vtkNew&lt;vtkActor&gt; coneActor;</span><br><span class="line">coneActor-&gt;<span class="built_in">SetMapper</span>(coneMapper);</span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;MistyRose&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkRenderer&gt; ren1;</span><br><span class="line">ren1-&gt;<span class="built_in">AddActor</span>(coneActor);</span><br><span class="line">ren1-&gt;<span class="built_in">SetBackground</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;MidnightBlue&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line">ren1-&gt;<span class="built_in">ResetCamera</span>();</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkRenderWindow&gt; renWin;</span><br><span class="line">renWin-&gt;<span class="built_in">AddRenderer</span>(ren1);</span><br><span class="line">renWin-&gt;<span class="built_in">SetSize</span>(<span class="number">300</span>, <span class="number">300</span>);</span><br><span class="line">renWin-&gt;<span class="built_in">SetWindowName</span>(<span class="string">&quot;Tutorial_Step2&quot;</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这部分代码和step1中的完全相同，除了多了一行<strong><code>ren1-&gt;ResetCamera();</code></strong>，用于重置相机的位置，使得圆锥体正确显示在视口中。<code>ResetCamera()</code> 会根据场景中的对象自动调整摄像机位置，确保它们可以被清晰地看到。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Here is where we setup the observer.</span></span><br><span class="line">vtkNew&lt;vtkMyCallback&gt; mo1;</span><br><span class="line">ren1-&gt;<span class="built_in">AddObserver</span>(vtkCommand::StartEvent, mo1);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>vtkNew&lt;vtkMyCallback&gt; mo1;</code></strong>：创建一个 <code>vtkMyCallback</code> 类型的回调函数对象 <code>mo1</code>。</li>
+<li><strong><code>ren1-&gt;AddObserver(vtkCommand::StartEvent, mo1);</code></strong>：将回调函数 <code>mo1</code> 添加到渲染器 <code>ren1</code> 上，并监听 <strong><code>StartEvent</code></strong> 事件。<code>vtkCommand::StartEvent</code> 是 VTK 的一个事件类型，当渲染开始时会触发该事件，从而调用 <code>mo1</code> 中的 <code>Execute()</code> 方法。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 现在我们循环 360 度，每次渲染圆锥体。</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">360</span>; ++i)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 渲染图像</span></span><br><span class="line">  renWin-&gt;<span class="built_in">Render</span>();</span><br><span class="line">  <span class="comment">// 使活动相机旋转 1 度。</span></span><br><span class="line">  ren1-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">Azimuth</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>与step1类似</li>
+</ul>
+<h3 id="效果-1"><a href="#效果-1" class="headerlink" title="效果"></a>效果</h3><p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220170753621.png" alt="image-20241220170753621"></p>
+<p>&emsp;&emsp;与step1不同的是，多进行了一段屏幕输出（回调函数），共计输出了360行。</p>
+<h2 id="step3"><a href="#step3" class="headerlink" title="step3"></a>step3</h2><p>&emsp;&emsp;此示例演示如何在渲染窗口内使用多个渲染器。(创建了两个不同的渲染器，显示相同的圆锥体对象在不同的视口中)</p>
+<h4 id="示例代码-2"><a href="#示例代码-2" class="headerlink" title="示例代码"></a>示例代码</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">vtkNew&lt;vtkNamedColors&gt; colors;</span><br><span class="line">  </span><br><span class="line">vtkNew&lt;vtkConeSource&gt; cone;</span><br><span class="line">cone-&gt;<span class="built_in">SetHeight</span>(<span class="number">3.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetRadius</span>(<span class="number">1.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetResolution</span>(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkPolyDataMapper&gt; coneMapper;</span><br><span class="line">coneMapper-&gt;<span class="built_in">SetInputConnection</span>(cone-&gt;<span class="built_in">GetOutputPort</span>());</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkActor&gt; coneActor;</span><br><span class="line">coneActor-&gt;<span class="built_in">SetMapper</span>(coneMapper);</span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;MistyRose&quot;</span>).<span class="built_in">GetData</span>());</span><br></pre></td></tr></table></figure>
+<ul>
+<li>和之前完全一致。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建两个渲染器并将演员添加到其中。渲染器将演员渲染到 vtkRenderWindow 内的一个视口中。</span></span><br><span class="line"><span class="comment">// 它是屏幕上窗口的一部分或全部，负责绘制它所拥有的演员。我们还在这里设置了背景颜色。</span></span><br><span class="line"><span class="comment">// 在这个例子中，我们将相同的演员添加到两个不同的渲染器中；当然，也可以将不同的演员添加到不同的渲染器中。</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line">vtkNew&lt;vtkRenderer&gt; ren1;</span><br><span class="line">ren1-&gt;<span class="built_in">AddActor</span>(coneActor);</span><br><span class="line">ren1-&gt;<span class="built_in">SetBackground</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;RoyalBlue&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line"></span><br><span class="line">ren1-&gt;<span class="built_in">SetViewport</span>(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.5</span>, <span class="number">1.0</span>);</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkRenderer&gt; ren2;</span><br><span class="line">ren2-&gt;<span class="built_in">AddActor</span>(coneActor);</span><br><span class="line">ren2-&gt;<span class="built_in">SetBackground</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;DodgerBlue&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line">ren2-&gt;<span class="built_in">SetViewport</span>(<span class="number">0.5</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>创建一个渲染器 <strong><code>ren1</code></strong>，并将圆锥体的演员 <code>coneActor</code> 添加到其中。</p>
+<ul>
+<li><p>设置背景颜色为 <strong><code>RoyalBlue</code></strong>。</p>
+</li>
+<li><p><strong><code>SetViewport(0.0, 0.0, 0.5, 1.0)</code></strong>：设置渲染器的视口（即渲染区域）。这里，视口的范围是 <code>(0.0, 0.0)</code> 到 <code>(0.5, 1.0)</code>，即占据窗口的左半部分。</p>
+</li>
+</ul>
+</li>
+<li><p>创建另一个渲染器 <strong><code>ren2</code></strong>，并添加相同的演员 <code>coneActor</code>。</p>
+<ul>
+<li>设置背景颜色为 <strong><code>DodgerBlue</code></strong>。</li>
+<li><strong><code>SetViewport(0.5, 0.0, 1.0, 1.0)</code></strong>：设置第二个渲染器的视口为右半部分，覆盖窗口的右半部分。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">vtkNew&lt;vtkRenderWindow&gt; renWin;</span><br><span class="line">renWin-&gt;<span class="built_in">AddRenderer</span>(ren1);</span><br><span class="line">renWin-&gt;<span class="built_in">AddRenderer</span>(ren2);</span><br><span class="line">renWin-&gt;<span class="built_in">SetSize</span>(<span class="number">600</span>, <span class="number">300</span>);</span><br><span class="line">renWin-&gt;<span class="built_in">SetWindowName</span>(<span class="string">&quot;Tutorial_Step3&quot;</span>);</span><br><span class="line"></span><br><span class="line">ren1-&gt;<span class="built_in">ResetCamera</span>();</span><br><span class="line">ren1-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">Azimuth</span>(<span class="number">90</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">360</span>; ++i)</span><br><span class="line">&#123;</span><br><span class="line">  renWin-&gt;<span class="built_in">Render</span>();</span><br><span class="line">  ren1-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">Azimuth</span>(<span class="number">1</span>);</span><br><span class="line">  ren2-&gt;<span class="built_in">GetActiveCamera</span>()-&gt;<span class="built_in">Azimuth</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>与之前类似</li>
+</ul>
+<h3 id="效果-2"><a href="#效果-2" class="headerlink" title="效果"></a>效果</h3><p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220174347952.png" alt="image-20241220174347952"></p>
+<h2 id="step4"><a href="#step4" class="headerlink" title="step4"></a>step4</h2><p>&emsp;&emsp;此示例演示了如何创建多个参与者以及如何操纵他们的属性和转换。</p>
+<h3 id="示例代码-3"><a href="#示例代码-3" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">vtkNew&lt;vtkNamedColors&gt; colors;</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkConeSource&gt; cone;</span><br><span class="line">cone-&gt;<span class="built_in">SetHeight</span>(<span class="number">3.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetRadius</span>(<span class="number">1.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetResolution</span>(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkPolyDataMapper&gt; coneMapper;</span><br><span class="line">coneMapper-&gt;<span class="built_in">SetInputConnection</span>(cone-&gt;<span class="built_in">GetOutputPort</span>());</span><br></pre></td></tr></table></figure>
+<ul>
+<li>与之前相同</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个演员来表示第一个圆锥。演员的属性被修改，以赋予它不同的表面属性。</span></span><br><span class="line"><span class="comment">// 默认情况下，一个演员会创建一个属性，因此可以使用 GetProperty() 方法。</span></span><br><span class="line">vtkNew&lt;vtkActor&gt; coneActor;</span><br><span class="line">coneActor-&gt;<span class="built_in">SetMapper</span>(coneMapper);</span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(<span class="number">0.2</span>, <span class="number">0.63</span>, <span class="number">0.79</span>); <span class="comment">// 设置颜色</span></span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetDiffuse</span>(<span class="number">0.7</span>); <span class="comment">// 设置漫反射属性</span></span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetSpecular</span>(<span class="number">0.4</span>); <span class="comment">// 设置镜面反射属性</span></span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetSpecularPower</span>(<span class="number">20</span>); <span class="comment">// 设置镜面反射的强度</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个属性并直接操作它。将其分配给第二个演员。</span></span><br><span class="line">vtkNew&lt;vtkProperty&gt; property;</span><br><span class="line">property-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;Tomato&quot;</span>).<span class="built_in">GetData</span>()); <span class="comment">// 设置颜色为番茄红</span></span><br><span class="line">property-&gt;<span class="built_in">SetDiffuse</span>(<span class="number">0.7</span>); <span class="comment">// 设置漫反射属性</span></span><br><span class="line">property-&gt;<span class="built_in">SetSpecular</span>(<span class="number">0.4</span>); <span class="comment">// 设置镜面反射属性</span></span><br><span class="line">property-&gt;<span class="built_in">SetSpecularPower</span>(<span class="number">20</span>); <span class="comment">// 设置镜面反射的强度</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建第二个演员和属性。属性直接操作后分配给演员。</span></span><br><span class="line"><span class="comment">// 以这种方式，一个属性可以在多个演员之间共享。</span></span><br><span class="line"><span class="comment">// 还要注意，我们使用了与第一个演员相同的 mapper。这样可以避免重复几何体，</span></span><br><span class="line"><span class="comment">// 如果几何体很大，这样做可以节省大量内存。</span></span><br><span class="line">vtkNew&lt;vtkActor&gt; coneActor2;</span><br><span class="line">coneActor2-&gt;<span class="built_in">SetMapper</span>(coneMapper);</span><br><span class="line">coneActor2-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(</span><br><span class="line">    colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;LightSeaGreen&quot;</span>).<span class="built_in">GetData</span>()); <span class="comment">// 设置颜色为浅海绿色</span></span><br><span class="line">coneActor2-&gt;<span class="built_in">SetProperty</span>(property); <span class="comment">// 设置演员的属性为之前创建的属性</span></span><br><span class="line">coneActor2-&gt;<span class="built_in">SetPosition</span>(<span class="number">0</span>, <span class="number">2</span>, <span class="number">0</span>); <span class="comment">// 设置第二个圆锥的位置</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>创建一个 <code>vtkActor</code> 对象，并将圆锥的映射器 <code>coneMapper</code> 设置为该演员的映射器。</p>
+<ul>
+<li><p><code>coneActor-&gt;GetProperty()-&gt;SetColor(0.2, 0.63, 0.79)</code> 设置演员的颜色（RGB 值为 0.2, 0.63, 0.79）。</p>
+</li>
+<li><p>设置演员的材质属性：漫反射强度为 0.7，镜面反射强度为 0.4，镜面反射高光强度为 20。这些属性影响演员在渲染时的外观效果。</p>
+</li>
+</ul>
+</li>
+<li><p>创建了一个新的 <code>vtkProperty</code> 对象，设置其颜色为 <code>&quot;Tomato&quot;</code>，漫反射强度为 0.7，镜面反射强度为 0.4，镜面反射高光强度为 20。</p>
+</li>
+<li><p>创建第二个演员 <code>coneActor2</code>，并为其设置与第一个演员相同的映射器 <code>coneMapper</code>。</p>
+<ul>
+<li><p>设置 <code>coneActor2</code> 的颜色为 <code>&quot;LightSeaGreen&quot;</code>，并将之前创建的 <code>property</code> 设置为该演员的材质属性。</p>
+</li>
+<li><p>将第二个演员 <code>coneActor2</code> 的位置设置为 <code>(0, 2, 0)</code>，即在 Y 轴上将其上移 2 个单位。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>两个问题：</p>
+<p>1.示例代码中对actor2的颜色设置部分存在冗余代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">property-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;Tomato&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line">coneActor2-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;LightSeaGreen&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line">coneActor2-&gt;<span class="built_in">SetProperty</span>(property);</span><br></pre></td></tr></table></figure>
+<p>最终的颜色是Tomato，第二行代码冗余。</p>
+<p>2.只设置actor2的位置，没有设置actor的位置。</p>
+<ul>
+<li><strong><code>coneActor2-&gt;SetPosition(0, 2, 0);</code></strong>: 这行代码设置了 <code>coneActor2</code> 的位置。<code>SetPosition</code> 会将该演员的几何位置设置为 (0, 2, 0)，即沿 Y 轴偏移 2 单位。</li>
+<li>默认情况下，如果没有特别设置位置，演员会处于原点 <code>(0, 0, 0)</code>。因此，<code>coneActor</code> 没有调用 <code>SetPosition</code>，它会保持在默认位置。</li>
+<li>在 VTK 中，演员的坐标是相对于渲染器的原点的。通常，如果你有多个演员，并且希望它们不重叠，可以为每个演员设置不同的位置。在这段代码中，<code>coneActor2</code> 被显式地放置到 <code>(0, 2, 0)</code>，而 <code>coneActor</code> 使用默认位置 <code>(0, 0, 0)</code>。</li>
+</ul>
+<p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220180902464.png" alt="image-20241220180902464"></p>
+<h2 id="step5"><a href="#step5" class="headerlink" title="step5"></a>step5</h2><p>&emsp;&emsp;引入交互的概念，定义了一种不同于默认的交互风格。（通过 <code>vtkInteractorStyleTrackballCamera</code>实现）</p>
+<h3 id="示例代码-4"><a href="#示例代码-4" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">vtkNew&lt;vtkNamedColors&gt; colors;</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkConeSource&gt; cone;</span><br><span class="line">cone-&gt;<span class="built_in">SetHeight</span>(<span class="number">3.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetRadius</span>(<span class="number">1.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetResolution</span>(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkPolyDataMapper&gt; coneMapper;</span><br><span class="line">coneMapper-&gt;<span class="built_in">SetInputConnection</span>(cone-&gt;<span class="built_in">GetOutputPort</span>());</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkActor&gt; coneActor;</span><br><span class="line">coneActor-&gt;<span class="built_in">SetMapper</span>(coneMapper);</span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;Bisque&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkRenderer&gt; ren1;</span><br><span class="line">ren1-&gt;<span class="built_in">AddActor</span>(coneActor);</span><br><span class="line">ren1-&gt;<span class="built_in">SetBackground</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;MidnightBlue&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkRenderWindow&gt; renWin;</span><br><span class="line">renWin-&gt;<span class="built_in">AddRenderer</span>(ren1);</span><br><span class="line">renWin-&gt;<span class="built_in">SetSize</span>(<span class="number">300</span>, <span class="number">300</span>);</span><br><span class="line">renWin-&gt;<span class="built_in">SetWindowName</span>(<span class="string">&quot;Tutorial_Step5&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>与之前一样</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vtkRenderWindowInteractor 类用于监视 vtkRenderWindow 中的事件（例如，按键、鼠标事件）。</span></span><br><span class="line"><span class="comment">// 这些事件会被转换为 VTK 可以理解的事件调用</span></span><br><span class="line"><span class="comment">// 然后，这些 VTK 事件的观察者可以根据需要进行处理。</span></span><br><span class="line">vtkNew&lt;vtkRenderWindowInteractor&gt; iren;</span><br><span class="line">iren-&gt;<span class="built_in">SetRenderWindow</span>(renWin);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认情况下，vtkRenderWindowInteractor 会实例化一个 vtkInteractorStyle 实例。</span></span><br><span class="line"><span class="comment">// vtkInteractorStyle 会将它观察到的一组事件转化为对 vtkRenderWindow 中的相机、演员和/或属性的操作。</span></span><br><span class="line"><span class="comment">// 在这里，我们指定了一个特定的交互器样式。</span></span><br><span class="line">vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;</span><br><span class="line">iren-&gt;<span class="built_in">SetInteractorStyle</span>(style);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 与之前的脚本不同，这里我们让事件循环持续运行。用户可以使用鼠标和键盘</span></span><br><span class="line"><span class="comment">// 根据当前的交互样式对场景进行操作。当用户按下 &quot;e&quot; 键时，默认情况下，</span></span><br><span class="line"><span class="comment">// vtkRenderWindowInteractor 会触发一个 ExitEvent，该事件会被捕捉并退出事件循环（通过随后调用的 Start() 方法触发）。</span></span><br><span class="line">iren-&gt;<span class="built_in">Initialize</span>();</span><br><span class="line">iren-&gt;<span class="built_in">Start</span>();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建了一个 <code>vtkRenderWindowInteractor</code> 对象 <code>iren</code>，它使得用户能够与渲染窗口进行交互。<code>SetRenderWindow()</code> 将窗口与交互器关联。</li>
+<li>创建了一个 <code>vtkInteractorStyleTrackballCamera</code> 对象 <code>style</code>，这是一个常用的交互样式，可以通过鼠标拖动来旋转、平移和缩放视图。并将交互器样式设置为 <code>style</code>，使得用户可以通过鼠标控制视角。</li>
+<li><code>iren-&gt;Initialize()</code> 初始化交互器。<code>iren-&gt;Start()</code> 启动交互，程序将在此处等待用户交互。</li>
+</ul>
+<h3 id="效果-3"><a href="#效果-3" class="headerlink" title="效果"></a>效果</h3><p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220184447967.png" alt="image-20241220184447967"></p>
+<p>&emsp;&emsp;用户可以通过鼠标拖动查看不同视角下的模型。</p>
+<h2 id="step6"><a href="#step6" class="headerlink" title="step6"></a>step6</h2><p>&emsp;&emsp;此示例介绍了 3D 小部件。3D 小部件利用了前面介绍的事件/观察者设计模式。它们通常在场景中具有特定的表示，可以使用鼠标和键盘进行交互选择和操作。当操作小部件时，它们依次调用 StartInteractionEvent、InteractionEvent 和 EndInteractionEvent 等事件，这些事件可用于操作小部件所嵌入的场景。3D 小部件在上一个示例中设置的事件循环上下文中工作。</p>
+<h3 id="示例代码-5"><a href="#示例代码-5" class="headerlink" title="示例代码"></a>示例代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">vtkMyCallback</span> : <span class="keyword">public</span> vtkCommand</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="type">static</span> vtkMyCallback* <span class="title">New</span><span class="params">()</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> vtkMyCallback;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">Execute</span><span class="params">(vtkObject* caller, <span class="type">unsigned</span> <span class="type">long</span>, <span class="type">void</span>*)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    vtkNew&lt;vtkTransform&gt; t;</span><br><span class="line">    <span class="keyword">auto</span> widget = <span class="built_in">reinterpret_cast</span>&lt;vtkBoxWidget*&gt;(caller);</span><br><span class="line">    widget-&gt;<span class="built_in">GetTransform</span>(t);</span><br><span class="line">    widget-&gt;<span class="built_in">GetProp3D</span>()-&gt;<span class="built_in">SetUserTransform</span>(t);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong><code>void Execute(vtkObject* caller, unsigned long, void*)</code></strong></p>
+<p><code>Execute</code> 是重写自 <code>vtkCommand</code> 的虚函数。当事件触发时，这个方法会被调用。在这个回调函数中，具体的操作是对 <code>vtkBoxWidget</code> 进行变换的获取和设置。</p>
+<ul>
+<li><strong><code>vtkObject* caller</code>：</strong><ul>
+<li><code>caller</code> 是触发事件的对象。在这个回调中，它将被转换为 <code>vtkBoxWidget*</code> 类型。<code>vtkBoxWidget</code> 是一个交互式的控件，通常用于控制对象的变换（例如移动、旋转、缩放等）。</li>
+</ul>
+</li>
+<li><strong><code>unsigned long</code> 和 <code>void\*</code>：</strong><ul>
+<li>这两个参数通常用于处理事件的 ID 和附加数据，但在这个回调函数中并没有被使用。</li>
+</ul>
+</li>
+<li><strong><code>vtkNew&lt;vtkTransform&gt; t;</code></strong><ul>
+<li>创建了一个新的 <code>vtkTransform</code> 对象 <code>t</code>，该对象用于存储 3D 变换（如位置、旋转、缩放）。<code>vtkTransform</code> 是 VTK 用于表示几何变换（如平移、旋转、缩放等）的类。</li>
+</ul>
+</li>
+<li><strong><code>auto widget = reinterpret_cast&lt;vtkBoxWidget*&gt;(caller);</code></strong><ul>
+<li>通过 <code>reinterpret_cast</code> 将 <code>caller</code> 转换为 <code>vtkBoxWidget*</code> 类型。<code>caller</code> 是触发事件的对象，我们期望它是一个 <code>vtkBoxWidget</code>，因此需要进行类型转换。</li>
+</ul>
+</li>
+<li><strong><code>widget-&gt;GetTransform(t);</code></strong><ul>
+<li>调用 <code>vtkBoxWidget</code> 的 <code>GetTransform</code> 方法，将当前 <code>vtkBoxWidget</code> 的变换信息（例如位置、旋转、缩放）存储到 <code>t</code> 变量中。</li>
+</ul>
+</li>
+<li><strong><code>widget-&gt;GetProp3D()-&gt;SetUserTransform(t);</code></strong><ul>
+<li>获取 <code>vtkBoxWidget</code> 对象的 3D 属性（<code>GetProp3D()</code>），然后调用 <code>SetUserTransform(t)</code>，将之前获取的变换应用到控件的 3D 属性上。</li>
+<li><code>SetUserTransform</code> 方法允许用户在现有的控件基础上应用额外的变换。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>vtkBoxWidget</code> 是一个用于交互式操作的 VTK 小部件，它允许用户通过鼠标拖动和操作一个 3D 的盒子（或矩形区域），来进行模型的变换。<code>vtkBoxWidget</code> 具有与这些操作相关的事件和回调机制，通过监听这些事件并响应，可以在 <code>vtkActor</code> 上实现这些变换。</p>
+</li>
+<li><p><code>vtkTransform</code> 是 VTK 中用于存储和应用变换（如平移、旋转、缩放等）的类。在代码中，我们使用 <code>vtkTransform</code> 来存储和应用 <code>vtkBoxWidget</code> 获取到的变换。</p>
+<ul>
+<li><p><strong><code>widget-&gt;GetTransform(t);</code></strong></p>
+<p>这行代码获取 <code>vtkBoxWidget</code> 当前的变换，并将其存储到 <code>vtkTransform</code> 对象 <code>t</code> 中。<code>vtkBoxWidget</code> 内部会跟踪用户通过交互对物体所做的变换（平移、缩放、旋转等）。<code>GetTransform</code> 会将这些变换信息提取出来。</p>
+</li>
+<li><p><strong><code>widget-&gt;GetProp3D()-&gt;SetUserTransform(t);</code></strong></p>
+<p>最后，通过 <code>widget-&gt;GetProp3D()</code> 获取与 <code>vtkBoxWidget</code> 关联的 <code>vtkProp3D</code> 对象（即需要变换的 3D 图形对象）。然后调用 <code>SetUserTransform(t)</code> 方法，应用之前从 <code>vtkBoxWidget</code> 中获取到的变换。<code>SetUserTransform</code> 允许将 <code>vtkTransform</code> 应用到 3D 对象上，使得对象的变换（平移、旋转、缩放）生效。</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">vtkNew&lt;vtkNamedColors&gt; colors;</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkConeSource&gt; cone;</span><br><span class="line">cone-&gt;<span class="built_in">SetHeight</span>(<span class="number">3.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetRadius</span>(<span class="number">1.0</span>);</span><br><span class="line">cone-&gt;<span class="built_in">SetResolution</span>(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkPolyDataMapper&gt; coneMapper;</span><br><span class="line">coneMapper-&gt;<span class="built_in">SetInputConnection</span>(cone-&gt;<span class="built_in">GetOutputPort</span>());</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkActor&gt; coneActor;</span><br><span class="line">coneActor-&gt;<span class="built_in">SetMapper</span>(coneMapper);</span><br><span class="line">coneActor-&gt;<span class="built_in">GetProperty</span>()-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;Bisque&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkRenderer&gt; ren1;</span><br><span class="line">ren1-&gt;<span class="built_in">AddActor</span>(coneActor);</span><br><span class="line">ren1-&gt;<span class="built_in">SetBackground</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;MidnightBlue&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkRenderWindow&gt; renWin;</span><br><span class="line">renWin-&gt;<span class="built_in">AddRenderer</span>(ren1);</span><br><span class="line">renWin-&gt;<span class="built_in">SetSize</span>(<span class="number">300</span>, <span class="number">300</span>);</span><br><span class="line">renWin-&gt;<span class="built_in">SetWindowName</span>(<span class="string">&quot;Tutorial_Step6&quot;</span>);</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkRenderWindowInteractor&gt; iren;</span><br><span class="line">iren-&gt;<span class="built_in">SetRenderWindow</span>(renWin);</span><br><span class="line"></span><br><span class="line">vtkNew&lt;vtkInteractorStyleTrackballCamera&gt; style;</span><br><span class="line">iren-&gt;<span class="built_in">SetInteractorStyle</span>(style);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>与之前一样</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vtkNew&lt;vtkBoxWidget&gt; boxWidget;</span><br><span class="line">boxWidget-&gt;<span class="built_in">SetInteractor</span>(iren);</span><br><span class="line">boxWidget-&gt;<span class="built_in">SetPlaceFactor</span>(<span class="number">1.25</span>);</span><br><span class="line">boxWidget-&gt;<span class="built_in">GetOutlineProperty</span>()-&gt;<span class="built_in">SetColor</span>(colors-&gt;<span class="built_in">GetColor3d</span>(<span class="string">&quot;Gold&quot;</span>).<span class="built_in">GetData</span>());</span><br><span class="line"></span><br><span class="line">boxWidget-&gt;<span class="built_in">SetProp3D</span>(coneActor);</span><br><span class="line">boxWidget-&gt;<span class="built_in">PlaceWidget</span>();</span><br><span class="line">vtkNew&lt;vtkMyCallback&gt; callback;</span><br><span class="line">boxWidget-&gt;<span class="built_in">AddObserver</span>(vtkCommand::InteractionEvent, callback);</span><br><span class="line"></span><br><span class="line">boxWidget-&gt;<span class="built_in">On</span>();</span><br><span class="line"></span><br><span class="line">iren-&gt;<span class="built_in">Initialize</span>();</span><br><span class="line">iren-&gt;<span class="built_in">Start</span>();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>vtkBoxWidget</code></strong> 是 VTK 中一个交互式小部件，允许用户通过拖动一个 3D 方框来变换场景中的对象。用户可以通过拖动盒子的边、角来平移、旋转和缩放物体。</li>
+<li><code>boxWidget-&gt;SetInteractor(iren);</code> 使得 <code>vtkBoxWidget</code> 能够与交互器 <code>iren</code> 关联，从而能够响应用户的鼠标输入。</li>
+<li><code>boxWidget-&gt;SetPlaceFactor(1.25);</code> 设置盒子小部件的缩放因子。这个因子影响了盒子的尺寸，通常是通过调整 <code>vtkBoxWidget</code> 形成的盒子与场景中物体的相对比例来控制。<code>1.25</code> 的值表示盒子在默认情况下稍微大于物体本身。</li>
+<li><code>boxWidget-&gt;GetOutlineProperty()-&gt;SetColor(colors-&gt;GetColor3d(&quot;Gold&quot;).GetData());</code> 设置盒子轮廓的颜色为 “Gold”（金色）。<code>GetOutlineProperty()</code> 获取盒子的属性，之后设置颜色。</li>
+<li><strong><code>boxWidget-&gt;SetProp3D(coneActor);</code></strong> 将 <code>coneActor</code> 设置为 <code>vtkBoxWidget</code> 的目标物体，意味着用户将通过拖动盒子来变换这个圆锥体 (<code>coneActor</code>)。</li>
+<li><strong><code>boxWidget-&gt;PlaceWidget();</code></strong> 调用此方法后，<code>vtkBoxWidget</code> 会根据 <code>coneActor</code> 的边界自动设置盒子的位置和大小，使得盒子能够完全包围住物体。这样，用户就可以通过调整盒子的大小和位置来操作圆锥体。</li>
+<li><strong><code>vtkMyCallback</code></strong> 是前面我们分析过的自定义回调类，它会在用户与 <code>vtkBoxWidget</code> 交互时被触发。回调函数 <code>Execute</code> 会在盒子的小部件与用户交互时被调用，用于处理变换（平移、旋转、缩放）。</li>
+<li><code>boxWidget-&gt;AddObserver(vtkCommand::InteractionEvent, callback);</code> 将回调函数 <code>callback</code> 注册到 <code>vtkBoxWidget</code> 上。当用户进行交互时（如拖动、缩放、旋转盒子），<code>vtkCommand::InteractionEvent</code> 事件会触发，进而调用 <code>vtkMyCallback::Execute</code> 方法，更新 <code>coneActor</code> 的变换。</li>
+<li><strong><code>boxWidget-&gt;On();</code></strong> 启用 <code>vtkBoxWidget</code>，使得它可以响应用户的交互。此时用户可以通过鼠标操作盒子，改变 <code>coneActor</code> 的变换。</li>
+</ul>
+<h3 id="效果-4"><a href="#效果-4" class="headerlink" title="效果"></a>效果</h3><p><img src="/2024/12/20/VTK-Tutorial/../../../bupt/vtk/tutorial/tutorial/image-20241220222459509.png" alt="image-20241220222459509"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/VTK/" rel="tag"># VTK</a>
+              <a href="/tags/%E7%A7%91%E5%AD%A6%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag"># 科学可视化</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/12/03/cuda-learning-02/" rel="prev" title="cuda_learning_02">
+                  <i class="fa fa-angle-left"></i> cuda_learning_02
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
