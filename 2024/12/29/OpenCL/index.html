@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+
+    <meta name="description" content="OpenCL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCL">
+<meta property="og:url" content="http://example.com/2024/12/29/OpenCL/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="OpenCL">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/12/29/OpenCL/image-20241229173724387.png">
+<meta property="og:image" content="http://example.com/2024/12/29/OpenCL/image-20241229184145164.png">
+<meta property="og:image" content="http://example.com/2024/12/29/OpenCL/image-20241229184632487.png">
+<meta property="og:image" content="http://example.com/2024/12/29/OpenCL/image-20241229224850302.png">
+<meta property="article:published_time" content="2024-12-29T09:09:38.000Z">
+<meta property="article:modified_time" content="2024-12-29T15:30:54.710Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="OpenCL">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/12/29/OpenCL/image-20241229173724387.png">
+
+
+<link rel="canonical" href="http://example.com/2024/12/29/OpenCL/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/12/29/OpenCL/","path":"2024/12/29/OpenCL/","title":"OpenCL"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>OpenCL | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    OpenCL
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#openCL%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">openCL基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%B9%B3%E5%8F%B0%EF%BC%88Platform%EF%BC%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.平台（Platform）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%AE%BE%E5%A4%87%EF%BC%88Device%EF%BC%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.设备（Device）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%88Context%EF%BC%89"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 上下文（Context）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%91%BD%E4%BB%A4%E9%98%9F%E5%88%97%EF%BC%88Command-Queue%EF%BC%89"><span class="nav-number">1.1.4.</span> <span class="nav-text">4.命令队列（Command Queue）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%86%85%E6%A0%B8%EF%BC%88Kernel%EF%BC%89"><span class="nav-number">1.1.5.</span> <span class="nav-text">5.内核（Kernel）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%EF%BC%88Memory-Objects%EF%BC%89"><span class="nav-number">1.1.6.</span> <span class="nav-text">6.内存对象（Memory Objects）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E4%BA%8B%E4%BB%B6%EF%BC%88Event%EF%BC%89"><span class="nav-number">1.1.7.</span> <span class="nav-text">7. 事件（Event）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E5%B7%A5%E4%BD%9C%E9%A1%B9%EF%BC%88Work-item%EF%BC%89%E5%92%8C%E5%B7%A5%E4%BD%9C%E7%BB%84%EF%BC%88Work-group%EF%BC%89"><span class="nav-number">1.1.8.</span> <span class="nav-text">8.工作项（Work-item）和工作组（Work-group）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#openCL%E4%B8%8Ecuda%E5%AF%B9%E6%AF%94"><span class="nav-number">1.2.</span> <span class="nav-text">openCL与cuda对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#openCL%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.</span> <span class="nav-text">openCL的工作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%B9%B3%E5%8F%B0%EF%BC%88Platform%EF%BC%89%E5%92%8C%E8%AE%BE%E5%A4%87%EF%BC%88Device%EF%BC%89%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.平台（Platform）和设备（Device）初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BAOpenCL%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%88Context%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.创建OpenCL上下文（Context）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%88%9B%E5%BB%BA%E5%91%BD%E4%BB%A4%E9%98%9F%E5%88%97%EF%BC%88Command-Queue%EF%BC%89"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.创建命令队列（Command Queue）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%88%9B%E5%BB%BA%E5%86%85%E5%AD%98%E5%AF%B9%E8%B1%A1%EF%BC%9A%E7%BC%93%E5%86%B2%E5%8C%BA%EF%BC%88Buffer%EF%BC%89"><span class="nav-number">1.3.4.</span> <span class="nav-text">4.创建内存对象：缓冲区（Buffer）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%8A%A0%E8%BD%BD%E5%92%8C%E7%BC%96%E8%AF%91OpenCL%E5%86%85%E6%A0%B8"><span class="nav-number">1.3.5.</span> <span class="nav-text">5. 加载和编译OpenCL内核</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%BC%96%E5%86%99%E5%86%85%E6%A0%B8%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">(1).编写内核代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%B0%86%E5%86%85%E6%A0%B8%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD%E5%88%B0-OpenCL-%E7%A8%8B%E5%BA%8F%E4%B8%AD-%E5%88%9B%E5%BB%BA%E7%A8%8B%E5%BA%8F%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.5.2.</span> <span class="nav-text">(2).将内核代码加载到 OpenCL 程序中(创建程序对象)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.5.3.</span> <span class="nav-text">(3).编译内核代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%A3%80%E6%9F%A5%E7%BC%96%E8%AF%91%E7%8A%B6%E6%80%81%E5%B9%B6%E8%8E%B7%E5%8F%96%E6%97%A5%E5%BF%97-%E5%8F%AF%E9%80%89"><span class="nav-number">1.3.5.4.</span> <span class="nav-text">(4).检查编译状态并获取日志(可选)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%88%9B%E5%BB%BAOpenCL%E5%86%85%E6%A0%B8%E5%AF%B9%E8%B1%A1%EF%BC%88Kernel%EF%BC%89"><span class="nav-number">1.3.6.</span> <span class="nav-text">6. 创建OpenCL内核对象（Kernel）</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/12/29/OpenCL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="OpenCL | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenCL
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-12-29 17:09:38 / 修改时间：23:30:54" itemprop="dateCreated datePublished" datetime="2024-12-29T17:09:38+08:00">2024-12-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HPC/" itemprop="url" rel="index"><span itemprop="name">HPC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 style="text-align: center;">
+    OpenCL
+</h1>
+
+<div style="text-align: center;">
+    <strong></strong>
+</div>
+<div style="text-align: center;">
+    <strong></strong>
+</div>
+
+<span id="more"></span>
+<h2 id="openCL基本概念"><a href="#openCL基本概念" class="headerlink" title="openCL基本概念"></a>openCL基本概念</h2><h3 id="1-平台（Platform）"><a href="#1-平台（Platform）" class="headerlink" title="1.平台（Platform）"></a>1.平台（Platform）</h3><p>&emsp;&emsp;OpenCL平台是指支持OpenCL的硬件和驱动程序的集合。一个平台通常包括多个计算设备（例如CPU和GPU），以及运行OpenCL程序的驱动程序和工具。每个平台包含一个OpenCL实现，可能是由不同的硬件厂商（如NVIDIA、AMD、Intel）提供的。</p>
+<h3 id="2-设备（Device）"><a href="#2-设备（Device）" class="headerlink" title="2.设备（Device）"></a>2.设备（Device）</h3><p>&emsp;&emsp;OpenCL设备是指实际执行OpenCL计算任务的硬件。例如，CPU、GPU、FPGA等都可以作为OpenCL设备。</p>
+<h3 id="3-上下文（Context）"><a href="#3-上下文（Context）" class="headerlink" title="3. 上下文（Context）"></a>3. 上下文（Context）</h3><p>&emsp;&emsp;OpenCL上下文是一个运行OpenCL程序的环境。它包含与平台和设备相关的资源，例如内存对象、编程模型等。上下文负责管理设备之间的协作，处理并发操作，并提供同步机制。（资源管理、任务调度、内存管理、线程同步）</p>
+<h3 id="4-命令队列（Command-Queue）"><a href="#4-命令队列（Command-Queue）" class="headerlink" title="4.命令队列（Command Queue）"></a>4.命令队列（Command Queue）</h3><p>&emsp;&emsp;命令队列是OpenCL的一个重要概念，它用于调度和管理计算任务。命令队列存储需要执行的命令（如内存操作、内核执行等），并按照先后顺序执行。每个命令队列只能与一个设备相关联，通常设备会有多个命令队列，以便支持多个任务的并发执行。</p>
+<h3 id="5-内核（Kernel）"><a href="#5-内核（Kernel）" class="headerlink" title="5.内核（Kernel）"></a>5.内核（Kernel）</h3><p>&emsp;&emsp;内核是OpenCL程序的基本单元，是在设备上执行的并行计算任务。内核由OpenCL C语言编写，OpenCL内核函数会在设备的多个计算单元上并行执行，从而实现高效的计算。</p>
+<h3 id="6-内存对象（Memory-Objects）"><a href="#6-内存对象（Memory-Objects）" class="headerlink" title="6.内存对象（Memory Objects）"></a>6.内存对象（Memory Objects）</h3><p>&emsp;&emsp;内存对象（Memory Objects） 是用于在主机（通常是CPU）和设备（如GPU、FPGA等）之间传输和存储数据的基本构建块。用于高效地管理内存和数据流动，以便并行计算能够顺利进行。例如，<strong>Buffer</strong>（penCL中最基础的内存对象，用于存储简单的线性数据结构，如数组、向量等）、<strong>Image</strong>（用于存储图像数据的内存对象。它专门设计用于处理图像类型数据，适用于图像处理、计算机视觉等应用，存储二维或三维图像数据，可以用于像素级的操作，如纹理映射、滤波、图像变换等）。</p>
+<h3 id="7-事件（Event）"><a href="#7-事件（Event）" class="headerlink" title="7. 事件（Event）"></a>7. 事件（Event）</h3><p>&emsp;&emsp;OpenCL中的事件机制用于追踪和管理异步操作的状态。事件允许程序员在执行任务时进行同步控制，避免多个操作的竞争和冲突。事件可以与命令队列中的操作相关联，当操作完成时，事件将被触发。</p>
+<h3 id="8-工作项（Work-item）和工作组（Work-group）"><a href="#8-工作项（Work-item）和工作组（Work-group）" class="headerlink" title="8.工作项（Work-item）和工作组（Work-group）"></a>8.工作项（Work-item）和工作组（Work-group）</h3><p>&emsp;&emsp;<strong>工作项（Work-item）</strong>是OpenCL中最小的并行计算单元，它是内核执行的基本单元。每个工作项在计算时都具有独立的ID，可以在内核函数中使用该ID来确定该工作项的任务。(thread)</p>
+<p>&emsp;&emsp;<strong>工作组（Work-group）</strong>是由多个工作项组成的集合。OpenCL将工作项组织为工作组，这些工作组可以并行地在设备上执行，工作组之间的执行是独立的。(block)</p>
+<h2 id="openCL与cuda对比"><a href="#openCL与cuda对比" class="headerlink" title="openCL与cuda对比"></a>openCL与cuda对比</h2><p><img src="/2024/12/29/OpenCL/image-20241229173724387.png" alt="image-20241229173724387"></p>
+<div align="center" style="color: #aaa;">   OpenCL vs CUDA  </div>
+
+<p><img src="/2024/12/29/OpenCL/image-20241229184145164.png" alt="image-20241229184145164"></p>
+<div align="center" style="color: #aaa;">   OpenCL vs CUDA  </div>
+
+<p>&emsp;&emsp;opencl比cuda更底层，跨平台，性能优化方面opencl需要开发这依靠不同的平台来手动调整。</p>
+<h2 id="openCL的工作流程"><a href="#openCL的工作流程" class="headerlink" title="openCL的工作流程"></a>openCL的工作流程</h2><p>&emsp;&emsp;大体流程如下图，opencl比较底层，步骤相较于cuda繁琐。<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/595385815">图片来源</a></p>
+<p><img src="/2024/12/29/OpenCL/image-20241229184632487.png" alt="image-20241229184632487"></p>
+<h3 id="1-平台（Platform）和设备（Device）初始化"><a href="#1-平台（Platform）和设备（Device）初始化" class="headerlink" title="1.平台（Platform）和设备（Device）初始化"></a>1.平台（Platform）和设备（Device）初始化</h3><ul>
+<li>获取平台</li>
+</ul>
+<p>&emsp;&emsp;调用<code>clGetPlatformIDs</code>列出可用平台。</p>
+<p><strong>函数原型：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_int <span class="title">clGetPlatformIDs</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    cl_uint num_entries,       <span class="comment">// 要获取的平台数量,若设置为0，表不返回平台ID，只查询平台的数量。</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_platform_id *platforms, <span class="comment">// 平台ID数组</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_uint *num_platforms     <span class="comment">// 实际获取到的平台数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br><span class="line"><span class="comment">//成功返回CL_SUCCESS,失败返回错误代码</span></span><br></pre></td></tr></table></figure>
+<p><strong>使用示例</strong></p>
+<pre><code>   <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cl_uint num_platforms;</span><br><span class="line"><span class="built_in">clGetPlatformIDs</span>(<span class="number">0</span>, <span class="literal">NULL</span>, &amp;num_platforms);  <span class="comment">// 先获取平台数量</span></span><br><span class="line">cl_platform_id *platforms = (cl_platform_id*) <span class="built_in">malloc</span>(num_platforms * <span class="built_in">sizeof</span>(cl_platform_id));</span><br><span class="line"><span class="built_in">clGetPlatformIDs</span>(num_platforms, platforms, <span class="literal">NULL</span>);  <span class="comment">// 获取平台ID数组</span></span><br></pre></td></tr></table></figure>
+</code></pre><ul>
+<li>选择设备</li>
+</ul>
+<p>&emsp;&emsp;每个平台可能有多个计算设备（如不同厂商的GPU或CPU）。使用 <code>clGetDeviceIDs</code> 来列出平台上的设备，选择一个或多个设备来进行计算。</p>
+<p><strong>函数原型</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_int <span class="title">clGetDeviceIDs</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    cl_platform_id platform,        <span class="comment">// 需要查询的OpenCL平台ID</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_device_type device_type,     <span class="comment">// 设备类型，如 CPU、GPU 等</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_uint num_entries,            <span class="comment">// 要返回的设备数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_device_id *devices,          <span class="comment">// 返回的设备ID数组</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_uint *num_devices            <span class="comment">// 实际获取到的设备数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><code>device_type</code>：指定设备类型，可以是以下几种常见类型：</p>
+<p><code>CL_DEVICE_TYPE_CPU</code>：查询CPU设备。</p>
+<p><code>CL_DEVICE_TYPE_GPU</code>：查询GPU设备。</p>
+<p><code>CL_DEVICE_TYPE_ACCELERATOR</code>：查询加速器设备（如FPGA）。</p>
+<p><code>CL_DEVICE_TYPE_ALL</code>：查询平台上所有设备（包括CPU、GPU和加速器等）。</p>
+<p><strong>使用示例</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cl_uint num_devices;</span><br><span class="line"><span class="built_in">clGetDeviceIDs</span>(platforms[<span class="number">0</span>], CL_DEVICE_TYPE_GPU, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;num_devices);  <span class="comment">// 获取GPU设备数量</span></span><br><span class="line">cl_device_id *devices = (cl_device_id*) <span class="built_in">malloc</span>(num_devices * <span class="built_in">sizeof</span>(cl_device_id));</span><br><span class="line"><span class="built_in">clGetDeviceIDs</span>(platforms[<span class="number">0</span>], CL_DEVICE_TYPE_GPU, num_devices, devices, <span class="literal">NULL</span>);  <span class="comment">// 获取GPU设备ID</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-创建OpenCL上下文（Context）"><a href="#2-创建OpenCL上下文（Context）" class="headerlink" title="2.创建OpenCL上下文（Context）"></a>2.创建OpenCL上下文（Context）</h3><p>&emsp;&emsp;<strong>上下文</strong> 是OpenCL程序执行的环境，它提供了一个运行时环境来管理设备、内存、命令队列等资源。上下文是OpenCL应用的基础，它允许程序与平台上的设备进行交互，并协调多个设备之间的任务。</p>
+<p>&emsp;&emsp;<code>clCreateContext</code> 是 OpenCL 中创建上下文的主要函数，用于初始化并返回一个新的上下文对象。上下文是与平台和设备交互的基本环境，所有 OpenCL 操作都需要在上下文中执行。</p>
+<p><strong>函数原型：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_context <span class="title">clCreateContext</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> cl_context_properties *properties,  <span class="comment">// 上下文的属性（可以是NULL）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_uint num_devices,                      <span class="comment">// 设备的数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> cl_device_id *devices,              <span class="comment">// 设备ID数组</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">void</span> (CL_CALLBACK *notify)(<span class="type">const</span> <span class="type">char</span> *, <span class="type">const</span> <span class="type">void</span> *, <span class="type">size_t</span>, <span class="type">void</span> *),  <span class="comment">// 错误回调函数（可为NULL）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">void</span> *user_data,                          <span class="comment">// 用户数据（传给回调函数）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_int *errcode_ret                       <span class="comment">// 返回的错误码</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>参数说明：</strong></p>
+<ol>
+<li><p><strong><code>properties</code></strong>：</p>
+<ul>
+<li><p>这是一个指向 <code>cl_context_properties</code> 数组的指针，用来设置一些上下文的属性。通常对于大部分情况，传入 <code>NULL</code> 即可。如果需要为上下文设置特定的属性（比如平台类型、上下文的版本等），可以在这里传入配置项。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printf_callback</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *buffer, <span class="type">size_t</span> len, <span class="type">size_t</span> complete, <span class="type">void</span> *user_data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;%.*s&quot;</span>, len, buffer);</span><br><span class="line">&#125;</span><br><span class="line">cl_context_properties properties[] = &#123;</span><br><span class="line">    CL_PRINTF_CALLBACK_ARM, (cl_context_properties)printf_callback,  <span class="comment">// 启用 printf 调试功能</span></span><br><span class="line">    CL_PRINTF_BUFFERSIZE_ARM, (cl_context_properties)<span class="number">0x100000</span>,      <span class="comment">// 设置 printf 输出缓冲区大小为 4MB</span></span><br><span class="line">    CL_CONTEXT_PLATFORM, (cl_context_properties)platform_id,        <span class="comment">// 选择平台</span></span><br><span class="line">    <span class="number">0</span>   <span class="comment">// 结束标识符，表示属性数组的结束</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong><code>CL_PRINTF_CALLBACK_ARM</code></strong>：设置一个 <code>printf</code> 输出回调函数，该函数将在设备端的 <code>printf</code> 输出时被调用。</li>
+<li><strong><code>CL_PRINTF_BUFFERSIZE_ARM</code></strong>：设置 <code>printf</code> 输出的缓冲区大小，这里要求设备为 <code>printf</code> 调试分配一个 4MB 的缓冲区。</li>
+<li><strong><code>CL_CONTEXT_PLATFORM</code></strong>：选择平台。<code>platform_id</code> 是通过 <code>clGetPlatformIDs</code> 获取的一个平台 ID，用于指定上下文所使用的平台。</li>
+<li><strong><code>0</code></strong>：这是数组的结束标识符，所有 OpenCL 上下文属性数组都需要以 <code>0</code> 结束。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong><code>devices</code></strong>：</p>
+<ul>
+<li>这是一个设备ID数组，表示在这个上下文中使用的设备。每个设备ID对应一个计算设备（如GPU或CPU）。如果只想使用一个设备，可以将该数组设置为一个包含单个设备ID的数组。</li>
+</ul>
+</li>
+<li><p><strong><code>notify</code></strong>：</p>
+<ul>
+<li>这是一个回调函数的指针，当发生错误时会被调用。通常我们可以将它设置为 <code>NULL</code>，不使用回调函数，或者提供一个自定义的回调函数来处理错误通知。</li>
+</ul>
+</li>
+<li><p><strong><code>user_data</code></strong>：</p>
+<ul>
+<li>这是一块指针，允许传递额外的数据给回调函数。它可以是任何类型的数据，通常在回调函数中使用。</li>
+</ul>
+</li>
+<li><p><strong><code>errcode_ret</code></strong>：</p>
+<ul>
+<li>这是一个指针，用于返回错误代码。如果上下文创建成功，错误码通常是 <code>CL_SUCCESS</code>；否则会返回对应的错误码。可以通过这个参数来获取创建上下文时可能发生的错误。</li>
+</ul>
+</li>
+</ol>
+<p><strong>使用示例</strong>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cl_context context = <span class="built_in">clCreateContext</span>(<span class="literal">NULL</span>, <span class="number">1</span>, &amp;device, <span class="literal">NULL</span>, <span class="literal">NULL</span>, &amp;err);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建平台2，设备3的上下文</span></span><br><span class="line">cl_platform_id selected_platform = platforms[<span class="number">1</span>];   <span class="comment">//平台2</span></span><br><span class="line">cl_context_properties properties[] = &#123;</span><br><span class="line">        CL_CONTEXT_PLATFORM, (cl_context_properties)selected_platform,</span><br><span class="line">        <span class="number">0</span>  <span class="comment">// 结束属性列表</span></span><br><span class="line">&#125;;</span><br><span class="line">device = device_list[<span class="number">2</span>];  <span class="comment">// 设备3（索引从0开始）</span></span><br><span class="line">cl_context context = <span class="built_in">clCreateContext</span>(properties, <span class="number">1</span>, &amp;device, <span class="literal">NULL</span>, <span class="literal">NULL</span>, &amp;err);</span><br></pre></td></tr></table></figure>
+<h3 id="3-创建命令队列（Command-Queue）"><a href="#3-创建命令队列（Command-Queue）" class="headerlink" title="3.创建命令队列（Command Queue）"></a>3.创建命令队列（Command Queue）</h3><p>&emsp;&emsp;命令队列是程序与设备交互的主要接口，它控制了多个操作（如内核执行、内存传输、同步操作等）的顺序执行。创建命令队列的函数是 <code>clCreateCommandQueue</code>，作用是创建一个用于发送命令到设备的队列。</p>
+<p><strong>函数原型：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_command_queue <span class="title">clCreateCommandQueue</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    cl_context context,                  <span class="comment">// 上下文</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_device_id device,                 <span class="comment">// 目标设备</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_command_queue_properties properties, <span class="comment">// 队列属性（可以是0）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_int *errcode_ret                  <span class="comment">// 返回的错误码</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明：</strong></p>
+<p><strong><code>properties</code></strong>：队列属性，可以是一个由位掩码组成的标志值。常用的标志有：</p>
+<ul>
+<li><code>0</code>：表示默认命令队列。（顺序执行）</li>
+<li><code>CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE</code>：启用无序执行模式（非阻塞模式）。</li>
+<li><code>CL_QUEUE_PROFILING_ENABLE</code>：启用命令队列的性能分析（profiling）。</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cl_command_queue queue = <span class="built_in">clCreateCommandQueue</span>(context, device, <span class="number">0</span>, &amp;err);</span><br></pre></td></tr></table></figure>
+<h3 id="4-创建内存对象：缓冲区（Buffer）"><a href="#4-创建内存对象：缓冲区（Buffer）" class="headerlink" title="4.创建内存对象：缓冲区（Buffer）"></a>4.创建内存对象：缓冲区（Buffer）</h3><p>&emsp;&emsp;用于在主机和设备之间传输数据，<code>clCreateBuffer</code> 是用于创建缓冲区的函数。</p>
+<p><strong>函数原型：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_mem <span class="title">clCreateBuffer</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    cl_context context,                    <span class="comment">// 上下文，指定缓冲区将在哪个上下文中使用</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_mem_flags flags,                    <span class="comment">// 缓冲区的标志，指定缓冲区的访问权限</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">size_t</span> size,                            <span class="comment">// 缓冲区的大小（以字节为单位）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">void</span> *host_ptr,                         <span class="comment">// 主机端的指针（可以是NULL）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_int *errcode_ret                     <span class="comment">// 返回的错误码</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><strong><code>flags</code></strong>：<ul>
+<li>缓冲区的标志，指定缓冲区的访问权限。常见的标志有：<ul>
+<li><code>CL_MEM_READ_WRITE</code>：表示缓冲区可以被读写（即既可以从主机到设备传输数据，也可以从设备到主机传输数据）。</li>
+<li><code>CL_MEM_READ_ONLY</code>：表示缓冲区只能用于读取数据。</li>
+<li><code>CL_MEM_WRITE_ONLY</code>：表示缓冲区只能用于写入数据。</li>
+<li><code>CL_MEM_COPY_HOST_PTR</code>：表示缓冲区将使用主机端的数据进行初始化，<code>host_ptr</code> 参数指向的数据会被复制到缓冲区中。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>host_ptr</code></strong>：<ul>
+<li>这是一个可选的参数，指向主机内存中的数据。如果希望缓冲区在创建时从主机数据中初始化，可以将此参数设置为主机内存的指针。如果为 <code>NULL</code>，则缓冲区不会被初始化。</li>
+</ul>
+</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设我们要创建一个包含1000个float元素的缓冲区</span></span><br><span class="line">cl_mem buffer;</span><br><span class="line"><span class="type">size_t</span> num_elements = <span class="number">1000</span>;</span><br><span class="line"><span class="type">size_t</span> buffer_size = <span class="built_in">sizeof</span>(<span class="type">float</span>) * num_elements;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个缓冲区，指定为读写类型</span></span><br><span class="line">buffer = <span class="built_in">clCreateBuffer</span>(</span><br><span class="line">	context,                     <span class="comment">// 上下文</span></span><br><span class="line">	CL_MEM_READ_WRITE,            <span class="comment">// 缓冲区的标志：读写</span></span><br><span class="line">	buffer_size,                  <span class="comment">// 缓冲区大小</span></span><br><span class="line">	<span class="literal">NULL</span>,                         <span class="comment">// 不从主机端初始化</span></span><br><span class="line">	&amp;err                           <span class="comment">// 错误代码</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p><strong>缓冲区的用途：</strong></p>
+<ol>
+<li><strong>将数据传输到设备</strong>：使用 <code>clEnqueueWriteBuffer</code> 将数据从主机内存写入缓冲区。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">clEnqueueWriteBuffer</span>(</span><br><span class="line">    command_queue,            <span class="comment">// 命令队列</span></span><br><span class="line">    buffer,                   <span class="comment">// 缓冲区对象</span></span><br><span class="line">    CL_TRUE,                  <span class="comment">// 阻塞写入：同步操作</span></span><br><span class="line">    <span class="number">0</span>,                        <span class="comment">// 偏移量</span></span><br><span class="line">    buffer_size,              <span class="comment">// 数据大小</span></span><br><span class="line">    host_data,                <span class="comment">// 主机数据</span></span><br><span class="line">    <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>             <span class="comment">// 事件：不使用</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>从设备读取数据</strong>：使用 <code>clEnqueueReadBuffer</code> 从设备读取数据到主机内存。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">clEnqueueReadBuffer</span>(</span><br><span class="line">    command_queue,            <span class="comment">// 命令队列</span></span><br><span class="line">    buffer,                   <span class="comment">// 缓冲区对象</span></span><br><span class="line">    CL_TRUE,                  <span class="comment">// 阻塞读取：同步操作</span></span><br><span class="line">    <span class="number">0</span>,                        <span class="comment">// 偏移量</span></span><br><span class="line">    buffer_size,              <span class="comment">// 数据大小</span></span><br><span class="line">    host_data,                <span class="comment">// 主机数据</span></span><br><span class="line">    <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>             <span class="comment">// 事件：不使用</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="5-加载和编译OpenCL内核"><a href="#5-加载和编译OpenCL内核" class="headerlink" title="5. 加载和编译OpenCL内核"></a>5. <strong>加载和编译OpenCL内核</strong></h3><h4 id="1-编写内核代码"><a href="#1-编写内核代码" class="headerlink" title="(1).编写内核代码"></a>(1).编写内核代码</h4><p><strong>示例代码：</strong>对数组中的每个元素进行加法操作。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__kernel <span class="type">void</span> <span class="title">vector_add</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    __global <span class="type">const</span> <span class="type">float</span>* A,  <span class="comment">// 输入数组 A</span></span></span></span><br><span class="line"><span class="params"><span class="function">    __global <span class="type">const</span> <span class="type">float</span>* B,  <span class="comment">// 输入数组 B</span></span></span></span><br><span class="line"><span class="params"><span class="function">    __global <span class="type">float</span>* C,        <span class="comment">// 输出数组 C</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> N      <span class="comment">// 元素数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> id = <span class="built_in">get_global_id</span>(<span class="number">0</span>);  <span class="comment">// 获取工作项的全局 ID</span></span><br><span class="line">    <span class="keyword">if</span> (id &lt; N) &#123;</span><br><span class="line">        C[id] = A[id] + B[id];  <span class="comment">// 每个工作项执行加法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;opencl中部分关键字只有左边两个下划线，与cuda不同，关键字的含义基本相同。并且使用<code>get_global_id</code>获取线程索引,    OpenCL中Work-Group也是支持多维的，这里的0其实对应cuda中的x。</p>
+<p><img src="/2024/12/29/OpenCL/image-20241229224850302.png" alt="image-20241229224850302"></p>
+<div align="center" style="color: #aaa;">   OpenCL 和 CUDA 的对应关系  </div>
+
+<h4 id="2-将内核代码加载到-OpenCL-程序中-创建程序对象"><a href="#2-将内核代码加载到-OpenCL-程序中-创建程序对象" class="headerlink" title="(2).将内核代码加载到 OpenCL 程序中(创建程序对象)"></a>(2).将内核代码加载到 OpenCL 程序中(创建程序对象)</h4><p>&emsp;&emsp;<code>clCreateProgramWithSource</code> 用于将内核代码加载到 OpenCL 程序中。它接受内核代码的字符串，并在主机上创建一个 OpenCL 程序对象。</p>
+<p><strong>函数原型：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_program <span class="title">clCreateProgramWithSource</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    cl_context context,         <span class="comment">// 上下文</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_uint count,              <span class="comment">// 内核代码字符串的数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">char</span> **strings,       <span class="comment">// 内核代码字符串数组</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">size_t</span> *lengths,      <span class="comment">// 每个字符串的长度数组（可为 NULL）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_int *errcode_ret         <span class="comment">// 返回的错误码</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">char</span>* kernelSource = <span class="string">&quot;__kernel void vector_add(__global const float* A, __global const float* B, __global float* C, const unsigned int N) &#123; int id = get_global_id(0); if (id &lt; N) &#123; C[id] = A[id] + B[id]; &#125; &#125;&quot;</span>;</span><br><span class="line"></span><br><span class="line">cl_int err;</span><br><span class="line">cl_program program = <span class="built_in">clCreateProgramWithSource</span>(context, <span class="number">1</span>, &amp;kernelSource, <span class="literal">NULL</span>, &amp;err);</span><br></pre></td></tr></table></figure>
+<p>或者将内核函数实现在.cl文件中，在.cpp代码中加载内核函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//vector_add.cl</span></span><br><span class="line"><span class="function">__kernel <span class="type">void</span> <span class="title">vector_add</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    __global <span class="type">const</span> <span class="type">float</span>* A,  <span class="comment">// 输入数组 A</span></span></span></span><br><span class="line"><span class="params"><span class="function">    __global <span class="type">const</span> <span class="type">float</span>* B,  <span class="comment">// 输入数组 B</span></span></span></span><br><span class="line"><span class="params"><span class="function">    __global <span class="type">float</span>* C,        <span class="comment">// 输出数组 C</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">unsigned</span> <span class="type">int</span> N      <span class="comment">// 元素数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> id = <span class="built_in">get_global_id</span>(<span class="number">0</span>);  <span class="comment">// 获取工作项的全局 ID</span></span><br><span class="line">    <span class="keyword">if</span> (id &lt; N) &#123;</span><br><span class="line">        C[id] = A[id] + B[id];  <span class="comment">// 每个工作项执行加法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.cpp</span></span><br><span class="line"><span class="comment">// 函数：加载 .cl 文件</span></span><br><span class="line"><span class="function"><span class="type">char</span>* <span class="title">load_kernel_source</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* filename, <span class="type">size_t</span>* length)</span> </span>&#123;</span><br><span class="line">    FILE* file = <span class="built_in">fopen</span>(filename, <span class="string">&quot;r&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!file) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(stderr, <span class="string">&quot;Error: Could not open kernel file %s\n&quot;</span>, filename);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">fseek</span>(file, <span class="number">0</span>, SEEK_END);</span><br><span class="line">    *length = <span class="built_in">ftell</span>(file);</span><br><span class="line">    <span class="built_in">rewind</span>(file);</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span>* source = (<span class="type">char</span>*)<span class="built_in">malloc</span>(*length + <span class="number">1</span>);  <span class="comment">// 分配内存以存储文件内容</span></span><br><span class="line">    <span class="built_in">fread</span>(source, <span class="number">1</span>, *length, file);</span><br><span class="line">    source[*length] = <span class="string">&#x27;\0&#x27;</span>;  <span class="comment">// 添加字符串结束符</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">fclose</span>(file);</span><br><span class="line">    <span class="keyword">return</span> source;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">size_t</span> kernel_length;</span><br><span class="line"><span class="type">char</span>* kernel_source = <span class="built_in">load_kernel_source</span>(<span class="string">&quot;vector_add.cl&quot;</span>, &amp;kernel_length);</span><br><span class="line">cl_int err;</span><br><span class="line">cl_program program = <span class="built_in">clCreateProgramWithSource</span>(context, <span class="number">1</span>, (<span class="type">const</span> <span class="type">char</span>**)&amp;kernel_source, &amp;kernel_length, &amp;err);</span><br></pre></td></tr></table></figure>
+<p><strong>扩展：</strong>使用 <code>clCreateProgramWithBinary</code> 将内核代码预编译为二进制文件，运行时直接加载，省去每次编译的时间。</p>
+<h4 id="3-编译内核代码"><a href="#3-编译内核代码" class="headerlink" title="(3).编译内核代码"></a>(3).编译内核代码</h4><p>&emsp;&emsp;<code>clBuildProgram</code> 用于将加载的内核代码编译为设备可以执行的二进制格式。</p>
+<p><strong>函数原型：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_int <span class="title">clBuildProgram</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    cl_program program,            <span class="comment">// 要编译的程序对象</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_uint num_devices,           <span class="comment">// 目标设备数量</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> cl_device_id *device_list, <span class="comment">// 目标设备列表</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">char</span> *options,           <span class="comment">// 编译选项（类似 GCC 编译器参数）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">void</span> (CL_CALLBACK *pfn_notify)(cl_program, <span class="type">void</span> *), <span class="comment">// 回调函数（可为 NULL）</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">void</span> *user_data                <span class="comment">// 用户数据（传递给回调函数）</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明：</strong></p>
+<p><code>options</code>：编译选项，类似于编译器的命令行参数，例如优化级别（<code>-O2</code>）或预处理器定义（<code>-D</code>）。</p>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">err = <span class="built_in">clBuildProgram</span>(program, <span class="number">1</span>, &amp;device, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="4-检查编译状态并获取日志-可选"><a href="#4-检查编译状态并获取日志-可选" class="headerlink" title="(4).检查编译状态并获取日志(可选)"></a>(4).检查编译状态并获取日志(可选)</h4><p>&emsp;&emsp;当 <code>clBuildProgram</code> 失败时，可以使用 <code>clGetProgramBuildInfo</code> 检查编译状态，并获取详细的编译日志。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_int <span class="title">clGetProgramBuildInfo</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    cl_program program,              <span class="comment">// 程序对象</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_device_id device,             <span class="comment">// 设备 ID</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_program_build_info param_name, <span class="comment">// 查询的参数</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">size_t</span> param_value_size,         <span class="comment">// 返回值的大小</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">void</span> *param_value,               <span class="comment">// 返回值</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">size_t</span> *param_value_size_ret     <span class="comment">// 返回值大小（可为 NULL）</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li>param_name：指定查询的参数，常见的参数包括：<ul>
+<li><code>CL_PROGRAM_BUILD_STATUS</code>：编译状态（成功、失败等）。</li>
+<li><code>CL_PROGRAM_BUILD_LOG</code>：编译日志。</li>
+</ul>
+</li>
+<li><code>param_value</code>：保存返回值的指针（例如日志内容）。</li>
+<li><code>param_value_size</code>：指定返回值的大小。</li>
+</ul>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">size_t</span> log_size;</span><br><span class="line"><span class="built_in">clGetProgramBuildInfo</span>(program, device, CL_PROGRAM_BUILD_LOG, <span class="number">0</span>, <span class="literal">NULL</span>, &amp;log_size);</span><br><span class="line"><span class="type">char</span> *log = (<span class="type">char</span> *)<span class="built_in">malloc</span>(log_size);</span><br><span class="line"><span class="built_in">clGetProgramBuildInfo</span>(program, device, CL_PROGRAM_BUILD_LOG, log_size, log, <span class="literal">NULL</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Build Log:\n%s\n&quot;</span>, log);</span><br><span class="line"><span class="built_in">free</span>(log);</span><br></pre></td></tr></table></figure>
+<h3 id="6-创建OpenCL内核对象（Kernel）"><a href="#6-创建OpenCL内核对象（Kernel）" class="headerlink" title="6. 创建OpenCL内核对象（Kernel）"></a>6. 创建OpenCL内核对象（Kernel）</h3><p>&emsp;&emsp;调用 <code>clCreateKernel</code> 函数，可以从一个已经成功编译的程序对象中创建内核对象。内核对象将绑定一个具体的内核函数，并用于进一步的设置参数和执行操作。</p>
+<p><strong>函数原型：</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cl_kernel <span class="title">clCreateKernel</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    cl_program program,       <span class="comment">// 已编译的程序对象</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> <span class="type">char</span> *kernel_name,  <span class="comment">// 内核函数名称</span></span></span></span><br><span class="line"><span class="params"><span class="function">    cl_int *errcode_ret       <span class="comment">// 返回的错误码</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OpenCL/" rel="tag"># OpenCL</a>
+              <a href="/tags/GPU/" rel="tag"># GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/12/20/VTK-Tutorial/" rel="prev" title="VTK Tutorial">
+                  <i class="fa fa-angle-left"></i> VTK Tutorial
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
