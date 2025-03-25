@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+
+    <meta name="description" content="cuda_learning_03       一、GPU的内存体系       二、通过归约(Reduction)操作理解GPU内存体系   问题&emsp;&emsp;计算A * B &#x3D; C  &emsp;&emsp;[M, K] * [K, N] &#x3D; [M, N] naiveSgemm&emsp;&emsp;最朴素的gemm，只是利用了gpu多线程的并行而已。出处(二、naive g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cuda_learning_03">
+<meta property="og:url" content="http://example.com/2025/03/25/cuda-learning-03/index.html">
+<meta property="og:site_name" content="Asuka">
+<meta property="og:description" content="cuda_learning_03       一、GPU的内存体系       二、通过归约(Reduction)操作理解GPU内存体系   问题&emsp;&emsp;计算A * B &#x3D; C  &emsp;&emsp;[M, K] * [K, N] &#x3D; [M, N] naiveSgemm&emsp;&emsp;最朴素的gemm，只是利用了gpu多线程的并行而已。出处(二、naive g">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/03/25/cuda-learning-03/3c77216e9d6c5fe97a34bc155cf3150b_720.jpg">
+<meta property="article:published_time" content="2025-03-25T13:39:57.000Z">
+<meta property="article:modified_time" content="2025-03-25T14:42:27.563Z">
+<meta property="article:author" content="Asuka">
+<meta property="article:tag" content="CUDA编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/03/25/cuda-learning-03/3c77216e9d6c5fe97a34bc155cf3150b_720.jpg">
+
+
+<link rel="canonical" href="http://example.com/2025/03/25/cuda-learning-03/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/03/25/cuda-learning-03/","path":"2025/03/25/cuda-learning-03/","title":"cuda_learning_03"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>cuda_learning_03 | Asuka</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Asuka</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">
+    cuda_learning_03
+</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#naiveSgemm"><span class="nav-number">1.2.</span> <span class="nav-text">naiveSgemm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#smemSgemm-ver1"><span class="nav-number">1.3.</span> <span class="nav-text">smemSgemm(ver1)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#regSgemm-ver1"><span class="nav-number">1.4.</span> <span class="nav-text">regSgemm(ver1)</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Asuka"
+      src="/images/asuka.jpg">
+  <p class="site-author-name" itemprop="name">Asuka</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/25/cuda-learning-03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/asuka.jpg">
+      <meta itemprop="name" content="Asuka">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Asuka">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="cuda_learning_03 | Asuka">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          cuda_learning_03
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-03-25 21:39:57 / 修改时间：22:42:27" itemprop="dateCreated datePublished" datetime="2025-03-25T21:39:57+08:00">2025-03-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/HPC/" itemprop="url" rel="index"><span itemprop="name">HPC</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p></p><h1 style="text-align: center;">
+    cuda_learning_03
+</h1><p></p>
+<div style="text-align: center;">
+    <strong>一、GPU的内存体系</strong>
+</div>
+<div style="text-align: center;">
+    <strong>二、通过归约(Reduction)操作理解GPU内存体系</strong>
+</div>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>&emsp;&emsp;计算A * B = C </p>
+<p>&emsp;&emsp;[M, K] * [K, N] = [M, N]</p>
+<h2 id="naiveSgemm"><a href="#naiveSgemm" class="headerlink" title="naiveSgemm"></a>naiveSgemm</h2><p>&emsp;&emsp;最朴素的gemm，只是利用了gpu多线程的并行而已。<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/703256080">出处(二、naive gemm)</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> OFFSET(row, col, ld) ((row) * (ld) + (col))</span></span><br><span class="line"><span class="comment">//__restrict__表示“限制性指针”,告诉编译器a指向的内存区域不会与其他指针指向的内存重叠</span></span><br><span class="line"><span class="comment">//简而言之，编译优化用的</span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">naiveSgemm</span><span class="params">(<span class="type">float</span> * __restrict__ a, <span class="type">float</span> * __restrict__ b, <span class="type">float</span> * __restrict__ c, <span class="type">const</span> <span class="type">int</span> M, <span class="type">const</span> <span class="type">int</span> K, <span class="type">const</span> <span class="type">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> tidx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> tidy = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(tidx &lt; N &amp;&amp; tidy &lt; M)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">float</span> sum = <span class="number">0.0</span>;</span><br><span class="line">        <span class="meta">#<span class="keyword">pragma</span> unroll</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">0</span>; k &lt; K; ++k) sum += a[<span class="built_in">OFFSET</span>(tidy, k, K)] * b[<span class="built_in">OFFSET</span>(k, tidx, N)];</span><br><span class="line">        c[<span class="built_in">OFFSET</span>(tidy, tidx, N)] = sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="smemSgemm-ver1"><a href="#smemSgemm-ver1" class="headerlink" title="smemSgemm(ver1)"></a>smemSgemm(ver1)</h2><p>&emsp;&emsp;利用共享内存加速。<a target="_blank" rel="noopener" href="https://chiemon.github.io/2020/02/06/CUDA-%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95-%E4%BC%98%E5%8C%96%E5%8F%8A%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90-%E4%B8%8A.html#wzfdh">出处(Shared Memory 优化)</a></p>
+<p><img src="/2025/03/25/cuda-learning-03/3c77216e9d6c5fe97a34bc155cf3150b_720.jpg" alt="img"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> BM = <span class="number">32</span>, BN = <span class="number">32</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> M = <span class="number">512</span>, N = <span class="number">512</span>, K = <span class="number">512</span>;</span><br><span class="line"><span class="function">dim3 <span class="title">blockDim</span><span class="params">(BN, BM)</span></span>;</span><br><span class="line"><span class="function">dim3 <span class="title">gridDim</span><span class="params">((N + BN - <span class="number">1</span>) / BN, (M + BM - <span class="number">1</span>) / BM)</span></span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> block_x = <span class="number">32</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> block_y = <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">smemSgemm</span><span class="params">(<span class="type">float</span> * __restrict__ a, <span class="type">float</span> * __restrict__ b, <span class="type">float</span> * __restrict__ c, <span class="type">const</span> <span class="type">int</span> M, <span class="type">const</span> <span class="type">int</span> K, <span class="type">const</span> <span class="type">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> tidx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> tidy = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="type">float</span> sum = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    __shared__ <span class="type">float</span> smema[block_y][block_x];</span><br><span class="line">    __shared__ <span class="type">float</span> smemb[block_y][block_x];</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> cnt = (K + block_x - <span class="number">1</span>) / block_x;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; cnt; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        smema[tidy][tidx] = a[<span class="built_in">OFFSET</span>(tidy, i * block_y + tidx, K)];</span><br><span class="line">        smemb[tidy][tidx] = b[<span class="built_in">OFFSET</span>(i * block_x + tidy, tidx, N)];</span><br><span class="line"></span><br><span class="line">        __syncthreads();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; block_x; ++j) sum += smema[tidy][j] * smemb[j][tidx];</span><br><span class="line"></span><br><span class="line">        __syncthreads();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c[<span class="built_in">OFFSET</span>(tidy, tidx, N)] = sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="regSgemm-ver1"><a href="#regSgemm-ver1" class="headerlink" title="regSgemm(ver1)"></a>regSgemm(ver1)</h2><p>&emsp;&emsp;寄存器优化，<a target="_blank" rel="noopener" href="https://chiemon.github.io/2020/02/06/CUDA-%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95-%E4%BC%98%E5%8C%96%E5%8F%8A%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90-%E4%B8%8A.html#bkbgs">出处(Register 优化)</a>。</p>
+<p>&emsp;&emsp;说是寄存器优化，实际主要通过 <strong>共享内存</strong> 和 <strong>指令级并行 (ILP)</strong> 机制优化了矩阵乘法计算的性能。与上面相比，只是一个线程计算C中的两个元素而已。例如，上面例子中<code>[block_x, block_y] = [32, 32]</code>, <code>smem</code>大小是<code>[32, 32]</code>，这个例子中，线程块大小发生变化，改为<code>[32, 16]</code>，<code>smem</code>的大小不变。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> block_x = <span class="number">32</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> block_y = <span class="number">16</span>;</span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">regSgemm</span><span class="params">(<span class="type">float</span> * __restrict__ a, <span class="type">float</span> * __restrict__ b, <span class="type">float</span> * __restrict__ c, <span class="type">const</span> <span class="type">int</span> M, <span class="type">const</span> <span class="type">int</span> K, <span class="type">const</span> <span class="type">int</span> N)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> tidx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> tidy = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="type">float</span> val[<span class="number">2</span>] = &#123;<span class="number">0.0f</span>&#125;;</span><br><span class="line"></span><br><span class="line">    __shared__ <span class="type">float</span> smema[block_x][block_x];</span><br><span class="line">    __shared__ <span class="type">float</span> smemb[block_x][block_x];</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> cnt = (K + block_x - <span class="number">1</span>) / block_x;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; cnt; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        smema[threadIdx.y][threadIdx.x] = a[<span class="built_in">OFFSET</span>(tidy, i * block_x + tidx, K)];</span><br><span class="line">        smema[threadIdx.y + <span class="number">16</span>][threadIdx.x] = a[<span class="built_in">OFFSET</span>(tidy + <span class="number">16</span>, i * block_x + tidx, K)];</span><br><span class="line"></span><br><span class="line">        smemb[threadIdx.y][threadIdx.x] = b[<span class="built_in">OFFSET</span>(i * block_x + tidy, tidx, N)];</span><br><span class="line">        smemb[threadIdx.y + <span class="number">16</span>][threadIdx.x] = b[<span class="built_in">OFFSET</span>(i * block_x + tidy + <span class="number">16</span>, tidx, N)];</span><br><span class="line"></span><br><span class="line">        __syncthreads();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; block_x; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            val[<span class="number">0</span>] += smema[threadIdx.y][j] * smemb[j][threadIdx.x];</span><br><span class="line">            val[<span class="number">1</span>] += smema[threadIdx.y + <span class="number">16</span>][j] * smemb[j][threadIdx.x];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        __syncthreads();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c[<span class="built_in">OFFSET</span>(tidy, tidx, N)] = val[<span class="number">0</span>];</span><br><span class="line">    c[<span class="built_in">OFFSET</span>(tidy + <span class="number">16</span>, tidx, N)] = val[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CUDA%E7%BC%96%E7%A8%8B/" rel="tag"># CUDA编程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/12/29/OpenCL/" rel="prev" title="OpenCL 入门">
+                  <i class="fa fa-angle-left"></i> OpenCL 入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Asuka</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
